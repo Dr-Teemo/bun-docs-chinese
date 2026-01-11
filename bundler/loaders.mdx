@@ -1,81 +1,81 @@
 ---
-title: Loaders
-description: Built-in loaders for the Bun bundler and runtime
+title: 加载器
+description: Bun打包器和运行时的内置加载器
 ---
 
-The Bun bundler implements a set of default loaders out of the box.
+Bun打包器开箱即用地实现了一组默认加载器。
 
-> As a rule of thumb: **the bundler and the runtime both support the same set of file types out of the box.**
+> 作为经验法则：**打包器和运行时都开箱即用地支持相同的文件类型集。**
 
-`.js` `.cjs` `.mjs` `.mts` `.cts` `.ts` `.tsx` `.jsx` `.css` `.json` `.jsonc` `.toml` `.yaml` `.yml` `.txt` `.wasm` `.node` `.html` `.sh`
+[.js] [.cjs] [.mjs] [.mts] [.cts] [.ts] [.tsx] [.jsx] [.css] [.json] [.jsonc] [.toml] [.yaml] [.yml] [.txt] [.wasm] [.node] [.html] [.sh]
 
-Bun uses the file extension to determine which built-in loader should be used to parse the file. Every loader has a name, such as `js`, `tsx`, or `json`. These names are used when building plugins that extend Bun with custom loaders.
+Bun使用文件扩展名来确定应该使用哪个内置加载器来解析文件。每个加载器都有一个名称，比如`js`、`tsx`或`json`。这些名称用于构建使用自定义加载器扩展Bun的插件。
 
-You can explicitly specify which loader to use using the `'type'` import attribute.
+您可以使用`'type'`导入属性显式指定要使用的加载器。
 
 ```ts title="index.ts" icon="/icons/typescript.svg"
 import my_toml from "./my_file" with { type: "toml" };
-// or with dynamic imports
+// 或使用动态导入
 const { default: my_toml } = await import("./my_file", { with: { type: "toml" } });
 ```
 
-## Built-in loaders
+## 内置加载器
 
 ### `js`
 
-**JavaScript loader.** Default for `.cjs` and `.mjs`.
+**JavaScript加载器。** 默认用于[.cjs]和[.mjs]。
 
-Parses the code and applies a set of default transforms like dead-code elimination and tree shaking. Note that Bun does not attempt to down-convert syntax at the moment.
+解析代码并应用一组默认转换，如死代码消除和树摇。请注意，Bun目前不尝试降级转换语法。
 
 ---
 
 ### `jsx`
 
-**JavaScript + JSX loader.** Default for `.js` and `.jsx`.
+**JavaScript + JSX加载器。** 默认用于[.js]和[.jsx]。
 
-Same as the `js` loader, but JSX syntax is supported. By default, JSX is down-converted to plain JavaScript; the details of how this is done depends on the `jsx*` compiler options in your `tsconfig.json`. Refer to the [TypeScript documentation on JSX](https://www.typescriptlang.org/tsconfig#jsx) for more information.
+与`js`加载器相同，但支持JSX语法。默认情况下，JSX被降级转换为普通JavaScript；具体如何完成取决于您`tsconfig.json`中的`jsx*`编译器选项。请参阅[TypeScript关于JSX的文档](https://www.typescriptlang.org/tsconfig#jsx)获取更多信息。
 
 ---
 
 ### `ts`
 
-**TypeScript loader.** Default for `.ts`, `.mts`, and `.cts`.
+**TypeScript加载器。** 默认用于[.ts]、[.mts]和[.cts]。
 
-Strips out all TypeScript syntax, then behaves identically to the `js` loader. Bun does not perform typechecking.
+剥离所有TypeScript语法，然后行为与`js`加载器相同。Bun不执行类型检查。
 
 ---
 
 ### `tsx`
 
-**TypeScript + JSX loader.** Default for `.tsx`.
+**TypeScript + JSX加载器。** 默认用于[.tsx]。
 
-Transpiles both TypeScript and JSX to vanilla JavaScript.
+将TypeScript和JSX都转译为普通JavaScript。
 
 ---
 
 ### `json`
 
-**JSON loader.** Default for `.json`.
+**JSON加载器。** 默认用于[.json]。
 
-JSON files can be directly imported.
+JSON文件可以直接导入。
 
 ```js
 import pkg from "./package.json";
 pkg.name; // => "my-package"
 ```
 
-During bundling, the parsed JSON is inlined into the bundle as a JavaScript object.
+在打包过程中，解析的JSON被内联到包中作为一个JavaScript对象。
 
 ```js
 const pkg = {
   name: "my-package",
-  // ... other fields
+  // ... 其他字段
 };
 
 pkg.name;
 ```
 
-If a `.json` file is passed as an entrypoint to the bundler, it will be converted to a `.js` module that `export default`s the parsed object.
+如果[.json]文件作为入口点传递给打包器，它将被转换为一个`.js`模块，该模块`export default`解析的对象。
 
 <CodeGroup>
 
@@ -101,16 +101,16 @@ export default {
 
 ### `jsonc`
 
-**JSON with Comments loader.** Default for `.jsonc`.
+**带注释的JSON加载器。** 默认用于[.jsonc]。
 
-JSONC (JSON with Comments) files can be directly imported. Bun will parse them, stripping out comments and trailing commas.
+JSONC（带注释的JSON）文件可以直接导入。Bun将解析它们，剥离注释和尾随逗号。
 
 ```js
 import config from "./config.jsonc";
 console.log(config);
 ```
 
-During bundling, the parsed JSONC is inlined into the bundle as a JavaScript object, identical to the `json` loader.
+在打包过程中，解析的JSONC被内联到包中作为一个JavaScript对象，与`json`加载器相同。
 
 ```js
 var config = {
@@ -119,36 +119,36 @@ var config = {
 ```
 
 <Note>
-  Bun automatically uses the `jsonc` loader for `tsconfig.json`, `jsconfig.json`, `package.json`, and `bun.lock` files.
+  Bun自动为`tsconfig.json`、`jsconfig.json`、`package.json`和`bun.lock`文件使用`jsonc`加载器。
 </Note>
 
 ---
 
 ### `toml`
 
-**TOML loader.** Default for `.toml`.
+**TOML加载器。** 默认用于[.toml]。
 
-TOML files can be directly imported. Bun will parse them with its fast native TOML parser.
+TOML文件可以直接导入。Bun将使用其快速的本机TOML解析器解析它们。
 
 ```js
 import config from "./bunfig.toml";
 config.logLevel; // => "debug"
 
-// via import attribute:
+// 通过导入属性:
 // import myCustomTOML from './my.config' with {type: "toml"};
 ```
 
-During bundling, the parsed TOML is inlined into the bundle as a JavaScript object.
+在打包过程中，解析的TOML被内联到包中作为一个JavaScript对象。
 
 ```js
 var config = {
   logLevel: "debug",
-  // ...other fields
+  // ...其他字段
 };
 config.logLevel;
 ```
 
-If a `.toml` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the parsed object.
+如果[.toml]文件作为入口点传递，它将被转换为一个`.js`模块，该模块`export default`解析的对象。
 
 <CodeGroup>
 
@@ -172,29 +172,29 @@ export default {
 
 ### `yaml`
 
-**YAML loader.** Default for `.yaml` and `.yml`.
+**YAML加载器。** 默认用于[.yaml]和[.yml]。
 
-YAML files can be directly imported. Bun will parse them with its fast native YAML parser.
+YAML文件可以直接导入。Bun将使用其快速的本机YAML解析器解析它们。
 
 ```js
 import config from "./config.yaml";
 console.log(config);
 
-// via import attribute:
+// 通过导入属性:
 import data from "./data.txt" with { type: "yaml" };
 ```
 
-During bundling, the parsed YAML is inlined into the bundle as a JavaScript object.
+在打包过程中，解析的YAML被内联到包中作为一个JavaScript对象。
 
 ```js
 var config = {
   name: "my-app",
   version: "1.0.0",
-  // ...other fields
+  // ...其他字段
 };
 ```
 
-If a `.yaml` or `.yml` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the parsed object.
+如果[.yaml]或[.yml]文件作为入口点传递，它将被转换为一个`.js`模块，该模块`export default`解析的对象。
 
 <CodeGroup>
 
@@ -218,27 +218,27 @@ export default {
 
 ### `text`
 
-**Text loader.** Default for `.txt`.
+**文本加载器。** 默认用于[.txt]。
 
-The contents of the text file are read and inlined into the bundle as a string. Text files can be directly imported. The file is read and returned as a string.
+文本文件的内容被读取并内联到包中作为一个字符串。文本文件可以直接导入。文件被读取并作为字符串返回。
 
 ```js
 import contents from "./file.txt";
 console.log(contents); // => "Hello, world!"
 
-// To import an html file as text
-// The "type" attribute can be used to override the default loader.
+// 要将html文件作为文本导入
+// "type"属性可用于覆盖默认加载器。
 import html from "./index.html" with { type: "text" };
 ```
 
-When referenced during a build, the contents are inlined into the bundle as a string.
+在构建过程中引用时，内容被内联到包中作为一个字符串。
 
 ```js
 var contents = `Hello, world!`;
 console.log(contents);
 ```
 
-If a `.txt` file is passed as an entrypoint, it will be converted to a `.js` module that `export default`s the file contents.
+如果[.txt]文件作为入口点传递，它将被转换为一个`.js`模块，该模块`export default`文件内容。
 
 <CodeGroup>
 
@@ -256,44 +256,44 @@ export default "Hello, world!";
 
 ### `napi`
 
-**Native addon loader.** Default for `.node`.
+**原生插件加载器。** 默认用于[.node]。
 
-In the runtime, native addons can be directly imported.
+在运行时，可以直接导入原生插件。
 
 ```js
 import addon from "./addon.node";
 console.log(addon);
 ```
 
-<Note>In the bundler, `.node` files are handled using the file loader.</Note>
+<Note>在打包器中，[.node]文件使用文件加载器处理。</Note>
 
 ---
 
 ### `sqlite`
 
-**SQLite loader.** Requires `with { "type": "sqlite" }` import attribute.
+**SQLite加载器。** 需要`with { "type": "sqlite" }`导入属性。
 
-In the runtime and bundler, SQLite databases can be directly imported. This will load the database using `bun:sqlite`.
+在运行时和打包器中，可以直接导入SQLite数据库。这将使用`bun:sqlite`加载数据库。
 
 ```js
 import db from "./my.db" with { type: "sqlite" };
 ```
 
-<Warning>This is only supported when the target is `bun`.</Warning>
+<Warning>这仅在目标为`bun`时支持。</Warning>
 
-By default, the database is external to the bundle (so that you can potentially use a database loaded elsewhere), so the database file on-disk won't be bundled into the final output.
+默认情况下，数据库在包外部（以便您可以潜在地使用在别处加载的数据库），因此磁盘上的数据库文件不会被打包到最终输出中。
 
-You can change this behavior with the `"embed"` attribute:
+您可以使用`"embed"`属性更改此行为：
 
 ```js
-// embed the database into the bundle
+// 将数据库嵌入到包中
 import db from "./my.db" with { type: "sqlite", embed: "true" };
 ```
 
 <Info>
-When using a standalone executable, the database is embedded into the single-file executable.
+使用独立可执行文件时，数据库被嵌入到单文件可执行文件中。
 
-Otherwise, the database to embed is copied into the `outdir` with a hashed filename.
+否则，要嵌入的数据库将被复制到`outdir`中，文件名为哈希值。
 
 </Info>
 
@@ -301,16 +301,16 @@ Otherwise, the database to embed is copied into the `outdir` with a hashed filen
 
 ### `html`
 
-**HTML loader.** Default for `.html`.
+**HTML加载器。** 默认用于[.html]。
 
-The `html` loader processes HTML files and bundles any referenced assets. It will:
+`html`加载器处理HTML文件并打包任何引用的资源。它将：
 
-- Bundle and hash referenced JavaScript files (`<script src="...">`)
-- Bundle and hash referenced CSS files (`<link rel="stylesheet" href="...">`)
-- Hash referenced images (`<img src="...">`)
-- Preserve external URLs (by default, anything starting with `http://` or `https://`)
+- 打包和哈希引用的JavaScript文件（`<script src="...">`）
+- 打包和哈希引用的CSS文件（`<link rel="stylesheet" href="...">`）
+- 哈希引用的图像（`<img src="...">`）
+- 保留外部URL（默认情况下，以`http://`或`https://`开头的任何内容）
 
-For example, given this HTML file:
+例如，给定这个HTML文件：
 
 ```html title="src/index.html" icon="file-code"
 <!DOCTYPE html>
@@ -323,7 +323,7 @@ For example, given this HTML file:
 </html>
 ```
 
-It will output a new HTML file with the bundled assets:
+它将输出一个带有打包资源的新HTML文件：
 
 ```html title="dist/index.html" icon="file-code"
 <!DOCTYPE html>
@@ -336,10 +336,10 @@ It will output a new HTML file with the bundled assets:
 </html>
 ```
 
-Under the hood, it uses [`lol-html`](https://github.com/cloudflare/lol-html) to extract script and link tags as entrypoints, and other assets as external.
+在底层，它使用[`lol-html`](https://github.com/cloudflare/lol-html)提取脚本和链接标签作为入口点，其他资源作为外部资源。
 
-<Accordion title="List of supported HTML selectors">
-Currently, the list of selectors is:
+<Accordion title="支持的HTML选择器列表">
+目前，选择器列表是：
 
 - `audio[src]`
 - `iframe[src]`
@@ -364,13 +364,13 @@ Currently, the list of selectors is:
 
 <Note>
 
-**HTML Loader Behavior in Different Contexts**
+**不同上下文中的HTML加载器行为**
 
-The `html` loader behaves differently depending on how it's used:
+`html`加载器的行为因使用方式而异：
 
-- Static Build: When you run `bun build ./index.html`, Bun produces a static site with all assets bundled and hashed.
-- Runtime: When you run `bun run server.ts` (where `server.ts` imports an HTML file), Bun bundles assets on-the-fly during development, enabling features like hot module replacement.
-- Full-stack Build: When you run `bun build --target=bun server.ts` (where `server.ts` imports an HTML file), the import resolves to a manifest object that `Bun.serve` uses to efficiently serve pre-bundled assets in production.
+- 静态构建：当您运行`bun build ./index.html`时，Bun生成一个静态站点，所有资源都被打包和哈希。
+- 运行时：当您运行`bun run server.ts`（其中`server.ts`导入HTML文件）时，Bun在开发过程中动态打包资源，启用热模块替换等功能。
+- 全栈构建：当您运行`bun build --target=bun server.ts`（其中`server.ts`导入HTML文件）时，导入解析为一个清单对象，`Bun.serve`使用该对象在生产环境中高效地提供预打包的资源。
 
 </Note>
 
@@ -378,15 +378,15 @@ The `html` loader behaves differently depending on how it's used:
 
 ### `css`
 
-**CSS loader.** Default for `.css`.
+**CSS加载器。** 默认用于[.css]。
 
-CSS files can be directly imported. The bundler will parse and bundle CSS files, handling `@import` statements and `url()` references.
+CSS文件可以直接导入。打包器将解析和打包CSS文件，处理`@import`语句和`url()`引用。
 
 ```js
 import "./styles.css";
 ```
 
-During bundling, all imported CSS files are bundled together into a single `.css` file in the output directory.
+在打包过程中，所有导入的CSS文件都被打包到输出目录中的单个[.css]文件中。
 
 ```css
 .my-class {
@@ -398,9 +398,9 @@ During bundling, all imported CSS files are bundled together into a single `.css
 
 ### `sh`
 
-**Bun Shell loader.** Default for `.sh` files.
+**Bun Shell加载器。** 默认用于[.sh]文件。
 
-This loader is used to parse Bun Shell scripts. It's only supported when starting Bun itself, so it's not available in the bundler or in the runtime.
+此加载器用于解析Bun Shell脚本。它仅在启动Bun本身时支持，因此在打包器或运行时中不可用。
 
 ```bash
 bun run ./script.sh
@@ -410,9 +410,9 @@ bun run ./script.sh
 
 ### `file`
 
-**File loader.** Default for all unrecognized file types.
+**文件加载器。** 默认用于所有未识别的文件类型。
 
-The file loader resolves the import as a path/URL to the imported file. It's commonly used for referencing media or font assets.
+文件加载器将导入解析为导入文件的路径/URL。它通常用于引用媒体或字体资源。
 
 ```js
 // logo.ts
@@ -420,14 +420,14 @@ import logo from "./logo.svg";
 console.log(logo);
 ```
 
-In the runtime, Bun checks that the `logo.svg` file exists and converts it to an absolute path to the location of `logo.svg` on disk.
+在运行时，Bun检查`logo.svg`文件是否存在，并将其转换为`logo.svg`在磁盘上位置的绝对路径。
 
 ```bash
 bun run logo.ts
 # Output: /path/to/project/logo.svg
 ```
 
-In the bundler, things are slightly different. The file is copied into `outdir` as-is, and the import is resolved as a relative path pointing to the copied file.
+在打包器中，情况略有不同。文件被原样复制到`outdir`中，导入被解析为指向复制文件的相对路径。
 
 ```js
 // Output
@@ -435,17 +435,17 @@ var logo = "./logo.svg";
 console.log(logo);
 ```
 
-If a value is specified for `publicPath`, the import will use value as a prefix to construct an absolute path/URL.
+如果为`publicPath`指定了值，导入将使用该值作为前缀来构造绝对路径/URL。
 
-| Public path                  | Resolved import                    |
+| 公共路径                  | 解析的导入                    |
 | ---------------------------- | ---------------------------------- |
-| `""` (default)               | `/logo.svg`                        |
+| `""` (默认)               | `/logo.svg`                        |
 | `"/assets"`                  | `/assets/logo.svg`                 |
 | `"https://cdn.example.com/"` | `https://cdn.example.com/logo.svg` |
 
 <Note>
-The location and file name of the copied file is determined by the value of `naming.asset`.
+复制文件的位置和文件名由`naming.asset`的值确定。
 
-This loader is copied into the `outdir` as-is. The name of the copied file is determined using the value of `naming.asset`.
+此加载器被原样复制到`outdir`中。复制文件的名称由`naming.asset`的值确定。
 
 </Note>

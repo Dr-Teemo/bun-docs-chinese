@@ -1,10 +1,10 @@
 ---
-title: Get the MIME type of a file
-sidebarTitle: Get MIME type
+title: 获取文件的 MIME 类型
+sidebarTitle: 获取 MIME 类型
 mode: center
 ---
 
-The `Bun.file()` function accepts a path and returns a `BunFile` instance. The `BunFile` class extends `Blob`, so use the `.type` property to read the MIME type.
+`Bun.file()` 函数接受一个路径并返回一个 [BunFile] 实例。[BunFile] 类扩展了 `Blob`，所以使用 `.type` 属性来读取 MIME 类型。
 
 ```ts
 const file = Bun.file("./package.json");
@@ -19,4 +19,4 @@ file.type; // image/png
 
 ---
 
-Refer to [API > File I/O](/runtime/file-io) for more information on working with `BunFile`.
+有关使用 [BunFile] 的更多信息，请参阅 [API > 文件 I/O](/runtime/file-io)。

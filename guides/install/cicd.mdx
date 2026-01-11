@@ -1,10 +1,10 @@
 ---
-title: Install dependencies with Bun in GitHub Actions
-sidebarTitle: Install Bun in GitHub Actions
+title: 在 GitHub Actions 中使用 Bun 安装依赖
+sidebarTitle: 在 GitHub Actions 中安装 Bun
 mode: center
 ---
 
-Use the official [`setup-bun`](https://github.com/oven-sh/setup-bun) GitHub Action to install `bun` in your GitHub Actions runner.
+使用官方的 [`setup-bun`](https://github.com/oven-sh/setup-bun) GitHub Action 在您的 GitHub Actions 运行器中安装 `bun`。
 
 ```yaml workflow.yml icon="file-code"
 title: my-workflow
@@ -17,13 +17,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2 // [!code ++]
 
-      # run any `bun` or `bunx` command
+      # 运行任何 `bun` 或 `bunx` 命令
       - run: bun install // [!code ++]
 ```
 
 ---
 
-To specify a version of Bun to install:
+要指定要安装的 Bun 版本：
 
 ```yaml workflow.yml icon="file-code"
 title: my-workflow
@@ -35,9 +35,9 @@ jobs:
       # ...
       - uses: oven-sh/setup-bun@v2
          with: # [!code ++]
-          version: "latest" # or "canary" # [!code ++]
+          version: "latest" # 或 "canary" # [!code ++]
 ```
 
 ---
 
-Refer to the [README.md](https://github.com/oven-sh/setup-bun) for complete documentation of the `setup-bun` GitHub Action.
+请参阅 [README.md](https://github.com/oven-sh/setup-bun) 以获取 `setup-bun` GitHub Action 的完整文档。

@@ -1,10 +1,10 @@
 ---
-title: Add a peer dependency
-sidebarTitle: Add a peer dependency
+title: 添加对等依赖
+sidebarTitle: 添加对等依赖
 mode: center
 ---
 
-To add an npm package as a peer dependency, use the `--peer` flag.
+要将 npm 包添加为对等依赖，请使用 `--peer` 标志。
 
 ```sh terminal icon="terminal"
 bun add @types/bun --peer
@@ -12,7 +12,7 @@ bun add @types/bun --peer
 
 ---
 
-This will add the package to `peerDependencies` in `package.json`.
+这会将包添加到 [package.json] 中的 `peerDependencies`。
 
 ```json package.json icon="file-json"
 {
@@ -24,7 +24,7 @@ This will add the package to `peerDependencies` in `package.json`.
 
 ---
 
-Running `bun install` will install peer dependencies by default, unless marked optional in `peerDependenciesMeta`.
+运行 `bun install` 默认会安装对等依赖，除非在 `peerDependenciesMeta` 中标记为可选。
 
 {/* prettier-ignore */}
 ```json package.json icon="file-json"
@@ -42,4 +42,4 @@ Running `bun install` will install peer dependencies by default, unless marked o
 
 ---
 
-See [Docs > Package manager](/pm/cli/install) for complete documentation of Bun's package manager.
+请参阅 [文档 > 包管理器](/pm/cli/install) 以获取 Bun 包管理器的完整文档。

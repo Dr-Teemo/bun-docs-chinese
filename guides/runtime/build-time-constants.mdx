@@ -1,10 +1,10 @@
 ---
-title: Build-time constants with --define
-sidebarTitle: Build-time constants
+title: 使用 --define 设置构建时常量
+sidebarTitle: 构建时常量
 mode: center
 ---
 
-The `--define` flag can be used with `bun build` and `bun build --compile` to inject build-time constants into your application. This is especially useful for embedding metadata like build versions, timestamps, or configuration flags directly into your compiled executables.
+`--define` 标志可以与 `bun build` 和 `bun build --compile` 一起使用，将构建时的常量注入到应用程序中。这对于直接将构建版本、时间戳或配置标志等元数据嵌入到编译后的可执行文件中特别有用。
 
 ```sh terminal icon="terminal"
 bun build --compile --define BUILD_VERSION='"1.2.3"' --define BUILD_TIME='"2024-01-15T10:30:00Z"' src/index.ts --outfile myapp
@@ -12,32 +12,32 @@ bun build --compile --define BUILD_VERSION='"1.2.3"' --define BUILD_TIME='"2024-
 
 ---
 
-## Why use build-time constants?
+## 为什么要使用构建时常量？
 
-Build-time constants are embedded directly into your compiled code, making them:
+构建时常量直接嵌入到编译后的代码中，使它们具有：
 
-- **Zero runtime overhead** - No environment variable lookups or file reads
-- **Immutable** - Values are baked into the binary at compile time
-- **Optimizable** - Dead code elimination can remove unused branches
-- **Secure** - No external dependencies or configuration files to manage
+- **零运行时开销** - 无需环境变量查找或文件读取
+- **不可变** - 值在编译时就被固化到二进制文件中
+- **可优化** - 死代码消除可以移除未使用的分支
+- **安全** - 无需管理外部依赖或配置文件
 
-This is similar to `gcc -D` or `#define` in C/C++, but for JavaScript/TypeScript.
+这类似于 C/C++ 中的 `gcc -D` 或 `#define`，但适用于 JavaScript/TypeScript。
 
 ---
 
-## Basic usage
+## 基本用法
 
-### With `bun build`
+### 与 `bun build` 配合使用
 
 ```sh terminal icon="terminal"
-# Bundle with build-time constants
+# 使用构建时常量进行打包
 bun build --define BUILD_VERSION='"1.0.0"' --define NODE_ENV='"production"' src/index.ts --outdir ./dist
 ```
 
-### With `bun build --compile`
+### 与 `bun build --compile` 配合使用
 
 ```sh terminal icon="terminal"
-# Compile to executable with build-time constants
+# 编译成带有构建时常量的可执行文件
 bun build --compile --define BUILD_VERSION='"1.0.0"' --define BUILD_TIME='"2024-01-15T10:30:00Z"' src/cli.ts --outfile mycli
 ```
 
@@ -57,16 +57,16 @@ await Bun.build({
 
 ---
 
-## Common use cases
+## 常见用例
 
-### Version information
+### 版本信息
 
-Embed version and build metadata directly into your executable:
+直接将版本和构建元数据嵌入到可执行文件中：
 
 <CodeGroup>
 
 ```ts src/version.ts icon="/icons/typescript.svg"
-// These constants are replaced at build time
+// 这些常量在构建时被替换
 declare const BUILD_VERSION: string;
 declare const BUILD_TIME: string;
 declare const GIT_COMMIT: string;
@@ -90,18 +90,18 @@ bun build --compile \
 
 </CodeGroup>
 
-### Feature flags
+### 功能标志
 
-Use build-time constants to enable/disable features:
+使用构建时常量启用/禁用功能：
 
 ```ts src/version.ts icon="/icons/typescript.svg"
-// Replaced at build time
+// 在构建时被替换
 declare const ENABLE_ANALYTICS: boolean;
 declare const ENABLE_DEBUG: boolean;
 
 function trackEvent(event: string) {
   if (ENABLE_ANALYTICS) {
-    // This entire block is removed if ENABLE_ANALYTICS is false
+    // 如果 ENABLE_ANALYTICS 为 false，则整个块都会被删除
     console.log("Tracking:", event);
   }
 }
@@ -112,16 +112,16 @@ if (ENABLE_DEBUG) {
 ```
 
 ```sh
-# Production build - analytics enabled, debug disabled
+# 生产构建 - 启用分析，禁用调试
 bun build --compile --define ENABLE_ANALYTICS=true --define ENABLE_DEBUG=false src/app.ts --outfile app-prod
 
-# Development build - both enabled
+# 开发构建 - 两者都启用
 bun build --compile --define ENABLE_ANALYTICS=false --define ENABLE_DEBUG=true src/app.ts --outfile app-dev
 ```
 
-### Configuration
+### 配置
 
-Replace configuration objects at build time:
+在构建时替换配置对象：
 
 ```ts src/version.ts icon="/icons/typescript.svg"
 declare const CONFIG: {
@@ -130,7 +130,7 @@ declare const CONFIG: {
   retries: number;
 };
 
-// CONFIG is replaced with the actual object at build time
+// CONFIG 在构建时被替换为实际对象
 const response = await fetch(CONFIG.apiUrl, {
   timeout: CONFIG.timeout,
 });
@@ -142,11 +142,11 @@ bun build --compile --define 'CONFIG={"apiUrl":"https://api.example.com","timeou
 
 ---
 
-## Advanced patterns
+## 高级模式
 
-### Environment-specific builds
+### 环境特定构建
 
-Create different executables for different environments:
+为不同环境创建不同的可执行文件：
 
 ```json
 {
@@ -158,12 +158,12 @@ Create different executables for different environments:
 }
 ```
 
-### Using shell commands for dynamic values
+### 使用 shell 命令生成动态值
 
-Generate build-time constants from shell commands:
+从 shell 命令生成构建时常量：
 
 ```sh
-# Use git to get current commit and timestamp
+# 使用 git 获取当前提交和时间戳
 bun build --compile \
   --define BUILD_VERSION="\"$(git describe --tags --always)\"" \
   --define BUILD_TIME="\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"" \
@@ -171,9 +171,9 @@ bun build --compile \
   src/cli.ts --outfile mycli
 ```
 
-### Build automation script
+### 构建自动化脚本
 
-Create a build script that automatically injects build metadata:
+创建一个构建脚本，自动注入构建元数据：
 
 ```ts
 // build.ts
@@ -198,70 +198,70 @@ console.log(`Built with version ${version.trim()}`);
 
 ---
 
-## Important considerations
+## 重要注意事项
 
-### Value format
+### 值的格式
 
-Values must be valid JSON that will be parsed and inlined as JavaScript expressions:
+值必须是有效的 JSON，将被解析并内联为 JavaScript 表达式：
 
 ```sh
-# ✅ Strings must be JSON-quoted
+# ✅ 字符串必须是 JSON 引用的
 --define VERSION='"1.0.0"'
 
-# ✅ Numbers are JSON literals
+# ✅ 数字是 JSON 字面量
 --define PORT=3000
 
-# ✅ Booleans are JSON literals
+# ✅ 布尔值是 JSON 字面量
 --define DEBUG=true
 
-# ✅ Objects and arrays (use single quotes to wrap the JSON)
+# ✅ 对象和数组（使用单引号包装 JSON）
 --define 'CONFIG={"host":"localhost","port":3000}'
 
-# ✅ Arrays work too
+# ✅ 数组也能工作
 --define 'FEATURES=["auth","billing","analytics"]'
 
-# ❌ This won't work - missing quotes around string
+# ❌ 这样不行 - 字符串周围缺少引号
 --define VERSION=1.0.0
 ```
 
-### Property keys
+### 属性键
 
-You can use property access patterns as keys, not just simple identifiers:
+您可以使用属性访问模式作为键，而不只是简单的标识符：
 
 ```sh
-# ✅ Replace process.env.NODE_ENV with "production"
+# ✅ 将 process.env.NODE_ENV 替换为 "production"
 --define 'process.env.NODE_ENV="production"'
 
-# ✅ Replace process.env.API_KEY with the actual key
+# ✅ 将 process.env.API_KEY 替换为实际密钥
 --define 'process.env.API_KEY="abc123"'
 
-# ✅ Replace nested properties
+# ✅ 替换嵌套属性
 --define 'window.myApp.version="1.0.0"'
 
-# ✅ Replace array access
+# ✅ 替换数组访问
 --define 'process.argv[2]="--production"'
 ```
 
-This is particularly useful for environment variables:
+这对于环境变量特别有用：
 
 ```ts
-// Before compilation
+// 编译前
 if (process.env.NODE_ENV === "production") {
   console.log("Production mode");
 }
 
-// After compilation with --define 'process.env.NODE_ENV="production"'
+// 使用 --define 'process.env.NODE_ENV="production"' 编译后
 if ("production" === "production") {
   console.log("Production mode");
 }
 
-// After optimization
+// 优化后
 console.log("Production mode");
 ```
 
-### TypeScript declarations
+### TypeScript 声明
 
-For TypeScript projects, declare your constants to avoid type errors:
+对于 TypeScript 项目，声明您的常量以避免类型错误：
 
 ```ts
 // types/build-constants.d.ts
@@ -271,9 +271,9 @@ declare const NODE_ENV: "development" | "staging" | "production";
 declare const DEBUG: boolean;
 ```
 
-### Cross-platform compatibility
+### 跨平台兼容性
 
-When building for multiple platforms, constants work the same way:
+在多个平台上构建时，常量的工作方式相同：
 
 ```sh
 # Linux
@@ -288,8 +288,8 @@ bun build --compile --target=bun-windows-x64 --define PLATFORM='"windows"' src/a
 
 ---
 
-## Related
+## 相关内容
 
-- [Define constants at runtime](/guides/runtime/define-constant) - Using `--define` with `bun run`
-- [Building executables](/bundler/executables) - Complete guide to `bun build --compile`
-- [Bundler API](/bundler) - Full bundler documentation including `define` option
+- [在运行时定义常量](/guides/runtime/define-constant) - 将 `--define` 与 `bun run` 一起使用
+- [构建可执行文件](/bundler/executables) - `bun build --compile` 完整指南
+- [打包器 API](/bundler) - 完整打包器文档，包括 `define` 选项

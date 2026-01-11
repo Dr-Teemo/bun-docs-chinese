@@ -1,25 +1,25 @@
 ---
-title: File System Router
-description: Bun provides a fast API for resolving routes against file-system paths
+title: 文件系统路由器
+description: Bun 提供了一个快速的 API 用于解析文件系统路径的路由
 ---
 
-This API is primarily intended for library authors. At the moment only Next.js-style file-system routing is supported, but other styles may be added in the future.
+此 API 主要面向库作者。目前只支持 Next.js 风格的文件系统路由，但将来可能会添加其他风格。
 
-## Next.js-style
+## Next.js 风格
 
-The `FileSystemRouter` class can resolve routes against a `pages` directory. (The Next.js 13 `app` directory is not yet supported.) Consider the following `pages` directory:
+`FileSystemRouter` 类可以解析 `pages` 目录的路由。（Next.js 13 的 `app` 目录尚不支持。）考虑以下 `pages` 目录：
 
 ```txt
 pages
 ├── index.tsx
 ├── settings.tsx
 ├── blog
-│   ├── [slug].tsx
-│   └── index.tsx
+│   ├── [slug].tsx
+│   └── index.tsx
 └── [[...catchall]].tsx
 ```
 
-The `FileSystemRouter` can be used to resolve routes against this directory:
+`FileSystemRouter` 可用于解析此目录的路由：
 
 ```ts router.ts
 const router = new Bun.FileSystemRouter({
@@ -41,7 +41,7 @@ router.match("/");
 }
 ```
 
-Query parameters will be parsed and returned in the `query` property.
+查询参数将被解析并在 `query` 属性中返回。
 
 ```ts
 router.match("/settings?foo=bar");
@@ -59,7 +59,7 @@ router.match("/settings?foo=bar");
 }
 ```
 
-The router will automatically parse URL parameters and return them in the `params` property:
+路由器将自动解析 URL 参数并在 `params` 属性中返回它们：
 
 ```ts
 router.match("/blog/my-cool-post");
@@ -77,19 +77,19 @@ router.match("/blog/my-cool-post");
 }
 ```
 
-The `.match()` method also accepts `Request` and `Response` objects. The `url` property will be used to resolve the route.
+`.match()` 方法也接受 `Request` 和 `Response` 对象。将使用 `url` 属性来解析路由。
 
 ```ts
 router.match(new Request("https://example.com/blog/my-cool-post"));
 ```
 
-The router will read the directory contents on initialization. To re-scan the files, use the `.reload()` method.
+路由器将在初始化时读取目录内容。要重新扫描文件，请使用 `.reload()` 方法。
 
 ```ts
 router.reload();
 ```
 
-## Reference
+## 参考
 
 ```ts
 interface Bun {

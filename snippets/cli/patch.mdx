@@ -1,171 +1,169 @@
-# CLI Usage
+# CLI 用法
 
 ```bash
 bun patch <package>@<version>
 ```
 
-### Patch Generation
+### 补丁生成
 
 <ParamField path="--commit" type="boolean">
-  Install a package containing modifications in <code>dir</code>
+  安装包含 <code>dir</code> 中修改的包
 </ParamField>
 
 <ParamField path="--patches-dir" type="string">
-  The directory to put the patch file in (only if --commit is used)
+  放置补丁文件的目录（仅当使用 --commit 时）
 </ParamField>
 
-### Dependency Management
+### 依赖管理
 
 <ParamField path="--production" type="boolean">
-  Don't install devDependencies. Alias: <code>-p</code>
+  不安装 devDependencies。别名：<code>-p</code>
 </ParamField>
 
 <ParamField path="--ignore-scripts" type="boolean">
-  Skip lifecycle scripts in the project's <code>package.json</code> (dependency scripts are never run)
+  跳过项目 <code>package.json</code> 中的生命周期脚本（依赖脚本永远不会运行）
 </ParamField>
 
 <ParamField path="--trust" type="boolean">
-  Add to <code>trustedDependencies</code> in the project's <code>package.json</code> and install the package(s)
+  添加到项目 <code>package.json</code> 中的 <code>trustedDependencies</code> 并安装包
 </ParamField>
 
 <ParamField path="--global" type="boolean">
-  Install globally. Alias: <code>-g</code>
+  全局安装。别名：<code>-g</code>
 </ParamField>
 
 <ParamField path="--omit" type="string">
-  Exclude <code>dev</code>, <code>optional</code>, or <code>peer</code> dependencies from install
+  从安装中排除 <code>dev</code>、<code>optional</code> 或 <code>peer</code> 依赖
 </ParamField>
 
-### Project Files &amp; Lockfiles
+### 项目文件和锁文件
 
 <ParamField path="--yarn" type="boolean">
-  Write a <code>yarn.lock</code> file (yarn v1). Alias: <code>-y</code>
+  写入 <code>yarn.lock</code> 文件（yarn v1）。别名：<code>-y</code>
 </ParamField>
 
 <ParamField path="--no-save" type="boolean">
-  Don't update <code>package.json</code> or save a lockfile
+  不更新 <code>package.json</code> 或保存锁文件
 </ParamField>
 
 <ParamField path="--save" type="boolean" default="true">
-  Save to <code>package.json</code> (true by default)
+  保存到 <code>package.json</code>（默认为 true）
 </ParamField>
 
 <ParamField path="--frozen-lockfile" type="boolean">
-  Disallow changes to lockfile
+  禁止更改锁文件
 </ParamField>
 
 <ParamField path="--save-text-lockfile" type="boolean">
-  Save a text-based lockfile
+  保存基于文本的锁文件
 </ParamField>
 
 <ParamField path="--lockfile-only" type="boolean">
-  Generate a lockfile without installing dependencies
+  生成锁文件但不安装依赖
 </ParamField>
 
-### Installation Control
+### 安装控制
 
 <ParamField path="--backend" type="string" default="clonefile">
-  Platform-specific optimizations for installing dependencies. Possible values: <code>clonefile</code> (default),{" "}
-  <code>hardlink</code>, <code>symlink</code>, <code>copyfile</code>
+  安装依赖的平台特定优化。可能的值：<code>clonefile</code>（默认）、{" "}
+  <code>hardlink</code>、<code>symlink</code>、<code>copyfile</code>
 </ParamField>
 
 <ParamField path="--linker" type="string">
-  Linker strategy (one of <code>isolated</code> or <code>hoisted</code>)
+  链接器策略（<code>isolated</code> 或 <code>hoisted</code> 之一）
 </ParamField>
 
 <ParamField path="--dry-run" type="boolean">
-  Don't install anything
+  不安装任何内容
 </ParamField>
 
 <ParamField path="--force" type="boolean">
-  Always request the latest versions from the registry &amp; reinstall all dependencies. Alias: <code>-f</code>
+  始终从注册表请求最新版本并重新安装所有依赖。别名：<code>-f</code>
 </ParamField>
 
 <ParamField path="--no-verify" type="boolean">
-  Skip verifying integrity of newly downloaded packages
+  跳过验证新下载包的完整性
 </ParamField>
 
-### Network &amp; Registry
+### 网络和注册表
 
 <ParamField path="--ca" type="string">
-  Provide a Certificate Authority signing certificate
+  提供证书颁发机构签名证书
 </ParamField>
 
 <ParamField path="--cafile" type="string">
-  Same as <code>--ca</code>, but as a file path to the certificate
+  与 <code>--ca</code> 相同，但作为证书的文件路径
 </ParamField>
 
 <ParamField path="--registry" type="string">
-  Use a specific registry by default, overriding <code>.npmrc</code>, <code>bunfig.toml</code>, and environment
-  variables
+  默认使用特定注册表，覆盖 <code>.npmrc</code>、<code>bunfig.toml</code> 和环境
+  变量
 </ParamField>
 
 <ParamField path="--network-concurrency" type="number" default="48">
-  Maximum number of concurrent network requests (default 48)
+  最大并发网络请求数（默认为 48）
 </ParamField>
 
-### Performance &amp; Resource
+### 性能和资源
 
 <ParamField path="--concurrent-scripts" type="number" default="5">
-  Maximum number of concurrent jobs for lifecycle scripts (default 5)
+  生命周期脚本的最大并发作业数（默认为 5）
 </ParamField>
 
-### Caching
+### 缓存
 
 <ParamField path="--cache-dir" type="string">
-  Store &amp; load cached data from a specific directory path
+  从特定目录路径存储和加载缓存数据
 </ParamField>
 
 <ParamField path="--no-cache" type="boolean">
-  Ignore manifest cache entirely
+  完全忽略清单缓存
 </ParamField>
 
-### Output &amp; Logging
+### 输出和日志
 
 <ParamField path="--silent" type="boolean">
-  Don't log anything
+  不记录任何内容
 </ParamField>
 
 <ParamField path="--quiet" type="boolean">
-  Only show tarball name when packing
+  打包时仅显示 tarball 名称
 </ParamField>
 
 <ParamField path="--verbose" type="boolean">
-  Excessively verbose logging
+  过度详细的日志记录
 </ParamField>
 
 <ParamField path="--no-progress" type="boolean">
-  Disable the progress bar
+  禁用进度条
 </ParamField>
 
 <ParamField path="--no-summary" type="boolean">
-  Don't print a summary
+  不打印摘要
 </ParamField>
 
-### Platform Targeting
+### 平台目标
 
 <ParamField path="--cpu" type="string">
-  Override CPU architecture for optional dependencies (e.g., <code>x64</code>, <code>arm64</code>, <code>*</code> for
-  all)
+  覆盖可选依赖的 CPU 架构（例如，<code>x64</code>、<code>arm64</code>、<code>*</code> 表示全部）
 </ParamField>
 
 <ParamField path="--os" type="string">
-  Override operating system for optional dependencies (e.g., <code>linux</code>, <code>darwin</code>, <code>*</code> for
-  all)
+  覆盖可选依赖的操作系统（例如，<code>linux</code>、<code>darwin</code>、<code>*</code> 表示全部）
 </ParamField>
 
-### Global Configuration &amp; Context
+### 全局配置和上下文
 
 <ParamField path="--config" type="string">
-  Specify path to config file (<code>bunfig.toml</code>). Alias: <code>-c</code>
+  指定配置文件路径（<code>bunfig.toml</code>）。别名：<code>-c</code>
 </ParamField>
 
 <ParamField path="--cwd" type="string">
-  Set a specific current working directory
+  设置特定的当前工作目录
 </ParamField>
 
-### Help
+### 帮助
 
 <ParamField path="--help" type="boolean">
-  Print this help menu. Alias: <code>-h</code>
+  打印此帮助菜单。别名：<code>-h</code>
 </ParamField>

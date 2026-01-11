@@ -1,19 +1,19 @@
 ---
-title: Server-side render (SSR) a React component
-sidebarTitle: "SSR React with Bun"
+title: 服务端渲染 (SSR) 一个 React 组件
+sidebarTitle: "使用 Bun 进行 SSR React"
 mode: center
 ---
 
-To get started, install `react` & `react-dom`:
+要开始，请安装 `react` 和 `react-dom`：
 
 ```sh terminal icon="terminal"
-# Any package manager can be used
+# 可以使用任何包管理器
 bun add react react-dom
 ```
 
 ---
 
-To render a React component to an HTML stream server-side (SSR):
+要将 React 组件渲染为服务端的 HTML 流 (SSR)：
 
 ```tsx ssr-react.tsx icon="file-code"
 import { renderToReadableStream } from "react-dom/server";
@@ -31,7 +31,7 @@ const stream = await renderToReadableStream(<Component message="Hello from serve
 
 ---
 
-Combining this with `Bun.serve()`, we get a simple SSR HTTP server:
+结合 `Bun.serve()`，我们得到一个简单的 SSR HTTP 服务器：
 
 ```tsx server.ts icon="/icons/typescript.svg"
 Bun.serve({
@@ -46,4 +46,4 @@ Bun.serve({
 
 ---
 
-React `19` and later includes an [SSR optimization](https://github.com/facebook/react/pull/25597) that takes advantage of Bun's "direct" `ReadableStream` implementation. If you run into an error like `export named 'renderToReadableStream' not found`, please make sure to install version `19` of `react` & `react-dom`, or import from `react-dom/server.browser` instead of `react-dom/server`. See [facebook/react#28941](https://github.com/facebook/react/issues/28941) for more information.
+React `19` 及更高版本包含一项[SSR 优化](https://github.com/facebook/react/pull/25597)，利用了 Bun 的"直接" `ReadableStream` 实现。如果您遇到类似 `export named 'renderToReadableStream' not found` 的错误，请确保安装了 `react` 和 `react-dom` 的 `19` 版本，或者从 `react-dom/server.browser` 而不是 `react-dom/server` 导入。更多信息请参见 [facebook/react#28941](https://github.com/facebook/react/issues/28941)。

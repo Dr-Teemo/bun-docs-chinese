@@ -1,28 +1,28 @@
 ---
-title: Detect when code is executed with Bun
-sidebarTitle: Detect Bun
+title: 检测代码何时在 Bun 中执行
+sidebarTitle: 检测 Bun
 mode: center
 ---
 
-The recommended way to detect when code is being executed with Bun is to check `process.versions.bun`. This works in both JavaScript and TypeScript without requiring any additional type definitions.
+推荐的方法是检查 `process.versions.bun` 来检测代码何时在 Bun 中执行。这在 JavaScript 和 TypeScript 中都可以使用，无需任何额外的类型定义。
 
 ```ts
 if (process.versions.bun) {
-  // this code will only run when the file is run with Bun
+  // 此代码仅在文件使用 Bun 运行时执行
 }
 ```
 
 ---
 
-Alternatively, you can check for the existence of the `Bun` global. This is similar to how you'd check for the existence of the `window` variable to detect when code is being executed in a browser.
+或者，您可以检查 `Bun` 全局变量的存在。这类似于检查 `window` 变量的存在以检测代码何时在浏览器中执行。
 
 <Note>
-  This approach will result in a type error in TypeScript unless `@types/bun` is installed. You can install it with `bun
-  add -d @types/bun`.
+  除非安装了 `@types/bun`，否则这种方法会在 TypeScript 中导致类型错误。你可以使用 `bun
+  add -d @types/bun` 安装它。
 </Note>
 
 ```ts
 if (typeof Bun !== "undefined") {
-  // this code will only run when the file is run with Bun
+  // 此代码仅在文件使用 Bun 运行时执行
 }
 ```

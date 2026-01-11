@@ -1,37 +1,37 @@
 ---
 title: Console
-description: The console object in Bun
+description: Bun 中的 console 对象
 ---
 
 <Note>
-  Bun provides a browser- and Node.js-compatible [console](https://developer.mozilla.org/en-US/docs/Web/API/console)
-  global. This page only documents Bun-native APIs.
+  Bun 提供了一个浏览器和 Node.js 兼容的 [console](https://developer.mozilla.org/en-US/docs/Web/API/console)
+  全局对象。此页面仅记录 Bun 原生 API。
 </Note>
 
 ---
 
-## Object inspection depth
+## 对象检查深度
 
-Bun allows you to configure how deeply nested objects are displayed in `console.log()` output:
+Bun 允许您配置 `console.log()` 输出中嵌套对象的显示深度：
 
-- **CLI flag**: Use `--console-depth <number>` to set the depth for a single run
-- **Configuration**: Set `console.depth` in your `bunfig.toml` for persistent configuration
-- **Default**: Objects are inspected to a depth of `2` levels
+- **CLI 标志**: 使用 `--console-depth <number>` 为单次运行设置深度
+- **配置**: 在 `bunfig.toml` 中设置 `console.depth` 以进行持久配置
+- **默认值**: 对象检查深度为 `2` 级别
 
 ```js
 const nested = { a: { b: { c: { d: "deep" } } } };
 console.log(nested);
-// Default (depth 2): { a: { b: [Object] } }
-// With depth 4: { a: { b: { c: { d: 'deep' } } } }
+// 默认（深度 2）：{ a: { b: [Object] } }
+// 深度 4：{ a: { b: { c: { d: 'deep' } } } }
 ```
 
-The CLI flag takes precedence over the configuration file setting.
+CLI 标志优先于配置文件设置。
 
 ---
 
-## Reading from stdin
+## 从 stdin 读取
 
-In Bun, the `console` object can be used as an `AsyncIterable` to sequentially read lines from `process.stdin`.
+在 Bun 中，`console` 对象可以用作 `AsyncIterable` 来从 `process.stdin` 顺序读取行。
 
 ```ts adder.ts icon="/icons/typescript.svg"
 for await (const line of console) {
@@ -39,29 +39,29 @@ for await (const line of console) {
 }
 ```
 
-This is useful for implementing interactive programs, like the following addition calculator.
+这对于实现交互式程序很有用，比如下面的加法计算器。
 
 ```ts adder.ts icon="/icons/typescript.svg"
-console.log(`Let's add some numbers!`);
-console.write(`Count: 0\n> `);
+console.log(`让我们来加一些数字！`);
+console.write(`计数: 0\n> `);
 
 let count = 0;
 for await (const line of console) {
   count += Number(line);
-  console.write(`Count: ${count}\n> `);
+  console.write(`计数: ${count}\n> `);
 }
 ```
 
-To run the file:
+要运行文件：
 
 ```bash terminal icon="terminal"
 bun adder.ts
-Let's add some numbers!
-Count: 0
+让我们来加一些数字！
+计数: 0
 > 5
-Count: 5
+计数: 5
 > 5
-Count: 10
+计数: 10
 > 5
-Count: 15
+计数: 15
 ```

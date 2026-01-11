@@ -1,10 +1,10 @@
 ---
-title: Write a ReadableStream to a file
-sidebarTitle: Write stream
+title: 将 ReadableStream 写入文件
+sidebarTitle: 写入流
 mode: center
 ---
 
-To write a `ReadableStream` to disk, first create a `Response` instance from the stream. This `Response` can then be written to disk using [`Bun.write()`](/runtime/file-io#writing-files-bun-write).
+要将 `ReadableStream` 写入磁盘，首先从流创建一个 [Response] 实例。然后可以使用 [`Bun.write()`](/runtime/file-io#writing-files-bun-write) 将此 [Response] 写入磁盘。
 
 ```ts
 const stream: ReadableStream = ...;
@@ -16,4 +16,4 @@ await Bun.write(path, response);
 
 ---
 
-See [Docs > API > File I/O](/runtime/file-io#writing-files-bun-write) for complete documentation of `Bun.write()`.
+请参阅 [文档 > API > 文件 I/O](/runtime/file-io#writing-files-bun-write) 了解 `Bun.write()` 的完整文档。

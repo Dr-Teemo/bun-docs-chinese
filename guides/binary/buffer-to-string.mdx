@@ -1,10 +1,10 @@
 ---
-title: Convert a Buffer to a string
-sidebarTitle: "Buffer to string"
+title: 将 Buffer 转换为字符串
+sidebarTitle: "Buffer 到 字符串"
 mode: center
 ---
 
-The [`Buffer`](https://nodejs.org/api/buffer.html) class provides a built-in `.toString()` method that converts a `Buffer` to a string.
+[Buffer](https://nodejs.org/api/buffer.html) 类提供了一个内置的 `.toString()` 方法，将 `Buffer` 转换为字符串。
 
 ```ts
 const buf = Buffer.from("hello");
@@ -14,7 +14,7 @@ const str = buf.toString();
 
 ---
 
-You can optionally specify an encoding and byte range.
+您可以选择指定编码和字节范围。
 
 ```ts
 const buf = Buffer.from("hello world!");
@@ -24,4 +24,4 @@ const str = buf.toString("utf8", 0, 5);
 
 ---
 
-See [Docs > API > Binary Data](/runtime/binary-data#conversion) for complete documentation on manipulating binary data with Bun.
+参阅 [文档 > API > 二进制数据](/runtime/binary-data#conversion) 获取关于使用Bun操作二进制数据的完整文档。

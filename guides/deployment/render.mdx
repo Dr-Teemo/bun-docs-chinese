@@ -1,30 +1,30 @@
 ---
-title: Deploy a Bun application on Render
-sidebarTitle: Deploy on Render
+title: 在 Render 上部署 Bun 应用程序
+sidebarTitle: 在 Render 上部署
 mode: center
 ---
 
-[Render](https://render.com/) is a cloud platform that lets you flexibly build, deploy, and scale your apps.
+[Render](https://render.com/) 是一个云平台，让您可以灵活地构建、部署和扩展您的应用程序。
 
-It offers features like auto deploys from GitHub, a global CDN, private networks, automatic HTTPS setup, and managed PostgreSQL and Redis.
+它提供了诸如从 GitHub 自动部署、全球 CDN、私有网络、自动 HTTPS 设置以及托管的 PostgreSQL 和 Redis 等功能。
 
-Render supports Bun natively. You can deploy Bun apps as web services, background workers, cron jobs, and more.
+Render 原生支持 Bun。您可以将 Bun 应用程序部署为 Web 服务、后台工作者、定时任务等。
 
 ---
 
-As an example, let's deploy a simple Express HTTP server to Render.
+作为一个例子，让我们将一个简单的 Express HTTP 服务器部署到 Render。
 
 <Steps>
-	<Step title="Step 1">
-		Create a new GitHub repo named `myapp`. Git clone it locally.
+	<Step title="第 1 步">
+		创建一个名为 `myapp` 的新 GitHub 仓库。将其 Git 克隆到本地。
 
     	```sh
     	git clone git@github.com:my-github-username/myapp.git
     	cd myapp
     	```
     	</Step>
-    	<Step title="Step 2">
-    	Add the Express library.
+    	<Step title="第 2 步">
+    	添加 Express 库。
 
     	```sh
     	bun add express
@@ -32,8 +32,8 @@ As an example, let's deploy a simple Express HTTP server to Render.
 
     </Step>
 
-    <Step title="Step 3">
-    	Define a simple server with Express:
+    <Step title="第 3 步">
+    	使用 Express 定义一个简单的服务器：
 
     	```ts app.ts icon="/icons/typescript.svg"
     	import express from "express";
@@ -50,9 +50,9 @@ As an example, let's deploy a simple Express HTTP server to Render.
     	});
     	```
     </Step>
-    <Step title="Step 4">
+    <Step title="第 4 步">
 
-    	Commit your changes and push to GitHub.
+    	提交您的更改并推送到 GitHub。
 
     	```sh terminal icon="terminal"
     	git add app.ts bun.lock package.json
@@ -60,23 +60,23 @@ As an example, let's deploy a simple Express HTTP server to Render.
     	git push origin main
     	```
     </Step>
-    <Step title="Step 5">
-    	In your [Render Dashboard](https://dashboard.render.com/), click `New` > `Web Service` and connect your `myapp` repo.
+    <Step title="第 5 步">
+    	在您的 [Render 仪表板](https://dashboard.render.com/) 中，点击 `New` > `Web Service` 并连接您的 `myapp` 仓库。
 
     </Step>
-    <Step title="Step 6">
-    	In the Render UI, provide the following values during web service creation:
+    <Step title="第 6 步">
+    	在 Render UI 中，在创建 Web 服务期间提供以下值：
 
     	|                   |               |
     	| ----------------- | ------------- |
-    	| **Runtime**       | `Node`        |
-    	| **Build Command** | `bun install` |
-    	| **Start Command** | `bun app.ts`  |
+    	| **运行时**       | `Node`        |
+    	| **构建命令** | `bun install` |
+    	| **启动命令** | `bun app.ts`  |
 
     </Step>
 
 </Steps>
 
-That's it! Your web service will be live at its assigned `onrender.com` URL as soon as the build finishes.
+就是这样！您的 Web 服务将在构建完成后立即在其分配的 `onrender.com` URL 上上线。
 
-You can view the [deploy logs](https://docs.render.com/logging#logs-for-an-individual-deploy-or-job) for details. Refer to [Render's documentation](https://docs.render.com/deploys) for a complete overview of deploying on Render.
+您可以查看 [部署日志](https://docs.render.com/logging#logs-for-an-individual-deploy-or-job) 了解详情。请参考 [Render 的文档](https://docs.render.com/deploys) 获取在 Render 上部署的完整概述。

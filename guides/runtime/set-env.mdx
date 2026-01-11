@@ -1,10 +1,10 @@
 ---
-title: Set environment variables
-sidebarTitle: Set env variables
+title: 设置环境变量
+sidebarTitle: 设置环境变量
 mode: center
 ---
 
-The current environment variables can be accessed via `process.env` or `Bun.env`.
+当前环境变量可以通过 `process.env` 或 `Bun.env` 访问。
 
 ```ts index.ts icon="/icons/typescript.svg"
 Bun.env.API_TOKEN; // => "secret"
@@ -13,13 +13,13 @@ process.env.API_TOKEN; // => "secret"
 
 ---
 
-Set these variables in a `.env` file.
+在 [.env] 文件中设置这些变量。
 
-Bun reads the following files automatically (listed in order of increasing precedence).
+Bun 会自动读取以下文件（按优先级递增顺序列出）。
 
-- `.env`
-- `.env.production`, `.env.development`, `.env.test` (depending on value of `NODE_ENV`)
-- `.env.local` (not loaded when `NODE_ENV=test`)
+- [.env]
+- [.env.production]、[.env.development]、[.env.test]（取决于 `NODE_ENV` 的值）
+- [.env.local]（当 `NODE_ENV=test` 时不加载）
 
 ```ini .env icon="settings"
 FOO=hello
@@ -28,7 +28,7 @@ BAR=world
 
 ---
 
-Variables can also be set via the command line.
+变量也可以通过命令行设置。
 
 <CodeGroup>
 
@@ -37,10 +37,10 @@ FOO=helloworld bun run dev
 ```
 
 ```sh Windows icon="windows"
-# Using CMD
+# 使用 CMD
 set FOO=helloworld && bun run dev
 
-# Using PowerShell
+# 使用 PowerShell
 $env:FOO="helloworld"; bun run dev
 ```
 
@@ -48,4 +48,4 @@ $env:FOO="helloworld"; bun run dev
 
 ---
 
-See [Docs > Runtime > Environment variables](/runtime/environment-variables) for more information on using environment variables with Bun.
+有关在 Bun 中使用环境变量的更多信息，请参阅 [文档 > 运行时 > 环境变量](/runtime/environment-variables)。

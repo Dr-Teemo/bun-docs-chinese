@@ -1,10 +1,10 @@
 ---
-title: Import a JSON file
-sidebarTitle: Import JSON
+title: 导入 JSON 文件
+sidebarTitle: 导入 JSON
 mode: center
 ---
 
-Bun natively supports `.json` imports.
+Bun 原生支持 `.json` 导入。
 
 ```json package.json icon="file-json"
 {
@@ -19,7 +19,7 @@ Bun natively supports `.json` imports.
 
 ---
 
-Import the file like any other source file.
+像任何其他源文件一样导入该文件。
 
 ```ts data.ts icon="/icons/typescript.svg"
 import data from "./package.json";
@@ -31,7 +31,7 @@ data.author.name; // => "John Dough"
 
 ---
 
-Bun also supports [Import Attributes](https://github.com/tc39/proposal-import-attributes/) and [JSON modules](https://github.com/tc39/proposal-json-modules) syntax.
+Bun 还支持 [导入属性](https://github.com/tc39/proposal-import-attributes/) 和 [JSON 模块](https://github.com/tc39/proposal-json-modules) 语法。
 
 ```ts data.ts icon="/icons/typescript.svg"
 import data from "./package.json" with { type: "json" };
@@ -43,4 +43,4 @@ data.author.name; // => "John Dough"
 
 ---
 
-See [Docs > Runtime > TypeScript](/runtime/typescript) for more information on using TypeScript with Bun.
+有关在 Bun 中使用 TypeScript 的更多信息，请参阅 [文档 > 运行时 > TypeScript](/runtime/typescript)。

@@ -1,10 +1,10 @@
 ---
-title: Check if two objects are deeply equal
-sidebarTitle: Deep equality
+title: 检查两个对象是否深度相等
+sidebarTitle: 深度相等
 mode: center
 ---
 
-Check if two objects are deeply equal. This is used internally by `expect().toEqual()` in Bun's [test runner](/test/writing-tests).
+检查两个对象是否深度相等。这在 Bun 的 [测试运行器](/test/writing-tests) 中被 [expect().toEqual()] 内部使用。
 
 ```ts index.ts icon="/icons/typescript.svg"
 const a = { a: 1, b: 2, c: { d: 3 } };
@@ -15,21 +15,21 @@ Bun.deepEquals(a, b); // true
 
 ---
 
-Pass `true` as a third argument to enable strict mode. This is used internally by `expect().toStrictEqual()` in Bun's [test runner](/test/writing-tests).
+传递 `true` 作为第三个参数以启用严格模式。这在 Bun 的 [测试运行器](/test/writing-tests) 中被 [expect().toStrictEqual()] 内部使用。
 
-The following examples would return `true` in non-strict mode but `false` in strict mode.
+以下示例在非严格模式下返回 `true`，但在严格模式下返回 `false`。
 
 ```ts index.ts icon="/icons/typescript.svg"
-// undefined values
+// undefined 值
 Bun.deepEquals({}, { a: undefined }, true); // false
 
-// undefined in arrays
+// 数组中的 undefined
 Bun.deepEquals(["asdf"], ["asdf", undefined], true); // false
 
-// sparse arrays
+// 稀疏数组
 Bun.deepEquals([, 1], [undefined, 1], true); // false
 
-// object literals vs instances w/ same properties
+// 对象字面量与实例 w/ 相同属性
 class Foo {
   a = 1;
 }
@@ -38,4 +38,4 @@ Bun.deepEquals(new Foo(), { a: 1 }, true); // false
 
 ---
 
-See [Docs > API > Utils](/runtime/utils) for more useful utilities.
+请参阅 [文档 > API > 工具](/runtime/utils) 了解更多的实用工具。

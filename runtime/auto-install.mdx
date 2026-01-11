@@ -1,97 +1,97 @@
 ---
-title: "Auto-install"
-description: "Bun's automatic package installation feature for standalone script execution"
+title: "自动安装"
+description: "Bun 的独立脚本执行自动包安装功能"
 ---
 
-If no `node_modules` directory is found in the working directory or higher, Bun will abandon Node.js-style module resolution in favor of the **Bun module resolution algorithm**.
+如果没有在工作目录或上级目录中找到 [node_modules] 目录，Bun 将放弃 Node.js 风格的模块解析，转而使用 **Bun 模块解析算法**。
 
-Under Bun-style module resolution, all imported packages are auto-installed on the fly into a [global module cache](/pm/global-cache) during execution (the same cache used by [`bun install`](/pm/cli/install)).
+在 Bun 风格的模块解析下，所有导入的包在执行期间都会动态自动安装到 [全局模块缓存](/pm/global-cache) 中（与 [`bun install`](/pm/cli/install) 使用的缓存相同）。
 
 ```ts index.ts icon="/icons/typescript.svg"
-import { foo } from "foo"; // install `latest` version
+import { foo } from "foo"; // 安装 `latest` 版本
 
 foo();
 ```
 
-The first time you run this script, Bun will auto-install `"foo"` and cache it. The next time you run the script, it will use the cached version.
+第一次运行此脚本时，Bun 将自动安装 `"foo"` 并缓存它。下次运行脚本时，将使用缓存的版本。
 
 ---
 
-## Version resolution
+## 版本解析
 
-To determine which version to install, Bun follows the following algorithm:
+要确定安装哪个版本，Bun 遵循以下算法：
 
-1. Check for a `bun.lock` file in the project root. If it exists, use the version specified in the lockfile.
-2. Otherwise, scan up the tree for a `package.json` that includes `"foo"` as a dependency. If found, use the specified semver version or version range.
-3. Otherwise, use `latest`.
-
----
-
-## Cache behavior
-
-Once a version or version range has been determined, Bun will:
-
-1. Check the module cache for a compatible version. If one exists, use it.
-2. When resolving `latest`, Bun will check if `package@latest` has been downloaded and cached in the last _24 hours_. If so, use it.
-3. Otherwise, download and install the appropriate version from the `npm` registry.
+1. 检查项目根目录中是否存在 [bun.lock] 文件。如果存在，使用锁文件中指定的版本。
+2. 否则，向上扫描树形结构，寻找包含 `"foo"` 作为依赖项的 [package.json]。如果找到，使用指定的 semver 版本或版本范围。
+3. 否则，使用 `latest`。
 
 ---
 
-## Installation
+## 缓存行为
 
-Packages are installed and cached into `<cache>/<pkg>@<version>`, so multiple versions of the same package can be cached at once. Additionally, a symlink is created under `<cache>/<pkg>/<version>` to make it faster to look up all versions of a package that exist in the cache.
+一旦确定了版本或版本范围，Bun 将：
+
+1. 检查模块缓存中是否存在兼容版本。如果存在，则使用它。
+2. 解析 `latest` 时，Bun 将检查过去 24 小时内是否已下载并缓存了 `package@latest`。如果是，则使用它。
+3. 否则，从 `npm` 注册表下载并安装适当的版本。
 
 ---
 
-## Version specifiers
+## 安装
 
-This entire resolution algorithm can be short-circuited by specifying a version or version range directly in your import statement.
+包被安装并缓存到 `<cache>/<pkg>@<version>` 中，因此同一包的多个版本可以同时缓存。此外，还会在 `<cache>/<pkg>/<version>` 下创建一个符号链接，以便更快地查找缓存中存在的包的所有版本。
+
+---
+
+## 版本说明符
+
+通过在导入语句中直接指定版本或版本范围，可以绕过整个解析算法。
 
 ```ts index.ts icon="/icons/typescript.svg"
-import { z } from "zod@3.0.0"; // specific version
-import { z } from "zod@next"; // npm tag
-import { z } from "zod@^3.20.0"; // semver range
+import { z } from "zod@3.0.0"; // 特定版本
+import { z } from "zod@next"; // npm 标签
+import { z } from "zod@^3.20.0"; // semver 范围
 ```
 
 ---
 
-## Benefits
+## 优势
 
-This auto-installation approach is useful for a few reasons:
+这种自动安装方法有几个好处：
 
-- **Space efficiency** — Each version of a dependency only exists in one place on disk. This is a huge space and time savings compared to redundant per-project installations.
-- **Portability** — To share simple scripts and gists, your source file is _self-contained_. No need to `zip` together a directory containing your code and config files. With version specifiers in `import` statements, even a `package.json` isn't necessary.
-- **Convenience** — There's no need to run `npm install` or `bun install` before running a file or script. Just `bun run` it.
-- **Backwards compatibility** — Because Bun still respects the versions specified in `package.json` if one exists, you can switch to Bun-style resolution with a single command: `rm -rf node_modules`.
-
----
-
-## Limitations
-
-- No Intellisense. TypeScript auto-completion in IDEs relies on the existence of type declaration files inside `node_modules`. We are investigating various solutions to this.
-- No [patch-package](https://github.com/ds300/patch-package) support
+- **空间效率** — 每个依赖项的每个版本只存在于磁盘的一个位置。相比于每个项目重复安装，这在空间和时间上都有巨大节省。
+- **便携性** — 要共享简单脚本和代码片段，您的源文件是自包含的。无需将包含代码和配置文件的目录压缩成 zip。由于在 `import` 语句中使用版本说明符，甚至不需要 [package.json]。
+- **便捷性** — 在运行文件或脚本之前无需运行 `npm install` 或 `bun install`。只需 `bun run` 即可。
+- **向后兼容性** — 因为如果存在 [package.json]，Bun 仍然遵循其中指定的版本，您可以使用单个命令切换到 Bun 风格的解析：`rm -rf node_modules`。
 
 ---
 
-## FAQ
+## 局限性
+
+- 无智能感知。IDE 中的 TypeScript 自动补全依赖于 [node_modules] 内部的类型声明文件的存在。我们正在研究此问题的各种解决方案。
+- 不支持 [patch-package](https://github.com/ds300/patch-package)
+
+---
+
+## 常见问题
 
 <AccordionGroup>
 
-    <Accordion title="How is this different from what pnpm does?">
+    <Accordion title="这与 pnpm 有何不同？">
 
-    With pnpm, you have to run `pnpm install`, which creates a `node_modules` folder of symlinks for the runtime to resolve. By contrast, Bun resolves dependencies on the fly when you run a file; there's no need to run any `install` command ahead of time. Bun also doesn't create a `node_modules` folder.
+    使用 pnpm，您必须运行 `pnpm install`，它会创建一个包含符号链接的 [node_modules] 文件夹供运行时解析。相比之下，Bun 在您运行文件时动态解析依赖项；无需预先运行任何 `install` 命令。Bun 也不会创建 [node_modules] 文件夹。
 
     </Accordion>
 
-    <Accordion title="How is this different from Yarn Plug'N'Play does?">
-    With Yarn, you must run `yarn install` before you run a script. By contrast, Bun resolves dependencies on the fly when you run a file; there's no need to run any `install` command ahead of time.
+    <Accordion title="这与 Yarn Plug'N'Play 有何不同？">
+    使用 Yarn，您必须在运行脚本之前运行 `yarn install`。相比之下，Bun 在您运行文件时动态解析依赖项；无需预先运行任何 `install` 命令。
 
-    Yarn Plug'N'Play also uses zip files to store dependencies. This makes dependency loading [slower at runtime](https://twitter.com/jarredsumner/status/1458207919636287490), as random access reads on zip files tend to be slower than the equivalent disk lookup.
+    Yarn Plug'N'Play 还使用 zip 文件存储依赖项。这使得依赖加载在运行时[变慢](https://twitter.com/jarredsumner/status/1458207919636287490)，因为对 zip 文件的随机访问读取往往比等效的磁盘查找要慢。
     </Accordion>
 
-    <Accordion title="How is this different from what Deno does?">
+    <Accordion title="这与 Deno 有何不同？">
 
-    Deno requires an `npm:` specifier before each npm `import`, lacks support for import maps via `compilerOptions.paths` in `tsconfig.json`, and has incomplete support for `package.json` settings. Unlike Deno, Bun does not currently support URL imports.
+    Deno 需要在每个 npm `import` 前加上 `npm:` 说明符，不支持通过 [tsconfig.json] 中的 `compilerOptions.paths` 的导入映射，并且对 [package.json] 设置的支持不完整。与 Deno 不同，Bun 目前不支持 URL 导入。
     </Accordion>
 
 </AccordionGroup>

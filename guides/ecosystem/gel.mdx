@@ -1,14 +1,14 @@
 ---
-title: Use Gel with Bun
-sidebarTitle: Gel with Bun
+title: 在 Bun 中使用 Gel
+sidebarTitle: Gel 与 Bun
 mode: center
 ---
 
-Gel (formerly EdgeDB) is a graph-relational database powered by Postgres under the hood. It provides a declarative schema language, migrations system, and object-oriented query language, in addition to supporting raw SQL queries. It solves the object-relational mapping problem at the database layer, eliminating the need for an ORM library in your application code.
+Gel（原名 EdgeDB）是一个图关系型数据库，底层基于 Postgres。它提供了声明式模式语言、迁移系统和面向对象的查询语言，此外还支持原始 SQL 查询。它在数据库层解决了对象关系映射问题，消除了在应用程序代码中需要 ORM 库的需求。
 
 ---
 
-First, [install Gel](https://docs.geldata.com/learn/installation) if you haven't already.
+首先，如果还没有安装的话，请[安装 Gel](https://docs.geldata.com/learn/installation)。
 
 <CodeGroup>
 
@@ -28,7 +28,7 @@ brew install geldata/tap/gel-cli
 
 ---
 
-Use `bun init` to create a fresh project.
+使用 `bun init` 创建一个新项目。
 
 ```sh terminal icon="terminal"
 mkdir my-edgedb-app
@@ -38,40 +38,40 @@ bun init -y
 
 ---
 
-We'll use the Gel CLI to initialize a Gel instance for our project. This creates a `gel.toml` file in our project root.
+我们将使用 Gel CLI 为我们的项目初始化一个 Gel 实例。这会在我们的项目根目录创建一个 [gel.toml] 文件。
 
 ```sh terminal icon="terminal"
 gel project init
 ```
 
 ```txt
-No `gel.toml` found in `/Users/colinmcd94/Documents/bun/fun/examples/my-gel-app` or above
-Do you want to initialize a new project? [Y/n]
+在 `/Users/colinmcd94/Documents/bun/fun/examples/my-gel-app` 或其上级目录未找到 `gel.toml`
+是否要初始化一个新项目？[Y/n]
 > Y
-Specify the name of Gel instance to use with this project [default: my_gel_app]:
+指定要与此项目一起使用的 Gel 实例名称 [默认: my_gel_app]:
 > my_gel_app
-Checking Gel versions...
-Specify the version of Gel to use with this project [default: x.y]:
+正在检查 Gel 版本...
+指定要与此项目一起使用的 Gel 版本 [默认: x.y]:
 > x.y
 ┌─────────────────────┬──────────────────────────────────────────────────────────────────┐
-│ Project directory   │ /Users/colinmcd94/Documents/bun/fun/examples/my-gel-app         │
-│ Project config      │ /Users/colinmcd94/Documents/bun/fun/examples/my-gel-app/gel.toml│
-│ Schema dir (empty)  │ /Users/colinmcd94/Documents/bun/fun/examples/my-gel-app/dbschema│
-│ Installation method │ portable package                                                 │
-│ Version             │ x.y+6d5921b                                                      │
-│ Instance name       │ my_gel_app                                                       │
+│ 项目目录             │ /Users/colinmcd94/Documents/bun/fun/examples/my-gel-app          │
+│ 项目配置             │ /Users/colinmcd94/Documents/bun/fun/examples/my-gel-app/gel.toml │
+│ 模式目录（空）       │ /Users/colinmcd94/Documents/bun/fun/examples/my-gel-app/dbschema  │
+│ 安装方法             │ portable package                                                 │
+│ 版本                 │ x.y+6d5921b                                                      │
+│ 实例名称             │ my_gel_app                                                       │
 └─────────────────────┴──────────────────────────────────────────────────────────────────┘
-Version x.y+6d5921b is already downloaded
-Initializing Gel instance...
-Applying migrations...
-Everything is up to date. Revision initial
-Project initialized.
-To connect to my_gel_app, run `gel`
+版本 x.y+6d5921b 已经下载
+正在初始化 Gel 实例...
+正在应用迁移...
+所有内容都是最新的。修订版本 initial
+项目已初始化。
+要连接到 my_gel_app，请运行 `gel`
 ```
 
 ---
 
-To see if the database is running, let's open a REPL and run a simple query.
+要查看数据库是否正在运行，让我们打开一个 REPL 并运行一个简单查询。
 
 ```sh terminal icon="terminal"
 gel
@@ -82,7 +82,7 @@ gel> select 1 + 1;
 2
 ```
 
-Then run `\quit` to exit the REPL.
+然后运行 `\quit` 退出 REPL。
 
 ```sh terminal icon="terminal"
 gel> \quit
@@ -90,7 +90,7 @@ gel> \quit
 
 ---
 
-With the project initialized, we can define a schema. The `gel project init` command already created a `dbschema/default.esdl` file to contain our schema.
+项目初始化后，我们可以定义一个模式。`gel project init` 命令已经创建了一个 `dbschema/default.esdl` 文件来包含我们的模式。
 
 ```txt File Tree icon="folder-tree"
 dbschema
@@ -100,7 +100,7 @@ dbschema
 
 ---
 
-Open that file and paste the following contents.
+打开该文件并粘贴以下内容。
 
 ```ts default.esdl icon="file-code"
 module default {
@@ -113,7 +113,7 @@ module default {
 
 ---
 
-Then generate and apply an initial migration.
+然后生成并应用一个初始迁移。
 
 ```sh terminal icon="terminal"
 gel migration create
@@ -133,7 +133,7 @@ Applied m1uwekrn4ni4qs7ul7hfar4xemm5kkxlpswolcoyqj3xdhweomwjrq (00001.edgeql)
 
 ---
 
-With our schema applied, let's execute some queries using Gel's JavaScript client library. We'll install the client library and Gel's codegen CLI, and create a `seed.ts`.file.
+模式应用后，让我们使用 Gel 的 JavaScript 客户端库执行一些查询。我们将安装客户端库和 Gel 的代码生成 CLI，并创建一个 [seed.ts] 文件。
 
 ```sh terminal icon="terminal"
 bun add gel
@@ -143,9 +143,9 @@ touch seed.ts
 
 ---
 
-Paste the following code into `seed.ts`.
+将以下代码粘贴到 [seed.ts] 中。
 
-The client auto-connects to the database. We insert a couple movies using the `.execute()` method. We will use EdgeQL's `for` expression to turn this bulk insert into a single optimized query.
+客户端自动连接到数据库。我们使用 `.execute()` 方法插入一些电影。我们将使用 EdgeQL 的 `for` 表达式将此批量插入转换为单个优化查询。
 
 ```ts seed.ts icon="/icons/typescript.svg"
 import { createClient } from "gel";
@@ -170,51 +170,51 @@ const movies = [
 
 await client.execute(INSERT_MOVIE, { movies });
 
-console.log(`Seeding complete.`);
+console.log(`播种完成。`);
 process.exit();
 ```
 
 ---
 
-Then run this file with Bun.
+然后使用 Bun 运行此文件。
 
 ```sh terminal icon="terminal"
 bun run seed.ts
 ```
 
 ```txt
-Seeding complete.
+播种完成。
 ```
 
 ---
 
-Gel implements a number of code generation tools for TypeScript. To query our newly seeded database in a typesafe way, we'll use `@gel/generate` to code-generate the EdgeQL query builder.
+Gel 实现了许多用于 TypeScript 的代码生成工具。为了以类型安全的方式查询我们刚填充的数据库，我们将使用 `@gel/generate` 来代码生成 EdgeQL 查询构建器。
 
 ```sh terminal icon="terminal"
 bunx @gel/generate edgeql-js
 ```
 
 ```txt
-Generating query builder...
-Detected tsconfig.json, generating TypeScript files.
-   To override this, use the --target flag.
-   Run `npx @edgedb/generate --help` for full options.
-Introspecting database schema...
-Writing files to ./dbschema/edgeql-js
-Generation complete! 🤘
-Checking the generated query builder into version control
-is not recommended. Would you like to update .gitignore to ignore
-the query builder directory? The following line will be added:
+正在生成查询构建器...
+检测到 tsconfig.json，正在生成 TypeScript 文件。
+   要覆盖此行为，请使用 --target 标志。
+   运行 `npx @edgedb/generate --help` 获取完整选项。
+正在检查数据库模式...
+正在将文件写入 ./dbschema/edgeql-js
+生成完成！🤘
+不建议将生成的查询构建器检入版本控制
+您是否想更新 .gitignore 以忽略
+查询构建器目录？以下行将被添加：
 
    dbschema/edgeql-js
 
-[y/n] (leave blank for "y")
+[y/n] （留空表示 "y"）
 > y
 ```
 
 ---
 
-In `index.ts`, we can import the generated query builder from `./dbschema/edgeql-js` and write a simple select query.
+在 [index.ts] 中，我们可以从 `./dbschema/edgeql-js` 导入生成的查询构建器并编写一个简单的选择查询。
 
 ```ts index.ts icon="/icons/typescript.svg"
 import { createClient } from "gel";
@@ -235,7 +235,7 @@ results; // { title: string, releaseYear: number | null }[]
 
 ---
 
-Running the file with Bun, we can see the list of movies we inserted.
+使用 Bun 运行该文件，我们可以看到我们插入的电影列表。
 
 ```sh terminal icon="terminal"
 bun run index.ts
@@ -258,4 +258,4 @@ bun run index.ts
 
 ---
 
-For complete documentation, refer to the [Gel docs](https://docs.geldata.com/).
+有关完整文档，请参阅 [Gel 文档](https://docs.geldata.com/)。

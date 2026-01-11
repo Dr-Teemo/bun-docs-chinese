@@ -1,51 +1,51 @@
 ---
-title: Upgrade Bun to the latest version
-sidebarTitle: Upgrade Bun
+title: 将 Bun 升级到最新版本
+sidebarTitle: 升级 Bun
 mode: center
 ---
 
-Bun can upgrade itself using the built-in `bun upgrade` command. This is the fastest way to get the latest features and bug fixes.
+Bun 可以使用内置的 `bun upgrade` 命令升级自身。这是获取最新功能和错误修复的最快方式。
 
 ```bash terminal icon="terminal"
 bun upgrade
 ```
 
-This downloads and installs the latest stable version of Bun, replacing the currently installed version.
+这会下载并安装最新稳定版的 Bun，替换当前安装的版本。
 
-<Note>To see the current version of Bun, run `bun --version`.</Note>
+<Note>要查看当前 Bun 版本，请运行 `bun --version`。</Note>
 
 ---
 
-## Verify the upgrade
+## 验证升级
 
-After upgrading, verify the new version:
+升级后，验证新版本：
 
 ```bash terminal icon="terminal"
 bun --version
 # Output: 1.x.y
 
-# See the exact commit of the Bun binary
+# 查看 Bun 二进制文件的确切提交
 bun --revision
 # Output: 1.x.y+abc123def
 ```
 
 ---
 
-## Upgrade to canary builds
+## 升级到金丝雀构建版本
 
-Canary builds are automatically released on every commit to the `main` branch. These are untested but useful for trying new features or verifying bug fixes before they're released.
+金丝雀构建版本在每次提交到 `main` 分支时自动发布。这些版本未经测试，但对于尝试新功能或在正式发布前验证错误修复很有用。
 
 ```bash terminal icon="terminal"
 bun upgrade --canary
 ```
 
-<Warning>Canary builds are not recommended for production use. They may contain bugs or breaking changes.</Warning>
+<Warning>不建议在生产环境中使用金丝雀构建版本。它们可能包含错误或破坏性更改。</Warning>
 
 ---
 
-## Switch back to stable
+## 切换回稳定版
 
-If you're on a canary build and want to return to the latest stable release:
+如果您正在使用金丝雀构建版本并想返回到最新的稳定发布版本：
 
 ```bash terminal icon="terminal"
 bun upgrade --stable
@@ -53,9 +53,9 @@ bun upgrade --stable
 
 ---
 
-## Install a specific version
+## 安装特定版本
 
-To install a specific version of Bun, use the install script with a version tag:
+要安装特定版本的 Bun，请使用带有版本标签的安装脚本：
 
 <Tabs>
   <Tab title="macOS & Linux">
@@ -72,22 +72,22 @@ To install a specific version of Bun, use the install script with a version tag:
 
 ---
 
-## Package manager users
+## 包管理器用户
 
-If you installed Bun via a package manager, use that package manager to upgrade instead of `bun upgrade` to avoid conflicts.
+如果您通过包管理器安装了 Bun，请使用该包管理器进行升级，而不是使用 `bun upgrade` 以避免冲突。
 
 <Tip>
-**Homebrew users** <br />
-To avoid conflicts with Homebrew, use `brew upgrade bun` instead.
+**Homebrew 用户** <br />
+为避免与 Homebrew 冲突，请改用 `brew upgrade bun`。
 
-**Scoop users** <br />
-To avoid conflicts with Scoop, use `scoop update bun` instead.
+**Scoop 用户** <br />
+为避免与 Scoop 冲突，请改用 `scoop update bun`。
 
 </Tip>
 
 ---
 
-## See also
+## 另请参阅
 
-- [Installation](/installation) — Install Bun for the first time
-- [Update packages](/pm/cli/update) — Update dependencies to latest versions
+- [安装](/installation) — 首次安装 Bun
+- [更新包](/pm/cli/update) — 将依赖项更新到最新版本

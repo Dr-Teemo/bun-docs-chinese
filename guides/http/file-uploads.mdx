@@ -1,10 +1,10 @@
 ---
-title: Upload files via HTTP using FormData
-sidebarTitle: Upload files via HTTP using FormData
+title: 使用 FormData 通过 HTTP 上传文件
+sidebarTitle: 使用 FormData 通过 HTTP 上传文件
 mode: center
 ---
 
-To upload files via HTTP with Bun, use the [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) API. Let's start with a HTTP server that serves a simple HTML web form.
+要使用 Bun 通过 HTTP 上传文件，请使用 [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData) API。让我们从一个提供简单 HTML 网页表单的 HTTP 服务器开始。
 
 ```ts index.ts icon="/icons/typescript.svg"
 const server = Bun.serve({
@@ -12,7 +12,7 @@ const server = Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
 
-    // return index.html for root path
+    // 为根路径返回 index.html
     if (url.pathname === "/")
       return new Response(Bun.file("index.html"), {
         headers: {
@@ -20,29 +20,29 @@ const server = Bun.serve({
         },
       });
 
-    return new Response("Not Found", { status: 404 });
+    return new Response("未找到", { status: 404 });
   },
 });
 
-console.log(`Listening on http://localhost:${server.port}`);
+console.log(`监听 http://localhost:${server.port}`);
 ```
 
 ---
 
-We can define our HTML form in another file, `index.html`.
+我们可以在另一个文件中定义我们的 HTML 表单，`index.html`。
 
 ```html index.html icon="file-code"
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Form</title>
+    <title>表单</title>
   </head>
   <body>
     <form action="/action" method="post" enctype="multipart/form-data">
-      <input type="text" name="name" placeholder="Name" />
+      <input type="text" name="name" placeholder="姓名" />
       <input type="file" name="profilePicture" />
-      <input type="submit" value="Submit" />
+      <input type="submit" value="提交" />
     </form>
   </body>
 </html>
@@ -50,20 +50,20 @@ We can define our HTML form in another file, `index.html`.
 
 ---
 
-At this point, we can run the server and visit [`localhost:4000`](http://localhost:4000) to see our form.
+此时，我们可以运行服务器并访问 [`localhost:4000`](http://localhost:4000) 查看我们的表单。
 
 ```bash
 bun run index.ts
-Listening on http://localhost:4000
+监听 http://localhost:4000
 ```
 
 ---
 
-Our form will send a `POST` request to the `/action` endpoint with the form data. Let's handle that request in our server.
+我们的表单将向 `/action` 端点发送一个带有表单数据的 `POST` 请求。让我们在服务器中处理该请求。
 
-First we use the [`.formData()`](https://developer.mozilla.org/en-US/docs/Web/API/Request/formData) method on the incoming `Request` to asynchronously parse its contents to a `FormData` instance. Then we can use the [`.get()`](https://developer.mozilla.org/en-US/docs/Web/API/FormData/get) method to extract the value of the `name` and `profilePicture` fields. Here `name` corresponds to a `string` and `profilePicture` is a `Blob`.
+首先我们在传入的 `Request` 上使用 [.formData()](https://developer.mozilla.org/en-US/docs/Web/API/Request/formData) 方法异步解析其内容到 `FormData` 实例。然后我们可以使用 [.get()](https://developer.mozilla.org/en-US/docs/Web/API/FormData/get) 方法提取 `name` 和 `profilePicture` 字段的值。这里 `name` 对应一个 `string`，而 `profilePicture` 是一个 `Blob`。
 
-Finally, we write the `Blob` to disk using [`Bun.write()`](/runtime/file-io#writing-files-bun-write).
+最后，我们使用 [`Bun.write()`](/runtime/file-io#writing-files-bun-write) 将 `Blob` 写入磁盘。
 
 {/* prettier-ignore */}
 ```ts index.ts icon="/icons/typescript.svg"
@@ -72,7 +72,7 @@ const server = Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
 
-    // return index.html for root path
+    // 为根路径返回 index.html
     if (url.pathname === "/")
       return new Response(Bun.file("index.html"), {
         headers: {
@@ -80,18 +80,18 @@ const server = Bun.serve({
         },
       });
 
-    // parse formdata at /action // [!code ++]
+    // 在 /action 解析表单数据 // [!code ++]
     if (url.pathname === "/action") { // [!code ++]
       const formdata = await req.formData(); // [!code ++]
       const name = formdata.get("name"); // [!code ++]
       const profilePicture = formdata.get("profilePicture"); // [!code ++]
-      if (!profilePicture) throw new Error("Must upload a profile picture."); // [!code ++]
-      // write profilePicture to disk // [!code ++]
+      if (!profilePicture) throw new Error("必须上传个人资料照片。"); // [!code ++]
+      // 将个人资料照片写入磁盘 // [!code ++]
       await Bun.write("profilePicture.png", profilePicture); // [!code ++]
-      return new Response("Success"); // [!code ++]
+      return new Response("成功"); // [!code ++]
     } // [!code ++]
 
-    return new Response("Not Found", { status: 404 });
+    return new Response("未找到", { status: 404 });
   },
 });
 ```

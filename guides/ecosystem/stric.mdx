@@ -1,18 +1,18 @@
 ---
-title: Build an HTTP server using StricJS and Bun
-sidebarTitle: "StricJS with Bun"
+title: 使用 StricJS 和 Bun 构建 HTTP 服务器
+sidebarTitle: "StricJS 与 Bun"
 mode: center
 ---
 
-[StricJS](https://github.com/bunsvr) is a Bun framework for building high-performance web applications and APIs.
+[StricJS](https://github.com/bunsvr) 是一个用于构建高性能 Web 应用程序和 API 的 Bun 框架。
 
-- **Fast** — Stric is one of the fastest Bun frameworks. See [benchmark](https://github.com/bunsvr/benchmark) for more details.
-- **Minimal** — The basic components like `@stricjs/router` and `@stricjs/utils` are under 50kB and require no external dependencies.
-- **Extensible** — Stric includes with a plugin system, dependency injection, and optional optimizations for handling requests.
+- **快速** — Stric 是最快的 Bun 框架之一。详见[基准测试](https://github.com/bunsvr/benchmark)了解更多信息。
+- **极简** — 像 `@stricjs/router` 和 `@stricjs/utils` 这样的基本组件小于 50kB，且不需要外部依赖。
+- **可扩展** — Stric 包含插件系统、依赖注入，以及处理请求的可选优化。
 
 ---
 
-Use `bun init` to create an empty project.
+使用 `bun init` 创建一个空项目。
 
 ```bash terminal icon="terminal"
 mkdir myapp
@@ -23,7 +23,7 @@ bun add @stricjs/router @stricjs/utils
 
 ---
 
-To implement a simple HTTP server with StricJS:
+使用 StricJS 实现一个简单的 HTTP 服务器：
 
 ```ts index.ts icon="file-code"
 import { Router } from "@stricjs/router";
@@ -33,7 +33,7 @@ export default new Router().get("/", () => new Response("Hi"));
 
 ---
 
-To serve static files from `/public`:
+从 `/public` 提供静态文件：
 
 ```ts index.ts icon="file-code"
 import { dir } from "@stricjs/utils";
@@ -43,7 +43,7 @@ export default new Router().get("/", () => new Response("Hi")).get("/*", dir("./
 
 ---
 
-Run the file in watch mode to start the development server.
+以监视模式运行文件以启动开发服务器。
 
 ```bash terminal icon="terminal"
 bun --watch run index.ts
@@ -51,4 +51,4 @@ bun --watch run index.ts
 
 ---
 
-For more info, see Stric's [documentation](https://stricjs.netlify.app).
+更多信息，请参见 Stric 的[文档](https://stricjs.netlify.app)。

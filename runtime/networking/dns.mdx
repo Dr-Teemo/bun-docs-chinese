@@ -1,9 +1,9 @@
 ---
 title: DNS
-description: Use Bun's DNS module to resolve DNS records
+description: 使用 Bun 的 DNS 模块解析 DNS 记录
 ---
 
-Bun implements it's own `dns` module, and the `node:dns` module.
+Bun 实现了它自己的 `dns` 模块和 `node:dns` 模块。
 
 ```ts
 import * as dns from "node:dns";
@@ -21,26 +21,26 @@ dns.prefetch("bun.com", 443);
 
 ---
 
-## DNS caching in Bun
+## Bun 中的 DNS 缓存
 
-Bun supports DNS caching. This cache makes repeated connections to the same hosts faster.
+Bun 支持 DNS 缓存。此缓存使对相同主机的重复连接更快。
 
-At the time of writing, we cache up to 255 entries for a maximum of 30 seconds (each). If any connections to a host fail, we remove the entry from the cache. When multiple connections are made to the same host simultaneously, DNS lookups are deduplicated to avoid making multiple requests for the same host.
+在撰写本文时，我们最多缓存 255 个条目，每个条目的最大缓存时间为 30 秒。如果任何到主机的连接失败，我们会从缓存中删除该条目。当同时对同一主机进行多个连接时，DNS 查找会被去重，以避免对同一主机发出多个请求。
 
-This cache is automatically used by:
+此缓存被以下组件自动使用：
 
 - `bun install`
 - `fetch()`
-- `node:http` (client)
+- `node:http` (客户端)
 - `Bun.connect`
 - `node:net`
 - `node:tls`
 
-### When should I prefetch a DNS entry?
+### 何时应该预取 DNS 条目？
 
-Web browsers expose [`<link rel="dns-prefetch">`](https://developer.mozilla.org/en-US/docs/Web/Performance/dns-prefetch) to allow developers to prefetch DNS entries. This is useful when you know you'll need to connect to a host in the near future and want to avoid the initial DNS lookup.
+Web 浏览器公开了 [`<link rel="dns-prefetch">`](https://developer.mozilla.org/en-US/docs/Web/Performance/dns-prefetch) 以允许开发人员预取 DNS 条目。当您知道在不久的将来需要连接到主机并希望避免初始 DNS 查找时，这很有用。
 
-In Bun, you can use the `dns.prefetch` API to achieve the same effect.
+在 Bun 中，您可以使用 `dns.prefetch` API 来实现相同的效果。
 
 ```ts
 import { dns } from "bun";
@@ -48,47 +48,47 @@ import { dns } from "bun";
 dns.prefetch("my.database-host.com", 5432);
 ```
 
-An example where you might want to use this is a database driver. When your application first starts up, you can prefetch the DNS entry for the database host so that by the time it finishes loading everything, the DNS query to resolve the database host may already be completed.
+一个可能想使用此功能的示例是数据库驱动程序。当您的应用程序首次启动时，您可以预取数据库主机的 DNS 条目，这样到完成加载所有内容时，解析数据库主机的 DNS 查询可能已经完成。
 
 ### `dns.prefetch`
 
-<Warning>This API is experimental and may change in the future.</Warning>
+<Warning>此 API 是实验性的，将来可能会更改。</Warning>
 
-To prefetch a DNS entry, you can use the `dns.prefetch` API. This API is useful when you know you'll need to connect to a host soon and want to avoid the initial DNS lookup.
+要预取 DNS 条目，您可以使用 `dns.prefetch` API。当您知道很快需要连接到主机并希望避免初始 DNS 查找时，此 API 很有用。
 
 ```ts
 dns.prefetch(hostname: string, port: number): void;
 ```
 
-Here's an example:
+这里是一个示例：
 
 ```ts
 import { dns } from "bun";
 
 dns.prefetch("bun.com", 443);
 //
-// ... sometime later ...
+// ... 一段时间后 ...
 await fetch("https://bun.com");
 ```
 
 ### `dns.getCacheStats()`
 
-<Warning>This API is experimental and may change in the future.</Warning>
+<Warning>此 API 是实验性的，将来可能会更改。</Warning>
 
-To get the current cache stats, you can use the `dns.getCacheStats` API. This API returns an object with the following properties:
+要获取当前缓存统计信息，您可以使用 `dns.getCacheStats` API。此 API 返回一个具有以下属性的对象：
 
 ```ts
 {
-  cacheHitsCompleted: number; // Cache hits completed
-  cacheHitsInflight: number; // Cache hits in flight
-  cacheMisses: number; // Cache misses
-  size: number; // Number of items in the DNS cache
-  errors: number; // Number of times a connection failed
-  totalCount: number; // Number of times a connection was requested at all (including cache hits and misses)
+  cacheHitsCompleted: number; // 已完成的缓存命中
+  cacheHitsInflight: number; // 正在处理的缓存命中
+  cacheMisses: number; // 缓存未命中
+  size: number; // DNS 缓存中的项目数量
+  errors: number; // 连接失败次数
+  totalCount: number; // 请求连接的总次数（包括缓存命中和未命中）
 }
 ```
 
-Example:
+示例：
 
 ```ts
 import { dns } from "bun";
@@ -98,14 +98,14 @@ console.log(stats);
 // => { cacheHitsCompleted: 0, cacheHitsInflight: 0, cacheMisses: 0, size: 0, errors: 0, totalCount: 0 }
 ```
 
-### Configuring DNS cache TTL
+### 配置 DNS 缓存 TTL
 
-Bun defaults to 30 seconds for the TTL of DNS cache entries. To change this, you can set the environment variable `$BUN_CONFIG_DNS_TIME_TO_LIVE_SECONDS`. For example, to set the TTL to 5 seconds:
+Bun 默认将 DNS 缓存条目的 TTL 设置为 30 秒。要更改此设置，您可以设置环境变量 `$BUN_CONFIG_DNS_TIME_TO_LIVE_SECONDS`。例如，要将 TTL 设置为 5 秒：
 
 ```sh
 BUN_CONFIG_DNS_TIME_TO_LIVE_SECONDS=5 bun run my-script.ts
 ```
 
-#### Why is 30 seconds the default?
+#### 为什么默认值是 30 秒？
 
-Unfortunately, the system API underneath (`getaddrinfo`) does not provide a way to get the TTL of a DNS entry. This means we have to pick a number arbitrarily. We chose 30 seconds because it's long enough to see the benefits of caching, and short enough to be unlikely to cause issues if a DNS entry changes. [Amazon Web Services recommends 5 seconds](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/jvm-ttl-dns.html) for the Java Virtual Machine, however the JVM defaults to cache indefinitely.
+不幸的是，底层系统 API（`getaddrinfo`）没有提供获取 DNS 条目 TTL 的方法。这意味着我们必须随意选择一个数字。我们选择 30 秒，因为它足够长以看到缓存的好处，又足够短以至于如果 DNS 条目更改也不太可能引起问题。[Amazon Web Services 建议 Java 虚拟机使用 5 秒](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/jvm-ttl-dns.html)，然而 JVM 默认会无限期缓存。

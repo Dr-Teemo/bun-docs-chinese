@@ -1,17 +1,17 @@
 ---
 title: "bun add"
-description: "Add packages to your project with Bun's fast package manager"
+description: "使用 Bun 的快速包管理器向你的项目添加包"
 ---
 
 import Add from "/snippets/cli/add.mdx";
 
-To add a particular package:
+要添加特定包：
 
 ```bash terminal icon="terminal"
 bun add preact
 ```
 
-To specify a version, version range, or tag:
+要指定版本、版本范围或标签：
 
 ```bash terminal icon="terminal"
 bun add zod@3.20.0
@@ -21,9 +21,9 @@ bun add zod@latest
 
 ## `--dev`
 
-<Note>**Alias** — `--development`, `-d`, `-D`</Note>
+<Note>**别名** — `--development`, `-d`, `-D`</Note>
 
-To add a package as a dev dependency (`"devDependencies"`):
+要将包添加为开发依赖（`"devDependencies"`）：
 
 ```bash terminal icon="terminal"
 bun add --dev @types/react
@@ -32,7 +32,7 @@ bun add -d @types/react
 
 ## `--optional`
 
-To add a package as an optional dependency (`"optionalDependencies"`):
+要将包添加为可选依赖（`"optionalDependencies"`）：
 
 ```bash terminal icon="terminal"
 bun add --optional lodash
@@ -40,7 +40,7 @@ bun add --optional lodash
 
 ## `--peer`
 
-To add a package as a peer dependency (`"peerDependencies"`):
+要将包添加为同级依赖（`"peerDependencies"`）：
 
 ```bash terminal icon="terminal"
 bun add --peer @types/bun
@@ -48,30 +48,30 @@ bun add --peer @types/bun
 
 ## `--exact`
 
-<Note>**Alias** — `-E`</Note>
+<Note>**别名** — `-E`</Note>
 
-To add a package and pin to the resolved version, use `--exact`. This will resolve the version of the package and add it to your `package.json` with an exact version number instead of a version range.
+要添加包并固定到解析的版本，请使用 `--exact`。这将解析包的版本并在你的 [package.json] 中添加确切的版本号而不是版本范围。
 
 ```bash terminal icon="terminal"
 bun add react --exact
 bun add react -E
 ```
 
-This will add the following to your `package.json`:
+这将向你的 [package.json] 添加以下内容：
 
 ```json package.json icon="file-json"
 {
   "dependencies": {
-    // without --exact
-    "react": "^18.2.0", // this matches >= 18.2.0 < 19.0.0
+    // 不使用 --exact
+    "react": "^18.2.0", // 这匹配 >= 18.2.0 < 19.0.0
 
-    // with --exact
-    "react": "18.2.0" // this matches only 18.2.0 exactly
+    // 使用 --exact
+    "react": "18.2.0" // 这仅匹配 18.2.0 确切版本
   }
 }
 ```
 
-To view a complete list of options for this command:
+要查看此命令的完整选项列表：
 
 ```bash terminal icon="terminal"
 bun add --help
@@ -80,14 +80,14 @@ bun add --help
 ## `--global`
 
 <Note>
-  **Note** — This would not modify package.json of your current project folder. **Alias** - `bun add --global`, `bun add
-  -g`, `bun install --global` and `bun install -g`
+  **注意** — 这不会修改当前项目文件夹的 [package.json]。**别名** - `bun add --global`, `bun add
+  -g`, `bun install --global` 和 `bun install -g`
 </Note>
 
-To install a package globally, use the `-g`/`--global` flag. This will not modify the `package.json` of your current project. Typically this is used for installing command-line tools.
+要全局安装包，请使用 `-g`/`--global` 标志。这不会修改当前项目的 [package.json]。通常这用于安装命令行工具。
 
 ```bash terminal icon="terminal"
-bun add --global cowsay # or `bun add -g cowsay`
+bun add --global cowsay # 或 `bun add -g cowsay`
 cowsay "Bun!"
 ```
 
@@ -102,24 +102,24 @@ cowsay "Bun!"
                 ||     ||
 ```
 
-<Accordion title="Configuring global installation behavior">
+<Accordion title="配置全局安装行为">
 
 ```toml bunfig.toml icon="settings"
 [install]
-# where `bun add --global` installs packages
+# `bun add --global` 安装包的位置
 globalDir = "~/.bun/install/global"
 
-# where globally-installed package bins are linked
+# 全局安装的包二进制文件链接的位置
 globalBinDir = "~/.bun/bin"
 ```
 
 </Accordion>
 
-## Trusted dependencies
+## 受信任依赖
 
-Unlike other npm clients, Bun does not execute arbitrary lifecycle scripts for installed dependencies, such as `postinstall`. These scripts represent a potential security risk, as they can execute arbitrary code on your machine.
+与其他 npm 客户端不同，Bun 不会为已安装的依赖执行任意生命周期脚本，如 `postinstall`。这些脚本代表潜在的安全风险，因为它们可以在你的机器上执行任意代码。
 
-To tell Bun to allow lifecycle scripts for a particular package, add the package to `trustedDependencies` in your package.json.
+要告诉 Bun 允许特定包的生命周期脚本，请在你的 [package.json] 中将包添加到 [trustedDependencies]。
 
 ```json package.json icon="file-json"
 {
@@ -129,21 +129,21 @@ To tell Bun to allow lifecycle scripts for a particular package, add the package
 }
 ```
 
-Bun reads this field and will run lifecycle scripts for `my-trusted-package`.
+Bun 读取此字段并将为 `my-trusted-package` 运行生命周期脚本。
 
-## Git dependencies
+## Git 依赖
 
-To add a dependency from a public or private git repository:
+要从公共或私有 git 仓库添加依赖：
 
 ```bash terminal icon="terminal"
 bun add git@github.com:moment/moment.git
 ```
 
 <Note>
-  To install private repositories, your system needs the appropriate SSH credentials to access the repository.
+  要安装私有仓库，你的系统需要适当的 SSH 凭据来访问仓库。
 </Note>
 
-Bun supports a variety of protocols, including [`github`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#github-urls), [`git`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#git-urls-as-dependencies), `git+ssh`, `git+https`, and many more.
+Bun 支持多种协议，包括 [`github`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#github-urls), [`git`](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#git-urls-as-dependencies), `git+ssh`, `git+https` 等等。
 
 ```json package.json icon="file-json"
 {
@@ -156,15 +156,15 @@ Bun supports a variety of protocols, including [`github`](https://docs.npmjs.com
 }
 ```
 
-## Tarball dependencies
+## Tarball 依赖
 
-A package name can correspond to a publicly hosted `.tgz` file. During installation, Bun will download and install the package from the specified tarball URL, rather than from the package registry.
+包名可以对应一个公开托管的 `.tgz` 文件。在安装期间，Bun 将从指定的 tarball URL 下载并安装包，而不是从包注册表安装。
 
 ```sh terminal icon="terminal"
 bun add zod@https://registry.npmjs.org/zod/-/zod-3.21.4.tgz
 ```
 
-This will add the following line to your `package.json`:
+这将在你的 [package.json] 中添加以下行：
 
 ```json package.json icon="file-json"
 {

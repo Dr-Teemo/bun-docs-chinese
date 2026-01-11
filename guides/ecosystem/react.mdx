@@ -1,52 +1,52 @@
 ---
-title: Build a React app with Bun
-sidebarTitle: React with Bun
+title: 使用 Bun 构建 React 应用
+sidebarTitle: React 与 Bun
 mode: center
 ---
 
-Bun supports `.jsx` and `.tsx` files out of the box. React just works with Bun.
+Bun 开箱即用地支持 `.jsx` 和 `.tsx` 文件。React 只需与 Bun 配合即可使用。
 
-Create a new React app with `bun init --react`. This gives you a template with a simple React app and a simple API server together in one full-stack app.
+使用 `bun init --react` 创建一个新的 React 应用。这为您提供了一个模板，其中包含一个简单的 React 应用和一个简单的 API 服务器，组成一个全栈应用。
 
 ```bash terminal icon="terminal"
-# Create a new React app
+# 创建一个新的 React 应用
 bun init --react
 
-# Run the app in development mode
+# 在开发模式下运行应用
 bun dev
 
-# Build as a static site for production
+# 构建为静态站点以供生产
 bun run build
 
-# Run the server in production
+# 在生产环境中运行服务器
 bun start
 ```
 
 ---
 
-### Hot Reloading
+### 热重载
 
-Run `bun dev` to start the app in development mode. This will start the API server and the React app with hot reloading.
+运行 `bun dev` 在开发模式下启动应用。这将启动 API 服务器和具有热重载功能的 React 应用。
 
-### Full-Stack App
+### 全栈应用
 
-Run `bun start` to start the API server and frontend together in one process.
+运行 `bun start` 在一个进程中一起启动 API 服务器和前端。
 
-### Static Site
+### 静态站点
 
-Run `bun run build` to build the app as a static site. This will create a `dist` directory with the built app and all the assets.
+运行 `bun run build` 将应用构建为静态站点。这将创建一个 [dist] 目录，其中包含构建后的应用和所有资源。
 
 ```txt File Tree icon="folder-tree"
 ├── src/
-│   ├── index.tsx       # Server entry point with API routes
-│   ├── frontend.tsx    # React app entry point with HMR
-│   ├── App.tsx         # Main React component
-│   ├── APITester.tsx   # Component for testing API endpoints
-│   ├── index.html      # HTML template
-│   ├── index.css       # Styles
-│   └── *.svg           # Static assets
-├── package.json        # Dependencies and scripts
-├── tsconfig.json       # TypeScript configuration
-├── bunfig.toml         # Bun configuration
-└── bun.lock            # Lock file
+│   ├── index.tsx       # 服务器入口点，含 API 路由
+│   ├── frontend.tsx    # React 应用入口点，含 HMR
+│   ├── App.tsx         # 主 React 组件
+│   ├── APITester.tsx   # 用于测试 API 端点的组件
+│   ├── index.html      # HTML 模板
+│   ├── index.css       # 样式
+│   └── *.svg           # 静态资源
+├── package.json        # 依赖和脚本
+├── tsconfig.json       # TypeScript 配置
+├── bunfig.toml         # Bun 配置
+└── bun.lock            # 锁定文件
 ```

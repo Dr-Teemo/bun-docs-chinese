@@ -1,140 +1,140 @@
-## CLI Usage
+## CLI 用法
 
 ```bash terminal icon="terminal"
 bun outdated <filter>
 ```
 
-### General Options
+### 通用选项
 
 <ParamField path="-c, --config" type="string">
-  Specify path to config file (<code>bunfig.toml</code>)
+  指定配置文件路径（<code>bunfig.toml</code>）
 </ParamField>
 
 <ParamField path="--cwd" type="string">
-  Set a specific cwd
+  设置特定的当前工作目录
 </ParamField>
 
 <ParamField path="-h, --help" type="boolean">
-  Print this help menu
+  打印此帮助菜单
 </ParamField>
 
 <ParamField path="-F, --filter" type="string">
-  Display outdated dependencies for each matching workspace
+  显示每个匹配工作区的过时依赖
 </ParamField>
 
-### Output & Logging
+### 输出和日志
 
 <ParamField path="--silent" type="boolean">
-  Don't log anything
+  不记录任何内容
 </ParamField>
 
 <ParamField path="--verbose" type="boolean">
-  Excessively verbose logging
+  过度详细的日志记录
 </ParamField>
 
 <ParamField path="--no-progress" type="boolean">
-  Disable the progress bar
+  禁用进度条
 </ParamField>
 
 <ParamField path="--no-summary" type="boolean">
-  Don't print a summary
+  不打印摘要
 </ParamField>
 
-### Dependency Scope & Target
+### 依赖范围和目标
 
 <ParamField path="-p, --production" type="boolean">
-  Don't install devDependencies
+  不安装 devDependencies
 </ParamField>
 
 <ParamField path="--omit" type="string">
-  Exclude <code>dev</code>, <code>optional</code>, or <code>peer</code> dependencies from install
+  从安装中排除 <code>dev</code>、<code>optional</code> 或 <code>peer</code> 依赖
 </ParamField>
 
 <ParamField path="-g, --global" type="boolean">
-  Install globally
+  全局安装
 </ParamField>
 
-### Lockfile & Package.json
+### 锁文件和 Package.json
 
 <ParamField path="-y, --yarn" type="boolean">
-  Write a <code>yarn.lock</code> file (yarn v1)
+  写入 <code>yarn.lock</code> 文件（yarn v1）
 </ParamField>
 
 <ParamField path="--no-save" type="boolean">
-  Don't update <code>package.json</code> or save a lockfile
+  不更新 <code>package.json</code> 或保存锁文件
 </ParamField>
 
 <ParamField path="--save" type="boolean" default="true">
-  Save to <code>package.json</code> (true by default)
+  保存到 <code>package.json</code>（默认为 true）
 </ParamField>
 
 <ParamField path="--frozen-lockfile" type="boolean">
-  Disallow changes to lockfile
+  禁止更改锁文件
 </ParamField>
 
 <ParamField path="--save-text-lockfile" type="boolean">
-  Save a text-based lockfile
+  保存基于文本的锁文件
 </ParamField>
 
 <ParamField path="--lockfile-only" type="boolean">
-  Generate a lockfile without installing dependencies
+  生成锁文件但不安装依赖
 </ParamField>
 
 <ParamField path="--trust" type="boolean">
-  Add to <code>trustedDependencies</code> in the project's <code>package.json</code> and install the package(s)
+  添加到项目 <code>package.json</code> 中的 <code>trustedDependencies</code> 并安装包
 </ParamField>
 
-### Network & Registry
+### 网络和注册表
 
 <ParamField path="--ca" type="string">
-  Provide a Certificate Authority signing certificate
+  提供证书颁发机构签名证书
 </ParamField>
 
 <ParamField path="--cafile" type="string">
-  Same as <code>--ca</code>, but as a file path to the certificate
+  与 <code>--ca</code> 相同，但作为证书的文件路径
 </ParamField>
 
 <ParamField path="--registry" type="string">
-  Use a specific registry by default, overriding <code>.npmrc</code>, <code>bunfig.toml</code> and environment variables
+  默认使用特定注册表，覆盖 <code>.npmrc</code>、<code>bunfig.toml</code> 和环境变量
 </ParamField>
 
 <ParamField path="--network-concurrency" type="number" default="48">
-  Maximum number of concurrent network requests (default 48)
+  最大并发网络请求数（默认为 48）
 </ParamField>
 
-### Caching
+### 缓存
 
 <ParamField path="--cache-dir" type="string">
-  Store &amp; load cached data from a specific directory path
+  从特定目录路径存储和加载缓存数据
 </ParamField>
 
 <ParamField path="--no-cache" type="boolean">
-  Ignore manifest cache entirely
+  完全忽略清单缓存
 </ParamField>
 
-### Execution Behavior
+### 执行行为
 
 <ParamField path="--dry-run" type="boolean">
-  Don't install anything
+  不安装任何内容
 </ParamField>
 
 <ParamField path="-f, --force" type="boolean">
-  Always request the latest versions from the registry &amp; reinstall all dependencies
+  始终从注册表请求最新版本并重新安装所有依赖
 </ParamField>
 
 <ParamField path="--no-verify" type="boolean">
-  Skip verifying integrity of newly downloaded packages
+  跳过验证新下载包的完整性
 </ParamField>
 
 <ParamField path="--ignore-scripts" type="boolean">
-  Skip lifecycle scripts in the project's <code>package.json</code> (dependency scripts are never run)
+  跳过项目 <code>package.json</code> 中的生命周期脚本（依赖脚本永远不会运行）
 </ParamField>
 
 <ParamField path="--backend" type="string" default="clonefile">
-  Platform-specific optimizations for installing dependencies. Possible values: <code>clonefile</code> (default),{" "}
-  <code>hardlink</code>, <code>symlink</code>, <code>copyfile</code>
+  安装依赖的平台特定优化。可能的值：<code>clonefile</code>（默认）、{" "}
+  <code>hardlink</code>、<code>symlink</code>、<code>copyfile</code>
 </ParamField>
 
 <ParamField path="--concurrent-scripts" type="number" default="5">
-  Maximum number of concurrent jobs for lifecycle scripts (default 5)
+  生命周期脚本的最大并发作业数（默认为 5）
 </ParamField>

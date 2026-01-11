@@ -1,14 +1,14 @@
 ---
-title: Run your tests with the Bun test runner
-sidebarTitle: Run tests
+title: 使用 Bun 测试运行器运行您的测试
+sidebarTitle: 运行测试
 mode: center
 ---
 
-Bun has a built-in [test runner](/test) with a Jest-like `expect` API.
+Bun 有一个内置的 [测试运行器](/test)，具有类似 Jest 的 `expect` API。
 
 ---
 
-To use it, run the `bun test` command from your project directory. The test runner will recursively search for all files in the directory that match the following patterns and execute the tests they contain.
+要使用它，请从项目目录中运行 `bun test` 命令。测试运行器将递归搜索目录中匹配以下模式的所有文件并执行它们包含的测试。
 
 ```txt File Tree icon="folder-tree"
 *.test.{js|jsx|ts|tsx}
@@ -19,7 +19,7 @@ To use it, run the `bun test` command from your project directory. The test runn
 
 ---
 
-Here's what the output of a typical test run looks like. In this case, there are three tests files (`test.test.js`, `test2.test.js`, and `test3.test.js`) containing two tests each (`add` and `multiply`).
+下面是典型测试运行的输出。在这种情况下，有三个测试文件（[test.test.js]、[test2.test.js] 和 [test3.test.js]），每个文件包含两个测试（`add` 和 `multiply`）。
 
 ```sh terminal icon="terminal"
 bun test
@@ -46,7 +46,7 @@ Ran 6 tests across 3 files. [9.00ms]
 
 ---
 
-To only run certain test files, pass a positional argument to `bun test`. The runner will only execute files that contain that argument in their path.
+要仅运行某些测试文件，请向 `bun test` 传递位置参数。运行器只会在路径中包含该参数的文件中执行测试。
 
 ```sh terminal icon="terminal"
 bun test test3
@@ -65,7 +65,7 @@ Ran 2 tests across 1 files. [15.00ms]
 
 ---
 
-All tests have a name, defined using the first parameter to the `test` function. Tests can also be grouped into suites with `describe`.
+所有测试都有一个名称，使用传递给 `test` 函数的第一个参数定义。测试也可以使用 `describe` 分组到套件中。
 
 ```ts
 import { test, expect, describe } from "bun:test";
@@ -83,9 +83,9 @@ describe("math", () => {
 
 ---
 
-To filter which tests are executed by name, use the `-t`/`--test-name-pattern` flag.
+要按名称筛选要执行的测试，请使用 `-t`/`--test-name-pattern` 标志。
 
-Adding `-t add` will only run tests with "add" in the name. This works with test names defined with `test` or test suite names defined with `describe`.
+添加 `-t add` 将只运行名称中包含"add"的测试。这对于使用 `test` 定义的测试名称或使用 `describe` 定义的测试套件名称都有效。
 
 ```sh terminal icon="terminal"
 bun test -t add
@@ -113,4 +113,4 @@ Ran 6 tests across 3 files. [59.00ms]
 
 ---
 
-See [Docs > Test Runner](/test) for complete documentation on the test runner.
+请参阅 [文档 > 测试运行器](/test) 了解测试运行器的完整文档。

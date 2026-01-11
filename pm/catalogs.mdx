@@ -1,25 +1,25 @@
 ---
-title: "Catalogs"
-description: "Share common dependency versions across multiple packages in a monorepo"
+title: "目录"
+description: "在单一代码库中的多个包之间共享常见的依赖版本"
 ---
 
-Catalogs in Bun provide a straightforward way to share common dependency versions across multiple packages in a monorepo. Rather than specifying the same versions repeatedly in each workspace package, you define them once in the root package.json and reference them consistently throughout your project.
+Bun 中的目录为在单一代码库(monorpo)中的多个包之间共享常见依赖版本提供了一种简单的方法。不必在每个工作空间包中重复指定相同的版本，而是在根 [package.json] 中定义一次，并在整个项目中一致地引用它们。
 
-## Overview
+## 概述
 
-Unlike traditional dependency management where each workspace package needs to independently specify versions, catalogs let you:
+与传统的依赖管理不同，传统方式中每个工作空间包都需要独立指定版本，目录让你可以：
 
-1. Define version catalogs in the root package.json
-2. Reference these versions with a simple `catalog:` protocol
-3. Update all packages simultaneously by changing the version in just one place
+1. 在根 [package.json] 中定义版本目录
+2. 使用简单的 `catalog:` 协议引用这些版本
+3. 通过仅更改一个地方的版本来同时更新所有包
 
-This is especially useful in large monorepos where dozens of packages need to use the same version of key dependencies.
+这在大型单一代码库中特别有用，其中数十个包需要使用关键依赖的相同版本。
 
-## How to Use Catalogs
+## 如何使用目录
 
-### Directory Structure Example
+### 目录结构示例
 
-Consider a monorepo with the following structure:
+考虑一个具有以下结构的单一代码库：
 
 ```
 my-monorepo/
@@ -34,9 +34,9 @@ my-monorepo/
         └── package.json
 ```
 
-### 1. Define Catalogs in Root package.json
+### 1. 在根 package.json 中定义目录
 
-In your root-level `package.json`, add a `catalog` or `catalogs` field within the `workspaces` object:
+在你的根级 [package.json] 中，在 [workspaces] 对象中添加一个 [catalog] 或 [catalogs] 字段：
 
 ```json package.json icon="file-json"
 {
@@ -57,11 +57,11 @@ In your root-level `package.json`, add a `catalog` or `catalogs` field within th
 }
 ```
 
-If you put `catalog` or `catalogs` at the top level of the `package.json` file, that will work too.
+如果你将 [catalog] 或 [catalogs] 放在 [package.json] 文件的顶层，那也可以。
 
-### 2. Reference Catalog Versions in Workspace Packages
+### 2. 在工作空间包中引用目录版本
 
-In your workspace packages, use the `catalog:` protocol to reference versions:
+在你的工作空间包中，使用 `catalog:` 协议来引用版本：
 
 ```json packages/app/package.json icon="file-json"
 {
@@ -88,15 +88,15 @@ In your workspace packages, use the `catalog:` protocol to reference versions:
 }
 ```
 
-### 3. Run Bun Install
+### 3. 运行 Bun Install
 
-Run `bun install` to install all dependencies according to the catalog versions.
+运行 `bun install` 根据目录版本安装所有依赖。
 
 ## Catalog vs Catalogs
 
-Bun supports two ways to define catalogs:
+Bun 支持两种定义目录的方式：
 
-1. **`catalog`** (singular): A single default catalog for commonly used dependencies
+1. **`catalog`** (单数): 用于常用依赖的单个默认目录
 
    ```json package.json icon="file-json"
    "catalog": {
@@ -105,7 +105,7 @@ Bun supports two ways to define catalogs:
    }
    ```
 
-   Reference with simply `catalog:`:
+   简单地使用 `catalog:` 引用：
 
    ```json packages/app/package.json icon="file-json"
    "dependencies": {
@@ -113,7 +113,7 @@ Bun supports two ways to define catalogs:
    }
    ```
 
-2. **`catalogs`** (plural): Multiple named catalogs for grouping dependencies
+2. **`catalogs`** (复数): 多个命名目录用于分组依赖
 
    ```json package.json icon="file-json"
    "catalogs": {
@@ -126,7 +126,7 @@ Bun supports two ways to define catalogs:
    }
    ```
 
-   Reference with `catalog:<name>`:
+   使用 `catalog:<name>` 引用：
 
    ```json packages/app/package.json icon="file-json"
    "dependencies": {
@@ -135,18 +135,18 @@ Bun supports two ways to define catalogs:
    }
    ```
 
-## Benefits of Using Catalogs
+## 使用目录的好处
 
-- **Consistency**: Ensures all packages use the same version of critical dependencies
-- **Maintenance**: Update a dependency version in one place instead of across multiple package.json files
-- **Clarity**: Makes it obvious which dependencies are standardized across your monorepo
-- **Simplicity**: No need for complex version resolution strategies or external tools
+- **一致性**: 确保所有包使用关键依赖的相同版本
+- **维护性**: 在一个地方更新依赖版本，而不是跨多个 [package.json] 文件更新
+- **清晰性**: 明显看出哪些依赖在你的单一代码库中标准化
+- **简洁性**: 无需复杂的版本解决策略或外部工具
 
-## Real-World Example
+## 实际示例
 
-Here's a more comprehensive example for a React application:
+这是一个更全面的 React 应用示例：
 
-**Root package.json**
+**根 package.json**
 
 ```json package.json icon="file-json"
 {
@@ -199,6 +199,7 @@ Here's a more comprehensive example for a React application:
   "name": "@monorepo/ui",
   "dependencies": {
     "react": "catalog:",
+    "react": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
@@ -220,25 +221,25 @@ Here's a more comprehensive example for a React application:
 }
 ```
 
-## Updating Versions
+## 更新版本
 
-To update versions across all packages, simply change the version in the root package.json:
+要跨所有包更新版本，只需在根 [package.json] 中更改版本：
 
 ```json package.json icon="file-json"
 "catalog": {
-  "react": "^19.1.0",  // Updated from ^19.0.0
-  "react-dom": "^19.1.0"  // Updated from ^19.0.0
+  "react": "^19.1.0",  // 从 ^19.0.0 更新
+  "react-dom": "^19.1.0"  // 从 ^19.0.0 更新
 }
 ```
 
-Then run `bun install` to update all packages.
+然后运行 `bun install` 来更新所有包。
 
-## Lockfile Integration
+## 锁定文件集成
 
-Bun's lockfile tracks catalog versions, making it easy to ensure consistent installations across different environments. The lockfile includes:
+Bun 的锁定文件跟踪目录版本，使跨不同环境的安装保持一致变得简单。锁定文件包括：
 
-- The catalog definitions from your package.json
-- The resolution of each cataloged dependency
+- 来自你的 [package.json] 的目录定义
+- 每个目录依赖的解析
 
 ```json bun.lock(excerpt) icon="file-json"
 {
@@ -275,18 +276,15 @@ Bun's lockfile tracks catalog versions, making it easy to ensure consistent inst
 }
 ```
 
-## Limitations and Edge Cases
+## 限制和边缘情况
 
-- Catalog references must match a dependency defined in either `catalog` or one of the named `catalogs`
-- Empty strings and whitespace in catalog names are ignored (treated as default catalog)
-- Invalid dependency versions in catalogs will fail to resolve during `bun install`
-- Catalogs are only available within workspaces; they cannot be used outside the monorepo
+- 目录引用必须匹配在 [catalog] 或命名 [catalogs] 中定义的依赖
+- 目录名称中的空字符串和空白字符被忽略（视为默认目录）
+- 目录中无效的依赖版本将在 `bun install` 期间解析失败
+- 目录仅在工作空间内可用；不能在单一代码库外使用
 
-Bun's catalog system provides a powerful yet simple way to maintain consistency across your monorepo without introducing additional complexity to your workflow.
+Bun 的目录系统提供了一种强大而简单的方法来维护单一代码库的一致性，而不会为你的工作流程引入额外的复杂性。
 
-## Publishing
+## 发布
 
-When you run `bun publish` or `bun pm pack`, Bun automatically replaces
-`catalog:` references in your `package.json` with the resolved version numbers.
-The published package includes regular semver strings and no longer depends on
-your catalog definitions.
+当你运行 `bun publish` 或 `bun pm pack` 时，Bun 会自动将你的 [package.json] 中的 `catalog:` 引用替换为解析后的版本号。发布的包包含常规的语义化版本字符串，不再依赖你的目录定义。

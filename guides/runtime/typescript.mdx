@@ -1,23 +1,23 @@
 ---
-title: Install TypeScript declarations for Bun
-sidebarTitle: TypeScript types
+title: 为 Bun 安装 TypeScript 声明
+sidebarTitle: TypeScript 类型
 mode: center
 ---
 
-To install TypeScript definitions for Bun's built-in APIs in your project, install `@types/bun`.
+要在您的项目中为 Bun 的内置 API 安装 TypeScript 定义，请安装 `@types/bun`。
 
 ```sh terminal icon="terminal"
-bun add -d @types/bun # dev dependency
+bun add -d @types/bun # 开发依赖
 ```
 
 ---
 
-Below is the full set of recommended `compilerOptions` for a Bun project. With this `tsconfig.json`, you can use top-level await, extensioned or extensionless imports, and JSX.
+以下是 Bun 项目的推荐 `compilerOptions` 完整集合。使用此 [tsconfig.json]，您可以使用顶级 await、带扩展名或无扩展名的导入，以及 JSX。
 
 ```json tsconfig.json icon="file-json"
 {
   "compilerOptions": {
-    // Environment setup & latest features
+    // 环境设置和最新功能
     "lib": ["ESNext"],
     "target": "ESNext",
     "module": "Preserve",
@@ -25,20 +25,20 @@ Below is the full set of recommended `compilerOptions` for a Bun project. With t
     "jsx": "react-jsx",
     "allowJs": true,
 
-    // Bundler mode
+    // 打包器模式
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
 
-    // Best practices
+    // 最佳实践
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
-    // Some stricter flags (disabled by default)
+    // 一些更严格的标志（默认禁用）
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
@@ -48,4 +48,4 @@ Below is the full set of recommended `compilerOptions` for a Bun project. With t
 
 ---
 
-Refer to [Ecosystem > TypeScript](/runtime/typescript) for a complete guide to TypeScript support in Bun.
+请参阅 [生态系统 > TypeScript](/runtime/typescript) 了解 Bun 中 TypeScript 支持的完整指南。

@@ -1,21 +1,21 @@
 ---
-title: Semver
-description: Use Bun's semantic versioning API
+title: 语义化版本
+description: 使用 Bun 的语义化版本 API
 ---
 
-Bun implements a semantic versioning API which can be used to compare versions and determine if a version is compatible with another range of versions. The versions and ranges are designed to be compatible with `node-semver`, which is used by npm clients.
+Bun 实现了一个语义化版本 API，可用于比较版本并确定某个版本是否与另一个版本范围兼容。版本和范围的设计与 `node-semver` 兼容，npm 客户端使用的就是它。
 
-It's about 20x faster than `node-semver`.
+它比 `node-semver` 快约 20 倍。
 
-<Frame>![Benchmark](https://github.com/oven-sh/bun/assets/709451/94746adc-8aba-4baf-a143-3c355f8e0f78)</Frame>
+<Frame>![基准测试](https://github.com/oven-sh/bun/assets/709451/94746adc-8aba-4baf-a143-3c355f8e0f78)</Frame>
 
-Currently, this API provides two functions:
+目前，此 API 提供两个函数：
 
 ## `Bun.semver.satisfies(version: string, range: string): boolean`
 
-Returns `true` if `version` satisfies `range`, otherwise `false`.
+如果 `version` 满足 `range`，则返回 `true`，否则返回 `false`。
 
-Example:
+示例:
 
 ```typescript
 import { semver } from "bun";
@@ -34,13 +34,13 @@ semver.satisfies("1.0.0", "1.0.0 - 2.0.0"); // true
 semver.satisfies("1.0.0", "1.0.0 - 1.0.1"); // true
 ```
 
-If `range` is invalid, it returns false. If `version` is invalid, it returns false.
+如果 `range` 无效，则返回 false。如果 `version` 无效，则返回 false。
 
 ## `Bun.semver.order(versionA: string, versionB: string): 0 | 1 | -1`
 
-Returns `0` if `versionA` and `versionB` are equal, `1` if `versionA` is greater than `versionB`, and `-1` if `versionA` is less than `versionB`.
+如果 `versionA` 和 `versionB` 相等，则返回 `0`，如果 `versionA` 大于 `versionB`，则返回 `1`，如果 `versionA` 小于 `versionB`，则返回 `-1`。
 
-Example:
+示例:
 
 ```typescript
 import { semver } from "bun";
@@ -54,4 +54,4 @@ unsorted.sort(semver.order); // ["1.0.0-alpha", "1.0.0-beta", "1.0.0-rc", "1.0.0
 console.log(unsorted);
 ```
 
-If you need other semver functions, feel free to open an issue or pull request.
+如果您需要其他 semver 函数，请随时提出问题或拉取请求。

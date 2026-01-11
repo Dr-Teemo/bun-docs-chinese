@@ -1,12 +1,12 @@
 ---
-title: Read a file to a Uint8Array
-sidebarTitle: Read to Uint8Array
+title: 将文件读取为 Uint8Array
+sidebarTitle: 读取为 Uint8Array
 mode: center
 ---
 
-The `Bun.file()` function accepts a path and returns a `BunFile` instance. The `BunFile` class extends `Blob` and allows you to lazily read the file in a variety of formats.
+`Bun.file()` 函数接受一个路径并返回一个 [BunFile] 实例。[BunFile] 类扩展了 `Blob` 并允许您以多种格式延迟读取文件。
 
-To read the file into a `Uint8Array` instance, retrieve the contents of the `BunFile` with `.bytes()`.
+要将文件读取到 `Uint8Array` 实例中，请使用 `.bytes()` 获取 [BunFile] 的内容。
 
 ```ts
 const path = "/path/to/package.json";
@@ -14,10 +14,10 @@ const file = Bun.file(path);
 
 const byteArray = await file.bytes();
 
-byteArray[0]; // first byteArray
-byteArray.length; // length of byteArray
+byteArray[0]; // 第一个字节数组
+byteArray.length; // 字节数组长度
 ```
 
 ---
 
-Refer to [API > Binary data > Typed arrays](/runtime/binary-data#typedarray) for more information on working with `Uint8Array` and other binary data formats in Bun.
+有关在 Bun 中使用 `Uint8Array` 和其他二进制数据格式的更多信息，请参阅 [API > 二进制数据 > 类型化数组](/runtime/binary-data#typedarray)。

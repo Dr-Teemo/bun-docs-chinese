@@ -1,43 +1,39 @@
 ---
-title: Bindgen
-description: Bindgen for Bun
+title: 绑定生成器
+description: Bun 的绑定生成器
 ---
 
-<Note>This document is for maintainers and contributors to Bun, and describes internal implementation details.</Note>
+<Note>本文档适用于 Bun 的维护者和贡献者，并描述内部实现细节。</Note>
 
-The new bindings generator, introduced to the codebase in Dec 2024, scans for
-`*.bind.ts` to find function and class definition, and generates glue code to
-interop between JavaScript and native code.
+新的绑定生成器于 2024 年 12 月引入代码库，扫描 `*.bind.ts` 以查找函数和类定义，并生成 JavaScript 和原生代码之间互操作的胶水代码。
 
-There are currently other code generators and systems that achieve similar
-purposes. The following will all eventually be completely phased out in favor of
-this one:
+目前还有其他代码生成器和系统实现了类似的目的。以下所有内容最终都将被完全淘汰，以支持这个新的：
 
-- "Classes generator", converting `*.classes.ts` for custom classes.
-- "JS2Native", allowing ad-hoc calls from `src/js` to native code.
+- "类生成器"，将 `*.classes.ts` 转换为自定义类。
+- "JS2Native"，允许从 `src/js` 到原生代码的临时调用。
 
-## Creating JS Functions in Zig
+## 在 Zig 中创建 JS 函数
 
-Given a file implementing a simple function, such as `add`
+给定一个实现简单函数的文件，例如 `add`
 
 ```zig src/bun.js/math.zig
 pub fn add(global: *jsc.JSGlobalObject, a: i32, b: i32) !i32 {
     return std.math.add(i32, a, b) catch {
-        // Binding functions can return `error.OutOfMemory` and `error.JSError`.
-        // Others like `error.Overflow` from `std.math.add` must be converted.
-        // Remember to be descriptive.
+        // 绑定函数可以返回 `error.OutOfMemory` 和 `error.JSError`。
+        // 其他如 `std.math.add` 的 `error.Overflow` 必须转换。
+        // 记住要描述清楚。
         return global.throwPretty("Integer overflow while adding", .{});
     };
 }
 
-const gen = bun.gen.math; // "math" being this file's basename
+const gen = bun.gen.math; // "math" 是此文件的基名
 
 const std = @import("std");
 const bun = @import("bun");
 const jsc = bun.jsc;
 ```
 
-Then describe the API schema using a `.bind.ts` function. The binding file goes next to the Zig file.
+然后使用 `.bind.ts` 函数描述 API 模式。绑定文件放在 Zig 文件旁边。
 
 ```ts src/bun.js/math.bind.ts icon="/icons/typescript.svg"
 import { t, fn } from "bindgen";
@@ -52,38 +48,37 @@ export const add = fn({
 });
 ```
 
-This function declaration is equivalent to:
+此函数声明等价于：
 
 ```ts
 /**
- * Throws if zero arguments are provided.
- * Wraps out of range numbers using modulo.
+ * 如果提供了零个参数则抛出异常。
+ * 使用模运算包装超出范围的数字。
  */
 declare function add(a: number, b: number = 1): number;
 ```
 
-The code generator will provide `bun.gen.math.jsAdd`, which is the native
-function implementation. To pass to JavaScript, use
-`bun.gen.math.createAddCallback(global)`. JS files in `src/js/` may use
-`$bindgenFn("math.bind.ts", "add")` to get a handle to the implementation.
+代码生成器将提供原生函数 `bun.gen.math.jsAdd`。
+要传递给 JavaScript，使用`bun.gen.math.createAddCallback(global)`。
+`src/js/` 中的 JS 文件可以使用`$bindgenFn("math.bind.ts", "add")` 。
 
-## Strings
+## 字符串
 
-The type for receiving strings is one of [`t.DOMString`](https://webidl.spec.whatwg.org/#idl-DOMString), [`t.ByteString`](https://webidl.spec.whatwg.org/#idl-ByteString), and [`t.USVString`](https://webidl.spec.whatwg.org/#idl-USVString). These map directly to their WebIDL counterparts, and have slightly different conversion logic. Bindgen will pass BunString to native code in all cases.
+接收字符串的类型是 [`t.DOMString`](https://webidl.spec.whatwg.org/#idl-DOMString)、[`t.ByteString`](https://webidl.spec.whatwg.org/#idl-ByteString) 和 [`t.USVString`](https://webidl.spec.whatwg.org/#idl-USVString) 之一。这些直接映射到它们的 WebIDL 对应项，并具有稍微不同的转换逻辑。绑定生成器在所有情况下都会将 BunString 传递给原生代码。
 
-When in doubt, use DOMString.
+如有疑问，请使用 DOMString。
 
-`t.UTF8String` can be used in place of `t.DOMString`, but will call `bun.String.toUTF8`. The native callback gets `[]const u8` (WTF-8 data) passed to native code, freeing it after the function returns.
+`t.UTF8String` 可以代替 `t.DOMString` 使用，但会调用 `bun.String.toUTF8`。原生回调得到 `[]const u8`（WTF-8 数据）传递给原生代码，在函数返回后释放它。
 
-TLDRs from WebIDL spec:
+WebIDL 规范的简要说明：
 
-- ByteString can only contain valid latin1 characters. It is not safe to assume bun.String is already in 8-bit format, but it is extremely likely.
-- USVString will not contain invalid surrogate pairs, aka text that can be represented correctly in UTF-8.
-- DOMString is the loosest but also most recommended strategy.
+- ByteString 只能包含有效的 latin1 字符。不能安全地假设 bun.String 已经是 8 位格式，但极有可能是。
+- USVString 将不包含无效的代理对，即可以用 UTF-8 正确表示的文本。
+- DOMString 是最宽松但也最推荐的策略。
 
-## Function Variants
+## 函数变体
 
-A `variants` can specify multiple variants (also known as overloads).
+`variants` 可以指定多个变体（也称为重载）。
 
 ```ts src/bun.js/math.bind.ts icon="/icons/typescript.svg"
 import { t, fn } from "bindgen";
@@ -106,7 +101,7 @@ export const action = fn({
 });
 ```
 
-In Zig, each variant gets a number, based on the order the schema defines.
+在 Zig 中，每个变体都会得到一个数字，基于模式定义的顺序。
 
 ```zig
 fn action1(a: i32) i32 {
@@ -120,16 +115,16 @@ fn action2(a: bun.String) bun.String {
 
 ## `t.dictionary`
 
-A `dictionary` is a definition for a JavaScript object, typically as a function inputs. For function outputs, it is usually a smarter idea to declare a class type to add functions and destructuring.
+`dictionary` 是 JavaScript 对象的定义，通常作为函数输入。对于函数输出，通常声明类类型以添加函数和解构是更明智的想法。
 
-## Enumerations
+## 枚举
 
-To use [WebIDL's enumeration](https://webidl.spec.whatwg.org/#idl-enums) type, use either:
+要使用 [WebIDL 的枚举](https://webidl.spec.whatwg.org/#idl-enums) 类型，使用以下之一：
 
-- `t.stringEnum`: Create and codegen a new enum type.
-- `t.zigEnum`: Derive a bindgen type off of an existing enum in the codebase.
+- `t.stringEnum`：创建并生成新枚举类型。
+- `t.zigEnum`：基于代码库中现有枚举派生绑定生成器类型。
 
-An example of `stringEnum` as used in `fmt.zig` / `bun:internal-for-testing`
+`stringEnum` 的示例，如在 `fmt.zig` / `bun:internal-for-testing` 中使用：
 
 ```ts
 export const Formatter = t.stringEnum("highlight-javascript", "escape-powershell");
@@ -144,33 +139,33 @@ export const fmtString = fn({
 });
 ```
 
-WebIDL strongly encourages using kebab case for enumeration values, to be consistent with existing Web APIs.
+WebIDL 强烈鼓励使用 kebab case 作为枚举值，以与现有 Web API 保持一致。
 
-### Deriving enums from Zig code
+### 从 Zig 代码派生枚举
 
 TODO: zigEnum
 
 ## `t.oneOf`
 
-A `oneOf` is a union between two or more types. It is represented by `union(enum)` in Zig.
+`oneOf` 是两个或多个类型之间的联合。在 Zig 中由 `union(enum)` 表示。
 
 TODO:
 
-## Attributes
+## 属性
 
-There are set of attributes that can be chained onto `t.*` types. On all types there are:
+有一组属性可以链接到 `t.*` 类型上。在所有类型上都有：
 
-- `.required`, in dictionary parameters only
-- `.optional`, in function arguments only
+- `.required`，仅在字典参数中
+- `.optional`，仅在函数参数中
 - `.default(T)`
 
-When a value is optional, it is lowered to a Zig optional.
+当值是可选的时，它会降低为 Zig 可选类型。
 
-Depending on the type, there are more attributes available. See the type definitions in auto-complete for more details. Note that one of the above three can only be applied, and they must be applied at the end.
+根据类型，有更多可用属性。有关更多详细信息，请参阅自动完成中的类型定义。请注意，上述三个中只能应用一个，并且必须在最后应用。
 
-### Integer Attributes
+### 整数属性
 
-Integer types allow customizing the overflow behavior with `clamp` or `enforceRange`
+整数类型允许使用 `clamp` 或 `enforceRange` 自定义溢出行为
 
 ```ts
 import { t, fn } from "bindgen";
@@ -178,22 +173,22 @@ import { t, fn } from "bindgen";
 export const add = fn({
   args: {
     global: t.globalObject,
-    // enforce in i32 range
+    // 在 i32 范围内强制
     a: t.i32.enforceRange(),
-    // clamp to u16 range
+    // 限制到 u16 范围
     b: t.u16,
-    // enforce in arbitrary range, with a default if not provided
+    // 强制在任意范围内，如果没有提供则使用默认值
     c: t.i32.enforceRange(0, 1000).default(5),
-    // clamp to arbitrary range, or null
+    // 限制到任意范围，或为 null
     d: t.u16.clamp(0, 10).optional,
   },
   ret: t.i32,
 });
 ```
 
-Various Node.js validator functions such as `validateInteger`, `validateNumber`, and more are available. Use these when implementing Node.js APIs, so the error messages match 1:1 what Node would do.
+各种 Node.js 验证器函数，如 `validateInteger`、`validateNumber` 等都是可用的。在实现 Node.js API 时使用这些，以便错误消息与 Node 的完全匹配。
 
-Unlike `enforceRange`, which is taken from WebIDL, `validate*` functions are much more strict on the input they accept. For example, Node's numerical validator check `typeof value === 'number'`, while WebIDL uses `ToNumber` for lossy conversion.
+与来自 WebIDL 的 `enforceRange` 不同，`validate*` 函数对它们接受的输入要严格得多。例如，Node 的数值验证器检查 `typeof value === 'number'`，而 WebIDL 使用 `ToNumber` 进行有损转换。
 
 ```ts
 import { t, fn } from "bindgen";
@@ -201,23 +196,23 @@ import { t, fn } from "bindgen";
 export const add = fn({
   args: {
     global: t.globalObject,
-    // throw if not given a number
+    // 如果未给出数字则抛出异常
     a: t.f64.validateNumber(),
-    // valid in i32 range
+    // 在 i32 范围内有效
     a: t.i32.validateInt32(),
-    // f64 within safe integer range
+    // f64 在安全整数范围内
     b: t.f64.validateInteger(),
-    // f64 in given range
+    // f64 在给定范围内
     c: t.f64.validateNumber(-10000, 10000),
   },
   ret: t.i32,
 });
 ```
 
-## Callbacks
+## 回调
 
 TODO
 
-## Classes
+## 类
 
 TODO

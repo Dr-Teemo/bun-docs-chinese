@@ -1,16 +1,16 @@
 ---
-title: Add Sentry to a Bun app
-sidebarTitle: Sentry with Bun
+title: 为 Bun 应用添加 Sentry
+sidebarTitle: Sentry 与 Bun
 mode: center
 ---
 
-[Sentry](https://sentry.io) is a developer-first error tracking and performance monitoring platform. Sentry has a first-class SDK for Bun, `@sentry/bun`, that instruments your Bun application to automatically collect error and performance data.
+[Sentry](https://sentry.io) 是一个以开发者为中心的错误跟踪和性能监控平台。Sentry 为 Bun 提供了一流的 SDK，`@sentry/bun`，它可以监控您的 Bun 应用程序，自动收集错误和性能数据。
 
-Don't already have an account and Sentry project established? Head over to [sentry.io](https://sentry.io/signup/), then return to this page.
+还没有账户和 Sentry 项目？请前往 [sentry.io](https://sentry.io/signup/) 注册，然后回到此页面。
 
 ---
 
-To start using Sentry with Bun, first install the Sentry Bun SDK.
+要开始在 Bun 中使用 Sentry，首先安装 Sentry Bun SDK。
 
 ```sh terminal icon="terminal"
 bun add @sentry/bun
@@ -18,24 +18,24 @@ bun add @sentry/bun
 
 ---
 
-Then, initialize the Sentry SDK with your Sentry DSN in your app's entry file. You can find your DSN in your Sentry project settings.
+然后，在您应用的入口文件中使用 Sentry DSN 初始化 Sentry SDK。您可以在 Sentry 项目设置中找到您的 DSN。
 
 ```ts sentry.ts icon="/icons/typescript.svg"
 import * as Sentry from "@sentry/bun";
 
-// Ensure to call this before importing any other modules!
+// 确保在导入任何其他模块之前调用此方法！
 Sentry.init({
   dsn: "__SENTRY_DSN__",
 
-  // Add Performance Monitoring by setting tracesSampleRate
-  // We recommend adjusting this value in production
+  // 通过设置 tracesSampleRate 添加性能监控
+  // 我们建议在生产环境中调整此值
   tracesSampleRate: 1.0,
 });
 ```
 
 ---
 
-You can verify that Sentry is working by capturing a test error:
+您可以通过捕获一个测试错误来验证 Sentry 是否正常工作：
 
 ```ts sentry.ts icon="/icons/typescript.svg"
 setTimeout(() => {
@@ -47,8 +47,8 @@ setTimeout(() => {
 }, 99);
 ```
 
-To view and resolve the recorded error, log into [sentry.io](https://sentry.io/) and open your project. Clicking on the error's title will open a page where you can see detailed information and mark it as resolved.
+要查看和解决记录的错误，请登录 [sentry.io](https://sentry.io/) 并打开您的项目。点击错误的标题将打开一个页面，在那里您可以查看详细信息并将其标记为已解决。
 
 ---
 
-To learn more about Sentry and using the Sentry Bun SDK, view the [Sentry documentation](https://docs.sentry.io/platforms/javascript/guides/bun).
+要了解更多关于 Sentry 和使用 Sentry Bun SDK 的信息，请查看 [Sentry 文档](https://docs.sentry.io/platforms/javascript/guides/bun)。

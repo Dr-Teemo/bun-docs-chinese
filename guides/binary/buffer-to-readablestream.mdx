@@ -1,10 +1,10 @@
 ---
-title: Convert a Buffer to a ReadableStream
-sidebarTitle: "Buffer to ReadableStream"
+title: 将 Buffer 转换为 ReadableStream
+sidebarTitle: "Buffer 到 ReadableStream"
 mode: center
 ---
 
-The naive approach to creating a [`ReadableStream`](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream) from a [`Buffer`](https://nodejs.org/api/buffer.html) is to use the `ReadableStream` constructor and enqueue the entire array as a single chunk. For a large buffer, this may be undesirable as this approach does not "streaming" the data in smaller chunks.
+从 [Buffer](https://nodejs.org/api/buffer.html) 创建 [ReadableStream](https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream) 的简单方法是使用 `ReadableStream` 构造函数并将整个数组作为单个块入队。对于大型缓冲区，这可能是不理想的，因为这种方法不会将数据"流式传输"为较小的块。
 
 ```ts
 const buf = Buffer.from("hello world");
@@ -18,7 +18,7 @@ const stream = new ReadableStream({
 
 ---
 
-To stream the data in smaller chunks, first create a `Blob` instance from the `Buffer`. Then use the [`Blob.stream()`](https://developer.mozilla.org/en-US/docs/Web/API/Blob/stream) method to create a `ReadableStream` that streams the data in chunks of a specified size.
+要将数据以较小的块流式传输，首先从 `Buffer` 创建一个 [Blob](https://developer.mozilla.org/zh-CN/docs/Web/API/Blob) 实例。然后使用 [Blob.stream()](https://developer.mozilla.org/zh-CN/docs/Web/API/Blob/stream) 方法创建一个 [ReadableStream](https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream)，它将数据以指定大小的块进行流式传输。
 
 ```ts
 const buf = Buffer.from("hello world");
@@ -28,16 +28,16 @@ const stream = blob.stream();
 
 ---
 
-The chunk size can be set by passing a number to the `.stream()` method.
+可以通过向 `.stream()` 方法传递一个数字来设置块大小。
 
 ```ts
 const buf = Buffer.from("hello world");
 const blob = new Blob([buf]);
 
-// set chunk size of 1024 bytes
+// 设置 1024 字节的块大小
 const stream = blob.stream(1024);
 ```
 
 ---
 
-See [Docs > API > Binary Data](/runtime/binary-data#conversion) for complete documentation on manipulating binary data with Bun.
+参阅 [文档 > API > 二进制数据](/runtime/binary-data#conversion) 获取关于使用Bun操作二进制数据的完整文档。

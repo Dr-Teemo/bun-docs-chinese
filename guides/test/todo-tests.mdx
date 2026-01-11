@@ -1,21 +1,21 @@
 ---
-title: Mark a test as a "todo" with the Bun test runner
-sidebarTitle: Todo tests
+title: 使用 Bun 测试运行器将测试标记为"待办"
+sidebarTitle: 待办测试
 mode: center
 ---
 
-To remind yourself to write a test later, use the `test.todo` function. There's no need to provide a test implementation.
+要提醒自己稍后编写测试，请使用 `test.todo` 函数。无需提供测试实现。
 
 ```ts test.ts icon="/icons/typescript.svg"
 import { test, expect } from "bun:test";
 
-// write this later
+// 稍后编写此测试
 test.todo("unimplemented feature");
 ```
 
 ---
 
-The output of `bun test` indicates how many `todo` tests were encountered.
+`bun test` 的输出显示遇到了多少个 `todo` 测试。
 
 ```sh terminal icon="terminal"
 bun test
@@ -36,7 +36,7 @@ Ran 3 tests across 1 files. [74.00ms]
 
 ---
 
-Optionally, you can provide a test implementation.
+可选地，您可以提供一个测试实现。
 
 ```ts
 import { test, expect } from "bun:test";
@@ -48,7 +48,7 @@ test.todo("unimplemented feature", () => {
 
 ---
 
-If an implementation is provided, it will not be run unless the `--todo` flag is passed. If the `--todo` flag is passed, the test will be executed and _expected to fail_ by test runner! If a todo test passes, the `bun test` run will return a non-zero exit code to signal the failure.
+如果提供了实现，则除非传递 `--todo` 标志，否则不会运行。如果传递了 `--todo` 标志，测试将被执行，并且测试运行器_期望它失败_！如果待办测试通过了，`bun test` 运行将返回非零退出代码以表示失败。
 
 ```sh terminal icon="terminal"
 bun test --todo
@@ -68,7 +68,7 @@ $ echo $?
 
 ---
 
-See also:
+另请参阅：
 
-- [Skip a test](/guides/test/skip-tests)
-- [Docs > Test runner > Writing tests](/test/writing-tests)
+- [跳过测试](/guides/test/skip-tests)
+- [文档 > 测试运行器 > 编写测试](/test/writing-tests)

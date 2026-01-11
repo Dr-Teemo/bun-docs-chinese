@@ -1,10 +1,10 @@
 ---
-title: Re-map import paths
-sidebarTitle: Re-map import paths
+title: 重新映射导入路径
+sidebarTitle: 重新映射导入路径
 mode: center
 ---
 
-Bun reads the `paths` field in your `tsconfig.json` to re-write import paths. This is useful for aliasing package names or avoiding long relative paths.
+Bun 读取 [tsconfig.json] 中的 `paths` 字段来重写导入路径。这对于别名包名称或避免长相对路径很有用。
 
 ```json tsconfig.json icon="file-json"
 {
@@ -19,13 +19,13 @@ Bun reads the `paths` field in your `tsconfig.json` to re-write import paths. Th
 
 ---
 
-With the above `tsconfig.json`, the following imports will be re-written:
+使用上述 [tsconfig.json]，以下导入将被重写：
 
 ```ts tsconfig.ts icon="/icons/typescript.svg"
-import { z } from "my-custom-name"; // imports from "zod"
-import { Button } from "@components/Button"; // imports from "./src/components/Button"
+import { z } from "my-custom-name"; // 从 "zod" 导入
+import { Button } from "@components/Button"; // 从 "./src/components/Button" 导入
 ```
 
 ---
 
-See [Docs > Runtime > TypeScript](/runtime/typescript) for more information on using TypeScript with Bun.
+有关在 Bun 中使用 TypeScript 的更多信息，请参阅 [文档 > 运行时 > TypeScript](/runtime/typescript)。

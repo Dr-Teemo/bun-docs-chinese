@@ -1,10 +1,10 @@
 ---
-title: Parse command-line arguments
-sidebarTitle: Parse command-line arguments
+title: 解析命令行参数
+sidebarTitle: 解析命令行参数
 mode: center
 ---
 
-The _argument vector_ is the list of arguments passed to the program when it is run. It is available as `Bun.argv`.
+_参数向量_ 是程序运行时传递给程序的参数列表。它可以通过 `Bun.argv` 获取。
 
 ```ts cli.ts icon="/icons/typescript.svg"
 console.log(Bun.argv);
@@ -12,7 +12,7 @@ console.log(Bun.argv);
 
 ---
 
-Running this file with arguments results in the following:
+使用参数运行此文件会产生以下结果：
 
 ```sh terminal icon="terminal"
 bun run cli.ts --flag1 --flag2 value
@@ -24,9 +24,9 @@ bun run cli.ts --flag1 --flag2 value
 
 ---
 
-To parse `argv` into a more useful format, `util.parseArgs` would be helpful.
+要将 `argv` 解析为更有用的格式，可以使用 `util.parseArgs`。
 
-Example:
+示例：
 
 ```ts cli.ts icon="/icons/typescript.svg"
 import { parseArgs } from "util";
@@ -51,7 +51,7 @@ console.log(positionals);
 
 ---
 
-then it outputs
+然后输出
 
 ```sh terminal icon="terminal"
 bun run cli.ts --flag1 --flag2 value

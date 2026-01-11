@@ -1,10 +1,10 @@
 ---
-title: Convert an ArrayBuffer to a Uint8Array
-sidebarTitle: "ArrayBuffer to Uint8Array"
+title: 将 ArrayBuffer 转换为 Uint8Array
+sidebarTitle: "ArrayBuffer 到 Uint8Array"
 mode: center
 ---
 
-A `Uint8Array` is a _typed array_, meaning it is a mechanism for viewing the data in an underlying `ArrayBuffer`.
+[Uint8Array](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) 是一种_类型化数组_，意味着它是用于查看底层 [ArrayBuffer](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) 中数据的一种机制。
 
 ```ts
 const buffer = new ArrayBuffer(64);
@@ -13,7 +13,7 @@ const arr = new Uint8Array(buffer);
 
 ---
 
-Instances of other typed arrays can be created similarly.
+其他类型化数组实例可以类似方式创建。
 
 ```ts
 const buffer = new ArrayBuffer(64);
@@ -29,13 +29,13 @@ const arr7 = new BigUint64Array(buffer);
 
 ---
 
-To create a typed array that only views a portion of the underlying buffer, pass the offset and length to the constructor.
+要创建一个只查看底层缓冲区一部分的类型化数组，请将偏移量和长度传递给构造函数。
 
 ```ts
 const buffer = new ArrayBuffer(64);
-const arr = new Uint8Array(buffer, 0, 16); // view first 16 bytes
+const arr = new Uint8Array(buffer, 0, 16); // 查看前16个字节
 ```
 
 ---
 
-See [Docs > API > Utils](/runtime/utils) for more useful utilities.
+请参阅 [文档 > API > 工具](/runtime/utils) 获取更多有用的工具。

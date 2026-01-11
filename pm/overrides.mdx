@@ -1,9 +1,9 @@
 ---
-title: "Overrides and resolutions"
-description: "Control metadependency versions with npm overrides and Yarn resolutions"
+title: "覆盖和解析"
+description: "使用 npm 覆盖和 Yarn 解析控制元依赖版本"
 ---
 
-Bun supports npm's `"overrides"` and Yarn's `"resolutions"` in `package.json`. These are mechanisms for specifying a version range for _metadependencies_—the dependencies of your dependencies.
+Bun 支持 [npm] 的 `"overrides"` 和 Yarn 的 `"resolutions"` 在 [package.json] 中。这些是为_元依赖_指定版本范围的机制——你的依赖的依赖。
 
 {/* prettier-ignore */}
 ```json package.json icon="file-json"
@@ -18,7 +18,7 @@ Bun supports npm's `"overrides"` and Yarn's `"resolutions"` in `package.json`. T
 }
 ```
 
-By default, Bun will install the latest version of all dependencies and metadependencies, according to the ranges specified in each package's `package.json`. Let's say you have a project with one dependency, `foo`, which in turn has a dependency on `bar`. This means `bar` is a _metadependency_ of our project.
+默认情况下，Bun 将根据每个包的 [package.json] 中指定的范围安装所有依赖和元依赖的最新版本。假设你有一个项目，它有一个依赖 `foo`，而 `foo` 又依赖于 `bar`。这意味着 `bar` 是我们项目的_元依赖_。
 
 ```json package.json icon="file-json"
 {
@@ -29,7 +29,7 @@ By default, Bun will install the latest version of all dependencies and metadepe
 }
 ```
 
-When you run `bun install`, Bun will install the latest versions of each package.
+当你运行 `bun install` 时，Bun 将安装每个包的最新版本。
 
 ```txt tree layout of node_modules icon="list-tree"
 node_modules
@@ -37,17 +37,17 @@ node_modules
 └── bar@4.5.6
 ```
 
-But what if a security vulnerability was introduced in `bar@4.5.6`? We may want a way to pin `bar` to an older version that doesn't have the vulnerability. This is where `"overrides"`/`"resolutions"` come in.
+但如果 `bar@4.5.6` 中引入了安全漏洞怎么办？我们可能希望将 `bar` 固定到没有漏洞的旧版本。这就是 `"overrides"`/`"resolutions"` 的用武之地。
 
 ---
 
 ## `"overrides"`
 
-Add `bar` to the `"overrides"` field in `package.json`. Bun will defer to the specified version range when determining which version of `bar` to install, whether it's a dependency or a metadependency.
+在 [package.json] 的 `"overrides"` 字段中添加 `bar`。当确定要安装哪个版本的 `bar` 时，无论是依赖还是元依赖，Bun 都会遵循指定的版本范围。
 
 <Note>
-  Bun currently only supports top-level `"overrides"`. [Nested
-  overrides](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides) are not supported.
+  Bun 目前仅支持顶层 `"overrides"`。[嵌套
+  覆盖](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides) 不受支持。
 </Note>
 
 {/* prettier-ignore */}
@@ -65,9 +65,9 @@ Add `bar` to the `"overrides"` field in `package.json`. Bun will defer to the sp
 
 ## `"resolutions"`
 
-The syntax is similar for `"resolutions"`, which is Yarn's alternative to `"overrides"`. Bun supports this feature to make migration from Yarn easier.
+语法与 `"resolutions"` 类似，这是 Yarn 对 `"overrides"` 的替代方案。Bun 支持此功能是为了让从 Yarn 迁移更容易。
 
-As with `"overrides"`, _nested resolutions_ are not currently supported.
+与 `"overrides"` 一样，_嵌套解析_目前不受支持。
 
 {/* prettier-ignore */}
 ```json package.json icon="file-json"

@@ -1,35 +1,35 @@
 ---
-title: Spawn a child process
-sidebarTitle: Spawn child process
+title: 生成子进程
+sidebarTitle: 生成子进程
 mode: center
 ---
 
-Use [`Bun.spawn()`](/runtime/child-process) to spawn a child process.
+使用 [`Bun.spawn()`](/runtime/child-process) 来生成子进程。
 
 ```ts
 const proc = Bun.spawn(["echo", "hello"]);
 
-// await completion
+// 等待完成
 await proc.exited;
 ```
 
 ---
 
-The second argument accepts a configuration object.
+第二个参数接受一个配置对象。
 
 ```ts
 const proc = Bun.spawn(["echo", "Hello, world!"], {
   cwd: "/tmp",
   env: { FOO: "bar" },
   onExit(proc, exitCode, signalCode, error) {
-    // exit handler
+    // 退出处理程序
   },
 });
 ```
 
 ---
 
-By default, the `stdout` of the child process can be consumed as a `ReadableStream` using `proc.stdout`.
+默认情况下，子进程的 `stdout` 可以使用 `proc.stdout` 作为 `ReadableStream` 来消费。
 
 ```ts
 const proc = Bun.spawn(["echo", "hello"]);
@@ -40,4 +40,4 @@ output; // => "hello\n"
 
 ---
 
-See [Docs > API > Child processes](/runtime/child-process) for complete documentation.
+请参阅 [文档 > API > 子进程](/runtime/child-process) 以获取完整文档。

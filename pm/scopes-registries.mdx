@@ -1,35 +1,35 @@
 ---
-title: "Scopes and registries"
-description: "Configure private registries and scoped packages"
+title: "作用域和注册表"
+description: "配置私有注册表和作用域包"
 ---
 
-The default registry is `registry.npmjs.org`. This can be globally configured in `bunfig.toml`:
+默认注册表是 [registry.npmjs.org]。这可以在 [bunfig.toml] 中全局配置：
 
 ```toml bunfig.toml icon="settings"
 [install]
-# set default registry as a string
+# 设置默认注册表为字符串
 registry = "https://registry.npmjs.org"
-# set a token
+# 设置一个令牌
 registry = { url = "https://registry.npmjs.org", token = "123456" }
-# set a username/password
+# 设置用户名/密码
 registry = "https://username:password@registry.npmjs.org"
 ```
 
-To configure a private registry scoped to a particular organization:
+要配置特定组织的私有注册表：
 
 ```toml bunfig.toml icon="settings"
 [install.scopes]
-# registry as string
+# 注册表为字符串
 "@myorg1" = "https://username:password@registry.myorg.com/"
 
-# registry with username/password
-# you can reference environment variables
+# 带用户名/密码的注册表
+# 你可以引用环境变量
 "@myorg2" = { username = "myusername", password = "$NPM_PASS", url = "https://registry.myorg.com/" }
 
-# registry with token
+# 带令牌的注册表
 "@myorg3" = { token = "$npm_token", url = "https://registry.myorg.com/" }
 ```
 
-### `.npmrc`
+### [.npmrc]
 
-Bun also reads `.npmrc` files, [learn more](/pm/npmrc).
+Bun 也读取 [.npmrc] 文件，[了解更多](/pm/npmrc)。

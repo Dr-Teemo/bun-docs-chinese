@@ -1,22 +1,22 @@
 ---
-title: "Global cache"
-description: "How Bun stores and manages packages in its global cache"
+title: "全局缓存"
+description: "Bun 如何在其全局缓存中存储和管理包"
 ---
 
-All packages downloaded from the registry are stored in a global cache at `~/.bun/install/cache`, or the path defined by the environment variable `BUN_INSTALL_CACHE_DIR`. They are stored in subdirectories named like `${name}@${version}`, so multiple versions of a package can be cached.
+从注册表下载的所有包都存储在全局缓存中，位置为 `~/.bun/install/cache`，或者是环境变量 `BUN_INSTALL_CACHE_DIR` 定义的路径。它们存储在名为 `${name}@${version}` 的子目录中，因此可以缓存一个包的多个版本。
 
-<Accordion title="Configuring cache behavior">
+<Accordion title="配置缓存行为">
 
 ```toml bunfig.toml icon="settings"
 [install.cache]
-# the directory to use for the cache
+# 用于缓存的目录
 dir = "~/.bun/install/cache"
 
-# when true, don't load from the global cache.
-# Bun may still write to node_modules/.cache
+# 当为 true 时，不从全局缓存加载。
+# Bun 仍可能写入 node_modules/.cache
 disable = false
 
-# when true, always resolve the latest versions from the registry
+# 当为 true 时，总是从注册表解析最新版本
 disableManifest = false
 ```
 
@@ -24,49 +24,49 @@ disableManifest = false
 
 ---
 
-## Minimizing re-downloads
+## 最小化重新下载
 
-Bun strives to avoid re-downloading packages multiple times. When installing a package, if the cache already contains a version in the range specified by `package.json`, Bun will use the cached package instead of downloading it again.
+Bun 努力避免多次重新下载包。安装包时，如果缓存已包含 [package.json] 指定范围内的版本，Bun 将使用缓存的包而不是再次下载。
 
-<Accordion title="Installation details">
-If the semver version has pre-release suffix (`1.0.0-beta.0`) or a build suffix (`1.0.0+20220101`), it is replaced with a hash of that value instead, to reduce the chances of errors associated with long file paths.
+<Accordion title="安装详情">
+如果语义化版本有预发布后缀（`1.0.0-beta.0`）或构建后缀（`1.0.0+20220101`），它将被替换为此值的哈希，以减少与长文件路径相关的错误的可能性。
 
-When the `node_modules` folder exists, before installing, Bun checks that `node_modules` contains all expected packages with appropriate versions. If so `bun install` completes. Bun uses a custom JSON parser which stops parsing as soon as it finds `"name"` and `"version"`.
+当存在 [node_modules] 文件夹时，在安装之前，Bun 会检查 [node_modules] 是否包含所有具有适当版本的预期包。如果是，`bun install` 完成。Bun 使用自定义 JSON 解析器，一旦找到 `"name"` 和 `"version"` 就停止解析。
 
-If a package is missing or has a version incompatible with the `package.json`, Bun checks for a compatible module in the cache. If found, it is installed into `node_modules`. Otherwise, the package will be downloaded from the registry then installed.
+如果包缺失或版本与 [package.json] 不兼容，Bun 会检查缓存中是否有兼容的模块。如果找到，它将被安装到 [node_modules] 中。否则，包将从注册表下载然后安装。
 
 </Accordion>
 
 ---
 
-## Fast copying
+## 快速复制
 
-Once a package is downloaded into the cache, Bun still needs to copy those files into `node_modules`. Bun uses the fastest syscalls available to perform this task. On Linux, it uses hardlinks; on macOS, it uses `clonefile`.
+包下载到缓存后，Bun 仍需要将这些文件复制到 [node_modules]。Bun 使用可用的最快系统调用执行此任务。在 Linux 上，它使用硬链接；在 macOS 上，它使用 `clonefile`。
 
 ---
 
-## Saving disk space
+## 节省磁盘空间
 
-Since Bun uses hardlinks to "copy" a module into a project's `node_modules` directory on Linux and Windows, the contents of the package only exist in a single location on disk, greatly reducing the amount of disk space dedicated to `node_modules`.
+由于 Bun 在 Linux 和 Windows 上使用硬链接将模块"复制"到项目的 [node_modules] 目录，包的内容只存在于磁盘上的单个位置，大大减少了专用于 [node_modules] 的磁盘空间。
 
-This benefit also applies to macOS, but there are exceptions. It uses `clonefile` which is copy-on-write, meaning it will not occupy disk space, but it will count towards drive's limit. This behavior is useful if something attempts to patch `node_modules/*`, so it's impossible to affect other installations.
+此好处也适用于 macOS，但有例外。它使用 `clonefile`，这是写时复制，意味着它不会占用磁盘空间，但它会计入驱动器的限制。如果某些内容试图修补 [node_modules/*]，此行为很有用，因此不可能影响其他安装。
 
-<Accordion title="Installation strategies">
-This behavior is configurable with the `--backend` flag, which is respected by all of Bun's package management commands.
+<Accordion title="安装策略">
+此行为可通过 `--backend` 标志配置，Bun 的所有包管理命令都支持此标志。
 
-- **`hardlink`**: Default on Linux and Windows.
-- **`clonefile`** Default on macOS.
-- **`clonefile_each_dir`**: Similar to `clonefile`, except it clones each file individually per directory. It is only available on macOS and tends to perform slower than `clonefile`.
-- **`copyfile`**: The fallback used when any of the above fail. It is the slowest option. On macOS, it uses `fcopyfile()`; on Linux it uses `copy_file_range()`.
-- **`symlink`**: Currently used only `file:` (and eventually `link:`) dependencies. To prevent infinite loops, it skips symlinking the `node_modules` folder.
+- **`hardlink`**: Linux 和 Windows 上的默认选项。
+- **`clonefile`** macOS 上的默认选项。
+- **`clonefile_each_dir`**: 类似于 `clonefile`，只是它按目录分别克隆每个文件。仅在 macOS 上可用，且往往比 `clonefile` 性能较慢。
+- **`copyfile`**: 当上述任何方法失败时使用的备选方案。这是最慢的选项。在 macOS 上使用 `fcopyfile()`；在 Linux 上使用 `copy_file_range()`。
+- **`symlink`**: 当前仅用于 `file:`（以及最终的 `link:`）依赖。为防止无限循环，它会跳过 [node_modules] 文件夹的符号链接。
 
-If you install with `--backend=symlink`, Node.js won't resolve node_modules of dependencies unless each dependency has its own `node_modules` folder or you pass `--preserve-symlinks` to `node`. See [Node.js documentation on `--preserve-symlinks`](https://nodejs.org/api/cli.html#--preserve-symlinks).
+如果使用 `--backend=symlink` 安装，Node.js 不会解析依赖的 node_modules，除非每个依赖都有自己的 [node_modules] 文件夹或你向 `node` 传递 `--preserve-symlinks`。请参阅 [Node.js 关于 `--preserve-symlinks` 的文档](https://nodejs.org/api/cli.html#--preserve-symlinks)。
 
 ```bash terminal icon="terminal"
 bun install --backend symlink
 node --preserve-symlinks ./foo.js
 ```
 
-Bun's runtime does not currently expose an equivalent of `--preserve-symlinks`.
+Bun 的运行时目前没有公开相当于 `--preserve-symlinks` 的功能。
 
 </Accordion>

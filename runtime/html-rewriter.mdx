@@ -1,35 +1,35 @@
 ---
 title: HTMLRewriter
-description: Use Bun's HTMLRewriter to transform HTML documents with CSS selectors
+description: 使用 Bun 的 HTMLRewriter 通过 CSS 选择器转换 HTML 文档
 ---
 
-HTMLRewriter lets you use CSS selectors to transform HTML documents. It works with `Request`, `Response`, as well as `string`. Bun's implementation is based on Cloudflare's [lol-html](https://github.com/cloudflare/lol-html).
+HTMLRewriter 让您可以使用 CSS 选择器来转换 HTML 文档。它可以与 `Request`、`Response` 以及 `string` 一起使用。Bun 的实现在 Cloudflare 的 [lol-html](https://github.com/cloudflare/lol-html) 基础上。
 
 ---
 
-## Usage
+## 用法
 
-A common usecase is rewriting URLs in HTML content. Here's an example that rewrites image sources and link URLs to use a CDN domain:
+一个常见的用例是重写 HTML 内容中的 URL。以下示例重写图像源和链接 URL 以使用 CDN 域：
 
 ```ts
-// Replace all images with a rickroll
+// 将所有图像替换为 rickroll
 const rewriter = new HTMLRewriter().on("img", {
   element(img) {
-    // Famous rickroll video thumbnail
+    // 著名的 rickroll 视频缩略图
     img.setAttribute("src", "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg");
 
-    // Wrap the image in a link to the video
+    // 将图像包装在视频链接中
     img.before('<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">', {
       html: true,
     });
     img.after("</a>", { html: true });
 
-    // Add some fun alt text
+    // 添加一些有趣的 alt 文本
     img.setAttribute("alt", "Definitely not a rickroll");
   },
 });
 
-// An example HTML document
+// 示例 HTML 文档
 const html = `
 <html>
 <body>
@@ -44,7 +44,7 @@ const result = rewriter.transform(html);
 console.log(result);
 ```
 
-This replaces all images with a thumbnail of Rick Astley and wraps each `<img>` in a link, producing a diff like this:
+这会将所有图像替换为 Rick Astley 的缩略图，并将每个 `<img>` 包装在链接中，产生如下差异：
 
 {/* prettier-ignore */}
 ```html
@@ -66,54 +66,54 @@ This replaces all images with a thumbnail of Rick Astley and wraps each `<img>` 
 </html>
 ```
 
-Now every image on the page will be replaced with a thumbnail of Rick Astley, and clicking any image will lead to [a very famous video](https://www.youtube.com/watch?v=dQw4w9WgXcQ).
+现在页面上的每个图像都将被替换为 Rick Astley 的缩略图，点击任何图像都会导致[一个非常著名的视频](https://www.youtube.com/watch?v=dQw4w9WgXcQ)。
 
-### Input types
+### 输入类型
 
-HTMLRewriter can transform HTML from various sources. The input is automatically handled based on its type:
+HTMLRewriter 可以转换来自各种源的 HTML。输入会根据其类型自动处理：
 
 ```ts
-// From Response
+// 从 Response
 rewriter.transform(new Response("<div>content</div>"));
 
-// From string
+// 从字符串
 rewriter.transform("<div>content</div>");
 
-// From ArrayBuffer
+// 从 ArrayBuffer
 rewriter.transform(new TextEncoder().encode("<div>content</div>").buffer);
 
-// From Blob
+// 从 Blob
 rewriter.transform(new Blob(["<div>content</div>"]));
 
-// From File
+// 从 File
 rewriter.transform(Bun.file("index.html"));
 ```
 
-Note that Cloudflare Workers implementation of HTMLRewriter only supports `Response` objects.
+注意 Cloudflare Workers 的 HTMLRewriter 实现只支持 `Response` 对象。
 
-### Element Handlers
+### 元素处理器
 
-The `on(selector, handlers)` method allows you to register handlers for HTML elements that match a CSS selector. The handlers are called for each matching element during parsing:
+`on(selector, handlers)` 方法允许您为匹配 CSS 选择器的 HTML 元素注册处理器。在解析过程中，处理器会被调用以处理每个匹配的元素：
 
 ```ts
 rewriter.on("div.content", {
-  // Handle elements
+  // 处理元素
   element(element) {
     element.setAttribute("class", "new-content");
     element.append("<p>New content</p>", { html: true });
   },
-  // Handle text nodes
+  // 处理文本节点
   text(text) {
     text.replace("new text");
   },
-  // Handle comments
+  // 处理注释
   comments(comment) {
     comment.remove();
   },
 });
 ```
 
-The handlers can be asynchronous and return a Promise. Note that async operations will block the transformation until they complete:
+处理器可以是异步的并返回 Promise。请注意，异步操作会阻塞转换直到完成：
 
 ```ts
 rewriter.on("div", {
@@ -124,117 +124,117 @@ rewriter.on("div", {
 });
 ```
 
-### CSS Selector Support
+### CSS 选择器支持
 
-The `on()` method supports a wide range of CSS selectors:
+`on()` 方法支持广泛的 CSS 选择器：
 
 ```ts
-// Tag selectors
+// 标签选择器
 rewriter.on("p", handler);
 
-// Class selectors
+// 类选择器
 rewriter.on("p.red", handler);
 
-// ID selectors
+// ID 选择器
 rewriter.on("h1#header", handler);
 
-// Attribute selectors
-rewriter.on("p[data-test]", handler); // Has attribute
-rewriter.on('p[data-test="one"]', handler); // Exact match
-rewriter.on('p[data-test="one" i]', handler); // Case-insensitive
-rewriter.on('p[data-test="one" s]', handler); // Case-sensitive
-rewriter.on('p[data-test~="two"]', handler); // Word match
-rewriter.on('p[data-test^="a"]', handler); // Starts with
-rewriter.on('p[data-test$="1"]', handler); // Ends with
-rewriter.on('p[data-test*="b"]', handler); // Contains
-rewriter.on('p[data-test|="a"]', handler); // Dash-separated
+// 属性选择器
+rewriter.on("p[data-test]", handler); // 有属性
+rewriter.on('p[data-test="one"]', handler); // 精确匹配
+rewriter.on('p[data-test="one" i]', handler); // 不区分大小写
+rewriter.on('p[data-test="one" s]', handler); // 区分大小写
+rewriter.on('p[data-test~="two"]', handler); // 单词匹配
+rewriter.on('p[data-test^="a"]', handler); // 以某字符开始
+rewriter.on('p[data-test$="1"]', handler); // 以某字符结束
+rewriter.on('p[data-test*="b"]', handler); // 包含
+rewriter.on('p[data-test|="a"]', handler); // 连字符分隔
 
-// Combinators
-rewriter.on("div span", handler); // Descendant
-rewriter.on("div > span", handler); // Direct child
+// 组合器
+rewriter.on("div span", handler); // 后代
+rewriter.on("div > span", handler); // 直接子元素
 
-// Pseudo-classes
+// 伪类
 rewriter.on("p:nth-child(2)", handler);
 rewriter.on("p:first-child", handler);
 rewriter.on("p:nth-of-type(2)", handler);
 rewriter.on("p:first-of-type", handler);
 rewriter.on("p:not(:first-child)", handler);
 
-// Universal selector
+// 通用选择器
 rewriter.on("*", handler);
 ```
 
-### Element Operations
+### 元素操作
 
-Elements provide various methods for manipulation. All modification methods return the element instance for chaining:
+元素提供多种方法用于操作。所有修改方法都返回元素实例以支持链式调用：
 
 ```ts
 rewriter.on("div", {
   element(el) {
-    // Attributes
+    // 属性
     el.setAttribute("class", "new-class").setAttribute("data-id", "123");
 
     const classAttr = el.getAttribute("class"); // "new-class"
     const hasId = el.hasAttribute("id"); // boolean
     el.removeAttribute("class");
 
-    // Content manipulation
-    el.setInnerContent("New content"); // Escapes HTML by default
-    el.setInnerContent("<p>HTML content</p>", { html: true }); // Parses HTML
-    el.setInnerContent(""); // Clear content
+    // 内容操作
+    el.setInnerContent("New content"); // 默认转义 HTML
+    el.setInnerContent("<p>HTML content</p>", { html: true }); // 解析 HTML
+    el.setInnerContent(""); // 清空内容
 
-    // Position manipulation
+    // 位置操作
     el.before("Content before").after("Content after").prepend("First child").append("Last child");
 
-    // HTML content insertion
+    // HTML 内容插入
     el.before("<span>before</span>", { html: true })
       .after("<span>after</span>", { html: true })
       .prepend("<span>first</span>", { html: true })
       .append("<span>last</span>", { html: true });
 
-    // Removal
-    el.remove(); // Remove element and contents
-    el.removeAndKeepContent(); // Remove only the element tags
+    // 移除
+    el.remove(); // 移除元素和内容
+    el.removeAndKeepContent(); // 只移除元素标签
 
-    // Properties
-    console.log(el.tagName); // Lowercase tag name
-    console.log(el.namespaceURI); // Element's namespace URI
-    console.log(el.selfClosing); // Whether element is self-closing (e.g. <div />)
-    console.log(el.canHaveContent); // Whether element can contain content (false for void elements like <br>)
-    console.log(el.removed); // Whether element was removed
+    // 属性
+    console.log(el.tagName); // 小写标签名
+    console.log(el.namespaceURI); // 元素的命名空间 URI
+    console.log(el.selfClosing); // 元素是否自闭合（例如 <div />）
+    console.log(el.canHaveContent); // 元素是否可以包含内容（void 元素如 <br> 为 false）
+    console.log(el.removed); // 元素是否已被移除
 
-    // Attributes iteration
+    // 属性迭代
     for (const [name, value] of el.attributes) {
       console.log(name, value);
     }
 
-    // End tag handling
+    // 结束标签处理
     el.onEndTag(endTag => {
       endTag.before("Before end tag");
       endTag.after("After end tag");
-      endTag.remove(); // Remove the end tag
-      console.log(endTag.name); // Tag name in lowercase
+      endTag.remove(); // 移除结束标签
+      console.log(endTag.name); // 小写的标签名
     });
   },
 });
 ```
 
-### Text Operations
+### 文本操作
 
-Text handlers provide methods for text manipulation. Text chunks represent portions of text content and provide information about their position in the text node:
+文本处理器提供文本操作方法。文本块表示文本内容的一部分，并提供关于它们在文本节点中位置的信息：
 
 ```ts
 rewriter.on("p", {
   text(text) {
-    // Content
-    console.log(text.text); // Text content
-    console.log(text.lastInTextNode); // Whether this is the last chunk
-    console.log(text.removed); // Whether text was removed
+    // 内容
+    console.log(text.text); // 文本内容
+    console.log(text.lastInTextNode); // 是否为最后一个块
+    console.log(text.removed); // 文本是否已被移除
 
-    // Manipulation
+    // 操作
     text.before("Before text").after("After text").replace("New text").remove();
 
-    // HTML content insertion
+    // HTML 内容插入
     text
       .before("<span>before</span>", { html: true })
       .after("<span>after</span>", { html: true })
@@ -243,22 +243,22 @@ rewriter.on("p", {
 });
 ```
 
-### Comment Operations
+### 注释操作
 
-Comment handlers allow comment manipulation with similar methods to text nodes:
+注释处理器允许注释操作，具有与文本节点类似的方法：
 
 ```ts
 rewriter.on("*", {
   comments(comment) {
-    // Content
-    console.log(comment.text); // Comment text
-    comment.text = "New comment text"; // Set comment text
-    console.log(comment.removed); // Whether comment was removed
+    // 内容
+    console.log(comment.text); // 注释文本
+    comment.text = "New comment text"; // 设置注释文本
+    console.log(comment.removed); // 注释是否已被移除
 
-    // Manipulation
+    // 操作
     comment.before("Before comment").after("After comment").replace("New comment").remove();
 
-    // HTML content insertion
+    // HTML 内容插入
     comment
       .before("<span>before</span>", { html: true })
       .after("<span>after</span>", { html: true })
@@ -267,60 +267,60 @@ rewriter.on("*", {
 });
 ```
 
-### Document Handlers
+### 文档处理器
 
-The `onDocument(handlers)` method allows you to handle document-level events. These handlers are called for events that occur at the document level rather than within specific elements:
+`onDocument(handlers)` 方法允许您处理文档级事件。这些处理器用于处理发生在文档级别而非特定元素内的事件：
 
 ```ts
 rewriter.onDocument({
-  // Handle doctype
+  // 处理 doctype
   doctype(doctype) {
     console.log(doctype.name); // "html"
-    console.log(doctype.publicId); // public identifier if present
-    console.log(doctype.systemId); // system identifier if present
+    console.log(doctype.publicId); // 公共标识符（如果存在）
+    console.log(doctype.systemId); // 系统标识符（如果存在）
   },
-  // Handle text nodes
+  // 处理文本节点
   text(text) {
     console.log(text.text);
   },
-  // Handle comments
+  // 处理注释
   comments(comment) {
     console.log(comment.text);
   },
-  // Handle document end
+  // 处理文档结束
   end(end) {
     end.append("<!-- Footer -->", { html: true });
   },
 });
 ```
 
-### Response Handling
+### 响应处理
 
-When transforming a Response:
+转换 Response 时：
 
-- The status code, headers, and other response properties are preserved
-- The body is transformed while maintaining streaming capabilities
-- Content-encoding (like gzip) is handled automatically
-- The original response body is marked as used after transformation
-- Headers are cloned to the new response
+- 状态码、头部和其他响应属性被保留
+- 在保持流功能的同时转换正文
+- 自动处理内容编码（如 gzip）
+- 转换后原始响应正文被标记为已使用
+- 头部被克隆到新响应中
 
-## Error Handling
+## 错误处理
 
-HTMLRewriter operations can throw errors in several cases:
+HTMLRewriter 操作在以下几种情况下可能抛出错误：
 
-- Invalid selector syntax in `on()` method
-- Invalid HTML content in transformation methods
-- Stream errors when processing Response bodies
-- Memory allocation failures
-- Invalid input types (e.g., passing Symbol)
-- Body already used errors
+- `on()` 方法中的选择器语法无效
+- 转换方法中的 HTML 内容无效
+- 处理响应正文时的流错误
+- 内存分配失败
+- 无效的输入类型（例如，传递 Symbol）
+- 正文已使用错误
 
-Errors should be caught and handled appropriately:
+错误应被捕获并适当处理：
 
 ```ts
 try {
   const result = rewriter.transform(input);
-  // Process result
+  // 处理结果
 } catch (error) {
   console.error("HTMLRewriter error:", error);
 }
@@ -328,6 +328,6 @@ try {
 
 ---
 
-## See also
+## 参见
 
-You can also read the [Cloudflare documentation](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/), which this API is intended to be compatible with.
+您还可以阅读 [Cloudflare 文档](https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/)，此 API 旨在与其兼容。

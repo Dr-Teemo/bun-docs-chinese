@@ -1,10 +1,10 @@
 ---
-title: Build an app with Astro and Bun
-sidebarTitle: "Astro with Bun"
+title: 使用 Astro 和 Bun 构建应用
+sidebarTitle: "Astro 与 Bun"
 mode: center
 ---
 
-Initialize a fresh Astro app with `bun create astro`. The `create-astro` package detects when you are using `bunx` and will automatically install dependencies using `bun`.
+使用 `bun create astro` 初始化一个全新的 Astro 应用。当您使用 `bunx` 时，`create-astro` 包会检测到并自动使用 `bun` 安装依赖项。
 
 ```sh terminal icon="terminal"
 bun create astro
@@ -12,71 +12,71 @@ bun create astro
 
 ```txt
 ╭─────╮  Houston:
-│ ◠ ◡ ◠  We're glad to have you on board.
+│ ◠ ◡ ◠  很高兴您加入我们。
 ╰─────╯
 
- astro   v3.1.4 Launch sequence initiated.
+ astro   v3.1.4 启动序列已启动。
 
-   dir   Where should we create your new project?
+   dir   我们应该在哪个位置创建您的新项目？
          ./fumbling-field
 
-  tmpl   How would you like to start your new project?
-         Use blog template
-      ✔  Template copied
+  tmpl   您希望如何开始您的新项目？
+         使用博客模板
+      ✔  模板已复制
 
-  deps   Install dependencies?
-         Yes
-      ✔  Dependencies installed
+  deps   安装依赖项？
+         是
+      ✔  依赖项已安装
 
-    ts   Do you plan to write TypeScript?
-         Yes
+    ts   您计划编写 TypeScript 吗？
+         是
 
-   use   How strict should TypeScript be?
-         Strict
-      ✔  TypeScript customized
+   use   TypeScript 应该有多严格？
+         严格
+      ✔  TypeScript 已自定义
 
-   git   Initialize a new git repository?
-         Yes
-      ✔  Git initialized
+   git   初始化新的 git 仓库？
+         是
+      ✔  Git 已初始化
 
-  next   Liftoff confirmed. Explore your project!
+  next   发射确认。探索您的项目！
 
-         Enter your project directory using cd ./fumbling-field
-         Run `bun run dev` to start the dev server. CTRL+C to stop.
-         Add frameworks like react or tailwind using astro add.
+         使用 cd ./fumbling-field 进入您的项目目录
+         运行 `bun run dev` 启动开发服务器。CTRL+C 停止。
+         使用 astro add 添加 react 或 tailwind 等框架。
 
-         Stuck? Join us at https://astro.build/chat
+         遇到困难？加入我们的聊天 https://astro.build/chat
 
 ╭─────╮  Houston:
-│ ◠ ◡ ◠  Good luck out there, astronaut! 🚀
+│ ◠ ◡ ◠  祝您好运，宇航员！🚀
 ╰─────╯
 ```
 
 ---
 
-Start the dev server with `bunx`.
+使用 `bunx` 启动开发服务器。
 
-By default, Bun will run the dev server with Node.js. To use the Bun runtime instead, use the `--bun` flag.
+默认情况下，Bun 将使用 Node.js 运行开发服务器。要改用 Bun 运行时，请使用 `--bun` 标志。
 
 ```sh terminal icon="terminal"
 bunx --bun astro dev
 ```
 
 ```txt
-  🚀  astro  v3.1.4 started in 200ms
+  🚀  astro  v3.1.4 启动于 200ms
 
-  ┃ Local    http://localhost:4321/
-  ┃ Network  use --host to expose
+  ┃ 本地    http://localhost:4321/
+  ┃ 网络  使用 --host 暴露
 ```
 
 ---
 
-Open [http://localhost:4321](http://localhost:4321) with your browser to see the result. Astro will hot-reload your app as you edit your source files.
+在浏览器中打开 [http://localhost:4321](http://localhost:4321) 查看结果。Astro 会在您编辑源文件时热重载您的应用。
 
 <Frame>
-  <img src="https://i.imgur.com/Dswiu6w.png" caption="An Astro v3 starter app running on Bun" />
+  <img src="https://i.imgur.com/Dswiu6w.png" caption="在 Bun 上运行的 Astro v3 项目" />
 </Frame>
 
 ---
 
-Refer to the [Astro docs](https://docs.astro.build/en/getting-started/) for complete documentation.
+请参阅 [Astro 文档](https://docs.astro.build/en/getting-started/) 获取完整文档。

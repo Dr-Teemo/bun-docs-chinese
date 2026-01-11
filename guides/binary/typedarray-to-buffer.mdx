@@ -1,10 +1,10 @@
 ---
-title: Convert a Uint8Array to a Buffer
-sidebarTitle: "Uint8Array to Buffer"
+title: 将 Uint8Array 转换为 Buffer
+sidebarTitle: "Uint8Array 到 Buffer"
 mode: center
 ---
 
-The [`Buffer`](https://nodejs.org/api/buffer.html) class extends [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) with a number of additional methods. Use `Buffer.from()` to create a `Buffer` instance from a `Uint8Array`.
+[Buffer](https://nodejs.org/api/buffer.html) 类扩展了 [Uint8Array](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)，添加了许多额外的方法。使用 `Buffer.from()` 从 [Uint8Array](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) 创建 [Buffer](https://nodejs.org/api/buffer.html) 实例。
 
 ```ts
 const arr: Uint8Array = ...
@@ -13,4 +13,4 @@ const buf = Buffer.from(arr);
 
 ---
 
-See [Docs > API > Binary Data](/runtime/binary-data#conversion) for complete documentation on manipulating binary data with Bun.
+参阅 [文档 > API > 二进制数据](/runtime/binary-data#conversion) 获取关于使用Bun操作二进制数据的完整文档。

@@ -1,19 +1,19 @@
 ---
-title: Check if the current file is the entrypoint
-sidebarTitle: Check entrypoint
+title: 检查当前文件是否为入口点
+sidebarTitle: 检查入口点
 mode: center
 ---
 
-Bun provides a handful of module-specific utilities on the [`import.meta`](/runtime/module-resolution#import-meta) object. Use `import.meta.main` to check if the current file is the entrypoint of the current process.
+Bun 在 [`import.meta`](/runtime/module-resolution#import-meta) 对象上提供了一些模块特定的实用工具。使用 `import.meta.main` 检查当前文件是否为当前进程的入口点。
 
 ```ts index.ts icon="/icons/typescript.svg"
 if (import.meta.main) {
-  // this file is directly executed with `bun run`
+  // 此文件直接使用 `bun run` 执行
 } else {
-  // this file is being imported by another file
+  // 此文件正被另一个文件导入
 }
 ```
 
 ---
 
-See [Docs > API > import.meta](/runtime/module-resolution#import-meta) for complete documentation.
+请参阅 [文档 > API > import.meta](/runtime/module-resolution#import-meta) 获取完整文档。

@@ -1,24 +1,24 @@
 ---
-title: "Plugins"
-description: "Universal plugin API for extending Bun's runtime and bundler"
+title: "插件"
+description: "用于扩展 Bun 运行时和打包器的通用插件 API"
 ---
 
-Bun provides a universal plugin API that can be used to extend both the _runtime_ and _bundler_.
+Bun 提供了一个通用插件 API，可以用来扩展_运行时_和_打包器_。
 
-Plugins intercept imports and perform custom loading logic: reading files, transpiling code, etc. They can be used to add support for additional file types, like `.scss` or `.yaml`. In the context of Bun's bundler, plugins can be used to implement framework-level features like CSS extraction, macros, and client-server code co-location.
+插件拦截导入并执行自定义加载逻辑：读取文件、转译代码等。它们可以用来添加对额外文件类型的支持，比如 `.scss` 或 `.yaml`。在 Bun 打包器的上下文中，插件可以用来实现框架级功能，如 CSS 提取、宏和客户端-服务端代码共存。
 
-## Lifecycle hooks
+## 生命周期钩子
 
-Plugins can register callbacks to be run at various points in the lifecycle of a bundle:
+插件可以注册在打包生命周期各个阶段运行的回调：
 
-- [`onStart()`](#onstart): Run once the bundler has started a bundle
-- [`onResolve()`](#onresolve): Run before a module is resolved
-- [`onLoad()`](#onload): Run before a module is loaded.
-- [`onBeforeParse()`](#onbeforeparse): Run zero-copy native addons in the parser thread before a file is parsed.
+- [`onStart()`](#onstart): 在打包器启动打包时运行一次
+- [`onResolve()`](#onresolve): 在模块解析之前运行
+- [`onLoad()`](#onload): 在模块加载之前运行
+- [`onBeforeParse()`](#onbeforeparse): 在解析器线程中运行零拷贝原生插件，在文件解析之前运行
 
-### Reference
+## 参考
 
-A rough overview of the types (please refer to Bun's `bun.d.ts` for the full type definitions):
+插件类型的粗略概述（请参考 Bun 的 `bun.d.ts` 以获取完整的类型定义）：
 
 ```ts Plugin Types icon="/icons/typescript.svg"
 type PluginBuilder = {
@@ -59,9 +59,9 @@ type Loader =
   | "html";
 ```
 
-## Usage
+## 用法
 
-A plugin is defined as simple JavaScript object containing a `name` property and a `setup` function.
+插件被定义为一个简单的 JavaScript 对象，包含一个 `name` 属性和一个 `setup` 函数。
 
 ```tsx myPlugin.ts icon="/icons/typescript.svg"
 import type { BunPlugin } from "bun";
@@ -74,7 +74,7 @@ const myPlugin: BunPlugin = {
 };
 ```
 
-This plugin can be passed into the `plugins` array when calling `Bun.build`.
+这个插件可以在调用 `Bun.build` 时传递给 `plugins` 数组。
 
 ```ts index.ts icon="/icons/typescript.svg"
 await Bun.build({
@@ -84,20 +84,20 @@ await Bun.build({
 });
 ```
 
-## Plugin lifecycle
+## 插件生命周期
 
-### Namespaces
+### 命名空间
 
-`onLoad` and `onResolve` accept an optional `namespace` string. What is a namespace?
+`onLoad` 和 `onResolve` 接受一个可选的 `namespace` 字符串。什么是命名空间？
 
-Every module has a namespace. Namespaces are used to prefix the import in transpiled code; for instance, a loader with a `filter: /\.yaml$/` and `namespace: "yaml:"` will transform an import from `./myfile.yaml` into `yaml:./myfile.yaml`.
+每个模块都有一个命名空间。命名空间用于在转译代码中为导入添加前缀；例如，一个具有 `filter: /\.yaml$/` 和 `namespace: "yaml:"` 的加载器会将来自 `./myfile.yaml` 的导入转换为 `yaml:./myfile.yaml`。
 
-The default namespace is `"file"` and it is not necessary to specify it, for instance: `import myModule from "./my-module.ts"` is the same as `import myModule from "file:./my-module.ts"`.
+默认命名空间是 `"file"`，不需要指定它，例如：`import myModule from "./my-module.ts"` 与 `import myModule from "file:./my-module.ts"` 相同。
 
-Other common namespaces are:
+其他常见命名空间有：
 
-- `"bun"`: for Bun-specific modules (e.g. `"bun:test"`, `"bun:sqlite"`)
-- `"node"`: for Node.js modules (e.g. `"node:fs"`, `"node:path"`)
+- `"bun"`: 用于 Bun 特定模块（例如 `"bun:test"`、`"bun:sqlite"`）
+- `"node"`: 用于 Node.js 模块（例如 `"node:fs"`、`"node:path"`）
 
 ### `onStart`
 
@@ -105,7 +105,7 @@ Other common namespaces are:
 onStart(callback: () => void): Promise<void> | void;
 ```
 
-Registers a callback to be run when the bundler starts a new bundle.
+注册一个在打包器启动新打包时运行的回调。
 
 ```ts index.ts icon="/icons/typescript.svg"
 import { plugin } from "bun";
@@ -121,9 +121,9 @@ plugin({
 });
 ```
 
-The callback can return a `Promise`. After the bundle process has initialized, the bundler waits until all `onStart()` callbacks have completed before continuing.
+回调可以返回一个 `Promise`。在打包过程初始化后，打包器会等待所有 `onStart()` 回调完成后再继续。
 
-For example:
+例如：
 
 ```ts index.ts icon="/icons/typescript.svg"
 const result = await Bun.build({
@@ -152,9 +152,9 @@ const result = await Bun.build({
 });
 ```
 
-In the above example, Bun will wait until the first `onStart()` (sleeping for 10 seconds) has completed, _as well as_ the second `onStart()` (writing the bundle time to a file).
+在上面的例子中，Bun 会等待第一个 `onStart()`（休眠 10 秒）完成，以及第二个 `onStart()`（将打包时间写入文件）完成。
 
-Note that `onStart()` callbacks (like every other lifecycle callback) do not have the ability to modify the `build.config` object. If you want to mutate `build.config`, you must do so directly in the `setup()` function.
+注意 `onStart()` 回调（像其他每个生命周期回调一样）无法修改 `build.config` 对象。如果你想修改 `build.config`，必须直接在 `setup()` 函数中进行。
 
 ### `onResolve`
 
@@ -168,17 +168,17 @@ onResolve(
 ): void;
 ```
 
-To bundle your project, Bun walks down the dependency tree of all modules in your project. For each imported module, Bun actually has to find and read that module. The "finding" part is known as "resolving" a module.
+要打包你的项目，Bun 会遍历你项目中所有模块的依赖树。对于每个导入的模块，Bun 实际上必须找到并读取该模块。"寻找"部分被称为"解析"一个模块。
 
-The `onResolve()` plugin lifecycle callback allows you to configure how a module is resolved.
+`onResolve()` 插件生命周期回调允许你配置模块是如何被解析的。
 
-The first argument to `onResolve()` is an object with a `filter` and [`namespace`](#what-is-a-namespace) property. The filter is a regular expression which is run on the import string. Effectively, these allow you to filter which modules your custom resolution logic will apply to.
+`onResolve()` 的第一个参数是一个对象，包含 `filter` 和 [`namespace`](#what-is-a-namespace) 属性。过滤器是对导入字符串运行的正则表达式。实际上，这些允许你过滤你的自定义解析逻辑将应用于哪些模块。
 
-The second argument to `onResolve()` is a callback which is run for each module import Bun finds that matches the `filter` and `namespace` defined in the first argument.
+`onResolve()` 的第二个参数是一个回调函数，对于 Bun 找到的每个匹配第一个参数中定义的 `filter` 和 `namespace` 的模块导入，都会运行此回调。
 
-The callback receives as input the _path_ to the matching module. The callback can return a _new path_ for the module. Bun will read the contents of the _new path_ and parse it as a module.
+回调接收匹配模块的_路径_作为输入。回调可以为模块返回一个新的_路径_。Bun 将读取_新路径_的内容并将其解析为模块。
 
-For example, redirecting all imports to `images/` to `./public/images/`:
+例如，将所有导入到 `images/` 的重定向到 `./public/images/`：
 
 ```ts index.ts icon="/icons/typescript.svg"
 import { plugin } from "bun";
@@ -211,19 +211,19 @@ onLoad(
 ): void;
 ```
 
-After Bun's bundler has resolved a module, it needs to read the contents of the module and parse it.
+在 Bun 的打包器解析了一个模块后，它需要读取模块的内容并解析它。
 
-The `onLoad()` plugin lifecycle callback allows you to modify the _contents_ of a module before it is read and parsed by Bun.
+`onLoad()` 插件生命周期回调允许你在模块被 Bun 读取和解析之前修改模块的_内容_。
 
-Like `onResolve()`, the first argument to `onLoad()` allows you to filter which modules this invocation of `onLoad()` will apply to.
+与 `onResolve()` 类似，`onLoad()` 的第一个参数允许你过滤这次 `onLoad()` 调用将应用于哪些模块。
 
-The second argument to `onLoad()` is a callback which is run for each matching module _before_ Bun loads the contents of the module into memory.
+`onLoad()` 的第二个参数是一个回调函数，对于每个匹配的模块，在 Bun 将模块内容加载到内存_之前_运行此回调。
 
-This callback receives as input the _path_ to the matching module, the _importer_ of the module (the module that imported the module), the _namespace_ of the module, and the _kind_ of the module.
+这个回调接收匹配模块的_路径_作为输入，模块的_导入者_（导入该模块的模块）、模块的_命名空间_和模块的_种类_。
 
-The callback can return a new `contents` string for the module as well as a new `loader`.
+回调可以为模块返回一个新的 `contents` 字符串以及一个新的 `loader`。
 
-For example:
+例如：
 
 ```ts index.ts icon="/icons/typescript.svg"
 import { plugin } from "bun";
@@ -250,17 +250,17 @@ Bun.build({
 // env.FOO === "bar"
 ```
 
-This plugin will transform all imports of the form `import env from "env"` into a JavaScript module that exports the current environment variables.
+这个插件将把所有形式为 `import env from "env"` 的导入转换为导出当前环境变量的 JavaScript 模块。
 
 #### `.defer()`
 
-One of the arguments passed to the `onLoad` callback is a `defer` function. This function returns a `Promise` that is resolved when all _other_ modules have been loaded.
+传递给 `onLoad` 回调的一个参数是 `defer` 函数。这个函数返回一个 `Promise`，当所有_其他_模块都已加载时该 `Promise` 会被解决。
 
-This allows you to delay execution of the `onLoad` callback until all other modules have been loaded.
+这允许你延迟执行 `onLoad` 回调，直到所有其他模块都已加载。
 
-This is useful for returning contents of a module that depends on other modules.
+这对于返回依赖于其他模块的模块内容很有用。
 
-##### Example: tracking and reporting unused exports
+##### 示例：跟踪和报告未使用的导出
 
 ```ts index.ts icon="/icons/typescript.svg"
 import { plugin } from "bun";
@@ -272,8 +272,8 @@ plugin({
 
     let trackedImports: Record<string, number> = {};
 
-    // Each module that goes through this onLoad callback
-    // will record its imports in `trackedImports`
+    // 每个通过此 onLoad 回调的模块
+    // 将在其 `trackedImports` 中记录其导入
     build.onLoad({ filter: /\.ts/ }, async ({ path }) => {
       const contents = await Bun.file(path).arrayBuffer();
 
@@ -287,12 +287,12 @@ plugin({
     });
 
     build.onLoad({ filter: /stats\.json/ }, async ({ defer }) => {
-      // Wait for all files to be loaded, ensuring
-      // that every file goes through the above `onLoad()` function
-      // and their imports tracked
+      // 等待所有文件加载，确保
+      // 每个文件都通过上面的 `onLoad()` 函数
+      // 并跟踪它们的导入
       await defer();
 
-      // Emit JSON containing the stats of each import
+      // 发出包含每个导入统计信息的 JSON
       return {
         contents: `export default ${JSON.stringify(trackedImports)}`,
         loader: "json",
@@ -302,68 +302,68 @@ plugin({
 });
 ```
 
-Note that the `.defer()` function currently has the limitation that it can only be called once per `onLoad` callback.
+注意 `.defer()` 函数目前有一个限制，即每个 `onLoad` 回调只能调用一次。
 
-## Native plugins
+## 原生插件
 
-One of the reasons why Bun's bundler is so fast is that it is written in native code and leverages multi-threading to load and parse modules in parallel.
+Bun 的打包器如此快速的原因之一是它用原生代码编写，并利用多线程并行加载和解析模块。
 
-However, one limitation of plugins written in JavaScript is that JavaScript itself is single-threaded.
+然而，用 JavaScript 编写的插件的一个限制是 JavaScript 本身是单线程的。
 
-Native plugins are written as [NAPI](/runtime/node-api) modules and can be run on multiple threads. This allows native plugins to run much faster than JavaScript plugins.
+原生插件是作为 [NAPI](/runtime/node-api) 模块编写的，可以在多个线程上运行。这允许原生插件比 JavaScript 插件运行得更快。
 
-In addition, native plugins can skip unnecessary work such as the UTF-8 -> UTF-16 conversion needed to pass strings to JavaScript.
+此外，原生插件可以跳过不必要的工作，如将字符串传递给 JavaScript 所需的 UTF-8 -> UTF-16 转换。
 
-These are the following lifecycle hooks which are available to native plugins:
+以下是原生插件可用的生命周期钩子：
 
-- [`onBeforeParse()`](#onbeforeparse): Called on any thread before a file is parsed by Bun's bundler.
+- [`onBeforeParse()`](#onbeforeparse): 在 Bun 的打包器解析文件之前在任何线程上调用。
 
-Native plugins are NAPI modules which expose lifecycle hooks as C ABI functions.
+原生插件是公开生命周期钩子作为 C ABI 函数的 NAPI 模块。
 
-To create a native plugin, you must export a C ABI function which matches the signature of the native lifecycle hook you want to implement.
+要创建原生插件，你必须导出一个匹配你想要实现的原生生命周期钩子签名的 C ABI 函数。
 
-### Creating a native plugin in Rust
+### 在 Rust 中创建原生插件
 
-Native plugins are NAPI modules which expose lifecycle hooks as C ABI functions.
+原生插件是公开生命周期钩子作为 C ABI 函数的 NAPI 模块。
 
-To create a native plugin, you must export a C ABI function which matches the signature of the native lifecycle hook you want to implement.
+要创建原生插件，你必须导出一个匹配你想要实现的原生生命周期钩子签名的 C ABI 函数。
 
 ```bash terminal icon="terminal"
 bun add -g @napi-rs/cli
 napi new
 ```
 
-Then install this crate:
+然后安装此 crate：
 
 ```bash terminal icon="terminal"
 cargo add bun-native-plugin
 ```
 
-Now, inside the `lib.rs` file, we'll use the `bun_native_plugin::bun` proc macro to define a function which
-will implement our native plugin.
+现在，在 `lib.rs` 文件中，我们将使用 `bun_native_plugin::bun` proc 宏来定义一个
+将实现我们的原生插件的函数。
 
-Here's an example implementing the `onBeforeParse` hook:
+这是一个实现 `onBeforeParse` 钩子的例子：
 
 ```rs lib.rs icon="/icons/rust.svg"
 use bun_native_plugin::{define_bun_plugin, OnBeforeParse, bun, Result, anyhow, BunLoader};
 use napi_derive::napi;
 
-/// Define the plugin and its name
+/// 定义插件及其名称
 define_bun_plugin!("replace-foo-with-bar");
 
-/// Here we'll implement `onBeforeParse` with code that replaces all occurrences of
-/// `foo` with `bar`.
+/// 这里我们将用替换所有出现的
+/// `foo` 为 `bar` 的代码实现 `onBeforeParse`
 ///
-/// We use the #[bun] macro to generate some of the boilerplate code.
+/// 我们使用 #[bun] 宏来生成一些样板代码。
 ///
-/// The argument of the function (`handle: &mut OnBeforeParse`) tells
-/// the macro that this function implements the `onBeforeParse` hook.
+/// 函数的参数（`handle: &mut OnBeforeParse`）告诉
+/// 宏这个函数实现了 `onBeforeParse` 钩子。
 #[bun]
 pub fn replace_foo_with_bar(handle: &mut OnBeforeParse) -> Result<()> {
-  // Fetch the input source code.
+  // 获取输入源代码。
   let input_source_code = handle.input_source_code()?;
 
-  // Get the Loader for the file
+  // 获取文件的加载器
   let loader = handle.output_loader();
 
 
@@ -375,7 +375,7 @@ pub fn replace_foo_with_bar(handle: &mut OnBeforeParse) -> Result<()> {
 }
 ```
 
-And to use it in Bun.build():
+在 Bun.build() 中使用：
 
 ```typescript
 import myNativeAddon from "./my-native-addon";
@@ -412,8 +412,8 @@ onBeforeParse(
 ): void;
 ```
 
-This lifecycle callback is run immediately before a file is parsed by Bun's bundler.
+这个生命周期回调在 Bun 的打包器解析文件之前立即运行。
 
-As input, it receives the file's contents and can optionally return new source code.
+作为输入，它接收文件的内容，并可以选择返回新的源代码。
 
-This callback can be called from any thread and so the napi module implementation must be thread-safe.
+这个回调可以从任何线程调用，因此 napi 模块实现必须是线程安全的。

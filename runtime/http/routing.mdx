@@ -1,42 +1,42 @@
 ---
-title: Routing
-description: Define routes in `Bun.serve` using static paths, parameters, and wildcards
+title: 路由
+description: 在 `Bun.serve` 中使用静态路径、参数和通配符定义路由
 ---
 
-You can add routes to `Bun.serve()` by using the `routes` property (for static paths, parameters, and wildcards) or by handling unmatched requests with the [`fetch`](#fetch) method.
+您可以通过使用 `routes` 属性（用于静态路径、参数和通配符）或使用 [`fetch`](#fetch) 方法处理未匹配的请求来向 `Bun.serve()` 添加路由。
 
-`Bun.serve()`'s router builds on top uWebSocket's [tree-based approach](https://github.com/oven-sh/bun/blob/0d1a00fa0f7830f8ecd99c027fce8096c9d459b6/packages/bun-uws/src/HttpRouter.h#L57-L64) to add [SIMD-accelerated route parameter decoding](https://github.com/oven-sh/bun/blob/main/src/bun.js/bindings/decodeURIComponentSIMD.cpp#L21-L271) and [JavaScriptCore structure caching](https://github.com/oven-sh/bun/blob/main/src/bun.js/bindings/ServerRouteList.cpp#L100-L101) to push the performance limits of what modern hardware allows.
+`Bun.serve()` 的路由器基于 uWebSocket 的[基于树的方法](https://github.com/oven-sh/bun/blob/0d1a00fa0f7830f8ecd99c027fce8096c9d459b6/packages/bun-uws/src/HttpRouter.h#L57-L64) 构建，添加了[SIMD加速的路由参数解码](https://github.com/oven-sh/bun/blob/main/src/bun.js/bindings/decodeURIComponentSIMD.cpp#L21-L271)和[JavaScriptCore结构缓存](https://github.com/oven-sh/bun/blob/main/src/bun.js/bindings/ServerRouteList.cpp#L100-L101)，以推动现代硬件允许的性能极限。
 
-## Basic Setup
+## 基本设置
 
 ```ts title="server.ts" icon="/icons/typescript.svg"
 Bun.serve({
   routes: {
-    "/": () => new Response("Home"),
+    "/": () => new Response("首页"),
     "/api": () => Response.json({ success: true }),
     "/users": async () => Response.json({ users: [] }),
   },
   fetch() {
-    return new Response("Unmatched route");
+    return new Response("未匹配的路由");
   },
 });
 ```
 
-Routes in `Bun.serve()` receive a `BunRequest` (which extends [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request)) and return a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) or `Promise<Response>`. This makes it easier to use the same code for both sending & receiving HTTP requests.
+`Bun.serve()` 中的路由接收一个 `BunRequest`（扩展了 [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request)）并返回一个 [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) 或 `Promise<Response>`。这使得发送和接收HTTP请求的代码更容易复用。
 
 ```ts
-// Simplified for brevity
+// 为简洁起见简化
 interface BunRequest<T extends string> extends Request {
   params: Record<T, string>;
   readonly cookies: CookieMap;
 }
 ```
 
-## Asynchronous Routes
+## 异步路由
 
 ### Async/await
 
-You can use async/await in route handlers to return a `Promise<Response>`.
+您可以在路由处理程序中使用 async/await 来返回 `Promise<Response>`。
 
 ```ts
 import { sql, serve } from "bun";
@@ -54,7 +54,7 @@ serve({
 
 ### Promise
 
-You can also return a `Promise<Response>` from a route handler.
+您也可以从路由处理程序返回 `Promise<Response>`。
 
 ```ts
 import { sql, serve } from "bun";
@@ -75,46 +75,46 @@ serve({
 
 ---
 
-## Route precedence
+## 路由优先级
 
-Routes are matched in order of specificity:
+路由按特异性顺序匹配：
 
-1. Exact routes (`/users/all`)
-2. Parameter routes (`/users/:id`)
-3. Wildcard routes (`/users/*`)
-4. Global catch-all (`/*`)
+1. 精确路由 (`/users/all`)
+2. 参数路由 (`/users/:id`)
+3. 通配符路由 (`/users/*`)
+4. 全局通配 (`/*`)
 
 ```ts
 Bun.serve({
   routes: {
-    // Most specific first
-    "/api/users/me": () => new Response("Current user"),
-    "/api/users/:id": req => new Response(`User ${req.params.id}`),
-    "/api/*": () => new Response("API catch-all"),
-    "/*": () => new Response("Global catch-all"),
+    // 最具体的优先
+    "/api/users/me": () => new Response("当前用户"),
+    "/api/users/:id": req => new Response(`用户 ${req.params.id}`),
+    "/api/*": () => new Response("API 通配"),
+    "/*": () => new Response("全局通配"),
   },
 });
 ```
 
 ---
 
-## Type-safe route parameters
+## 类型安全的路由参数
 
-TypeScript parses route parameters when passed as a string literal, so that your editor will show autocomplete when accessing `request.params`.
+TypeScript 会解析作为字符串字面量传递的路由参数，以便您的编辑器在访问 `request.params` 时显示自动完成。
 
 ```ts title="index.ts" icon="/icons/typescript.svg"
 import type { BunRequest } from "bun";
 
 Bun.serve({
   routes: {
-    // TypeScript knows the shape of params when passed as a string literal
+    // 当作为字符串字面量传递时，TypeScript 知道 params 的结构
     "/orgs/:orgId/repos/:repoId": req => {
       const { orgId, repoId } = req.params;
       return Response.json({ orgId, repoId });
     },
 
     "/orgs/:orgId/repos/:repoId/settings": (
-      // optional: you can explicitly pass a type to BunRequest:
+      // 可选：您可以显式地为 BunRequest 传递一个类型：
       req: BunRequest<"/orgs/:orgId/repos/:repoId/settings">,
     ) => {
       const { orgId, repoId } = req.params;
@@ -124,28 +124,28 @@ Bun.serve({
 });
 ```
 
-Percent-encoded route parameter values are automatically decoded. Unicode characters are supported. Invalid unicode is replaced with the unicode replacement character `&0xFFFD;`.
+百分号编码的路由参数值会自动解码。支持 Unicode 字符。无效的 Unicode 将被 Unicode 替换字符 `&0xFFFD;` 替换。
 
-### Static responses
+### 静态响应
 
-Routes can also be `Response` objects (without the handler function). Bun.serve() optimizes it for zero-allocation dispatch - perfect for health checks, redirects, and fixed content:
+路由也可以是 `Response` 对象（没有处理函数）。Bun.serve() 对其进行零分配调度优化 - 非常适合健康检查、重定向和固定内容：
 
 ```ts
 Bun.serve({
   routes: {
-    // Health checks
+    // 健康检查
     "/health": new Response("OK"),
     "/ready": new Response("Ready", {
       headers: {
-        // Pass custom headers
+        // 传递自定义头部
         "X-Ready": "1",
       },
     }),
 
-    // Redirects
+    // 重定向
     "/blog": Response.redirect("https://bun.com/blog"),
 
-    // API responses
+    // API 响应
     "/api/config": Response.json({
       version: "1.0.0",
       env: "production",
@@ -154,51 +154,51 @@ Bun.serve({
 });
 ```
 
-Static responses do not allocate additional memory after initialization. You can generally expect at least a 15% performance improvement over manually returning a `Response` object.
+静态响应在初始化后不会分配额外内存。通常您可以期望比手动返回 `Response` 对象至少 15% 的性能提升。
 
-Static route responses are cached for the lifetime of the server object. To reload static routes, call `server.reload(options)`.
+静态路由响应在服务器对象的整个生命周期内被缓存。要重新加载静态路由，请调用 `server.reload(options)`。
 
-### File Responses vs Static Responses
+### 文件响应与静态响应
 
-When serving files in routes, there are two distinct behaviors depending on whether you buffer the file content or serve it directly:
+在路由中提供文件时，根据您是缓冲文件内容还是直接提供文件，有两种不同的行为：
 
 ```ts
 Bun.serve({
   routes: {
-    // Static route - content is buffered in memory at startup
+    // 静态路由 - 内容在启动时缓冲在内存中
     "/logo.png": new Response(await Bun.file("./logo.png").bytes()),
 
-    // File route - content is read from filesystem on each request
+    // 文件路由 - 每个请求都从文件系统读取内容
     "/download.zip": new Response(Bun.file("./download.zip")),
   },
 });
 ```
 
-**Static routes** (`new Response(await file.bytes())`) buffer content in memory at startup:
+**静态路由** (`new Response(await file.bytes())`) 在启动时缓冲内容到内存：
 
-- **Zero filesystem I/O** during requests - content served entirely from memory
-- **ETag support** - Automatically generates and validates ETags for caching
-- **If-None-Match** - Returns `304 Not Modified` when client ETag matches
-- **No 404 handling** - Missing files cause startup errors, not runtime 404s
-- **Memory usage** - Full file content stored in RAM
-- **Best for**: Small static assets, API responses, frequently accessed files
+- **零文件系统I/O** - 请求期间内容完全从内存提供
+- **ETag 支持** - 自动为缓存生成和验证ETags
+- **If-None-Match** - 当客户端ETag匹配时返回 `304 Not Modified`
+- **无 404 处理** - 缺失文件导致启动错误，而不是运行时 404
+- **内存使用** - 完整文件内容存储在RAM中
+- **最佳用于**: 小静态资源、API响应、频繁访问的文件
 
-**File routes** (`new Response(Bun.file(path))`) read from filesystem per request:
+**文件路由** (`new Response(Bun.file(path))`) 每次请求都从文件系统读取：
 
-- **Filesystem reads** on each request - checks file existence and reads content
-- **Built-in 404 handling** - Returns `404 Not Found` if file doesn't exist or becomes inaccessible
-- **Last-Modified support** - Uses file modification time for `If-Modified-Since` headers
-- **If-Modified-Since** - Returns `304 Not Modified` when file hasn't changed since client's cached version
-- **Range request support** - Automatically handles partial content requests with `Content-Range` headers
-- **Streaming transfers** - Uses buffered reader with backpressure handling for efficient memory usage
-- **Memory efficient** - Only buffers small chunks during transfer, not entire file
-- **Best for**: Large files, dynamic content, user uploads, files that change frequently
+- **文件系统读取** - 每次请求检查文件是否存在并读取内容
+- **内置 404 处理** - 如果文件不存在或无法访问则返回 `404 Not Found`
+- **Last-Modified 支持** - 使用文件修改时间处理 `If-Modified-Since` 头部
+- **If-Modified-Since** - 当文件自客户端缓存版本以来未更改时返回 `304 Not Modified`
+- **范围请求支持** - 自动使用 `Content-Range` 头部处理部分内容请求
+- **流式传输** - 使用带反压处理的缓冲读取器以实现高效的内存使用
+- **内存高效** - 只在传输期间缓冲小块，而不是整个文件
+- **最佳用于**: 大文件、动态内容、用户上传、频繁更改的文件
 
 ---
 
-## Streaming files
+## 流式传输文件
 
-To stream a file, return a `Response` object with a `BunFile` object as the body.
+要流式传输文件，返回一个以 `BunFile` 对象作为正文的 `Response` 对象。
 
 ```ts
 Bun.serve({
@@ -209,16 +209,16 @@ Bun.serve({
 ```
 
 <Info>
-  ⚡️ **Speed** — Bun automatically uses the [`sendfile(2)`](https://man7.org/linux/man-pages/man2/sendfile.2.html)
-  system call when possible, enabling zero-copy file transfers in the kernel—the fastest way to send files.
+  ⚡️ **速度** — Bun 在可能的情况下自动使用 [`sendfile(2)`](https://man7.org/linux/man-pages/man2/sendfile.2.html)
+  系统调用，实现内核中的零拷贝文件传输 - 这是发送文件的最快方式。
 </Info>
 
-You can send part of a file using the [`slice(start, end)`](https://developer.mozilla.org/en-US/docs/Web/API/Blob/slice) method on the `Bun.file` object. This automatically sets the `Content-Range` and `Content-Length` headers on the `Response` object.
+您可以使用 `Bun.file` 对象上的 [`slice(start, end)`](https://developer.mozilla.org/en-US/docs/Web/API/Blob/slice) 方法发送文件的一部分。这会自动在 `Response` 对象上设置 `Content-Range` 和 `Content-Length` 头部。
 
 ```ts
 Bun.serve({
   fetch(req) {
-    // parse `Range` header
+    // 解析 `Range` 头部
     const [start = 0, end = Infinity] = req.headers
       .get("Range") // Range: bytes=0-100
       .split("=") // ["Range: bytes", "0-100"]
@@ -226,7 +226,7 @@ Bun.serve({
       .split("-") // ["0", "100"]
       .map(Number); // [0, 100]
 
-    // return a slice of the file
+    // 返回文件的切片
     const bigFile = Bun.file("./big-video.mp4");
     return new Response(bigFile.slice(start, end));
   },
@@ -235,22 +235,22 @@ Bun.serve({
 
 ---
 
-## `fetch` request handler
+## `fetch` 请求处理器
 
-The `fetch` handler handles incoming requests that weren't matched by any route. It receives a [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) object and returns a [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) or [`Promise<Response>`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+`fetch` 处理器处理未被任何路由匹配的传入请求。它接收一个 [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) 对象并返回一个 [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) 或 [`Promise<Response>`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)。
 
 ```ts
 Bun.serve({
   fetch(req) {
     const url = new URL(req.url);
-    if (url.pathname === "/") return new Response("Home page!");
-    if (url.pathname === "/blog") return new Response("Blog!");
+    if (url.pathname === "/") return new Response("首页!");
+    if (url.pathname === "/blog") return new Response("博客!");
     return new Response("404!");
   },
 });
 ```
 
-The `fetch` handler supports async/await:
+`fetch` 处理器支持 async/await：
 
 ```ts
 import { sleep, serve } from "bun";
@@ -260,30 +260,30 @@ serve({
     const start = performance.now();
     await sleep(10);
     const end = performance.now();
-    return new Response(`Slept for ${end - start}ms`);
+    return new Response(`休眠了 ${end - start}ms`);
   },
 });
 ```
 
-Promise-based responses are also supported:
+也支持基于Promise的响应：
 
 ```ts
 Bun.serve({
   fetch(req) {
-    // Forward the request to another server.
+    // 将请求转发到另一个服务器。
     return fetch("https://example.com");
   },
 });
 ```
 
-You can also access the `Server` object from the `fetch` handler. It's the second argument passed to the `fetch` function.
+您还可以从 `fetch` 处理器访问 `Server` 对象。它是作为第二个参数传递给 `fetch` 函数的。
 
 ```ts
-// `server` is passed in as the second argument to `fetch`.
+// `server` 作为第二个参数传递给 `fetch`。
 const server = Bun.serve({
   fetch(req, server) {
     const ip = server.requestIP(req);
-    return new Response(`Your IP is ${ip.address}`);
+    return new Response(`您的IP是 ${ip.address}`);
   },
 });
 ```

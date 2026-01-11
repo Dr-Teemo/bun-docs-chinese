@@ -1,10 +1,10 @@
 ---
-title: Write to stdout
-sidebarTitle: Write to stdout
+title: 写入标准输出
+sidebarTitle: 写入标准输出
 mode: center
 ---
 
-The `console.log` function writes to `stdout`. It will automatically append a line break at the end of the printed data.
+`console.log` 函数写入 `stdout`。它会在打印的数据末尾自动添加换行符。
 
 ```ts
 console.log("Lorem ipsum");
@@ -12,7 +12,7 @@ console.log("Lorem ipsum");
 
 ---
 
-For more advanced use cases, Bun exposes `stdout` as a `BunFile` via the `Bun.stdout` property. This can be used as a destination for [`Bun.write()`](/runtime/file-io#writing-files-bun-write).
+对于更高级的用例，Bun 通过 `Bun.stdout` 属性将 `stdout` 暴露为一个 [BunFile]。这可以用作 [`Bun.write()`](/runtime/file-io#writing-files-bun-write) 的目标。
 
 ```ts
 await Bun.write(Bun.stdout, "Lorem ipsum");
@@ -20,4 +20,4 @@ await Bun.write(Bun.stdout, "Lorem ipsum");
 
 ---
 
-See [Docs > API > File I/O](/runtime/file-io#writing-files-bun-write) for complete documentation of `Bun.write()`.
+请参阅 [文档 > API > 文件 I/O](/runtime/file-io#writing-files-bun-write) 了解 `Bun.write()` 的完整文档。

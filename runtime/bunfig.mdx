@@ -1,40 +1,40 @@
 ---
 title: "bunfig.toml"
-description: "Configure Bun's behavior using its configuration file bunfig.toml"
+description: "使用 Bun 的配置文件 bunfig.toml 配置 Bun 的行为"
 ---
 
-Bun's behavior can be configured using its configuration file, `bunfig.toml`.
+Bun 的行为可以通过其配置文件 `bunfig.toml` 进行配置。
 
-In general, Bun relies on pre-existing configuration files like `package.json` and `tsconfig.json` to configure its behavior. `bunfig.toml` is only necessary for configuring Bun-specific things. This file is optional, and Bun will work out of the box without it.
+一般来说，Bun 依赖于现有的配置文件，如 `package.json` 和 `tsconfig.json` 来配置其行为。`bunfig.toml` 仅用于配置 Bun 特定的功能。此文件是可选的，Bun 无需该文件即可开箱即用。
 
-## Global vs. local
+## 全局 vs. 本地
 
-In general, it's recommended to add a `bunfig.toml` file to your project root, alongside your `package.json`.
+一般建议将 `bunfig.toml` 文件添加到项目根目录，与 `package.json` 在同一级。
 
-To configure Bun globally, you can also create a `.bunfig.toml` file at one of the following paths:
+要全局配置 Bun，您还可以在以下路径之一创建 `.bunfig.toml` 文件：
 
 - `$HOME/.bunfig.toml`
 - `$XDG_CONFIG_HOME/.bunfig.toml`
 
-If both a global and local `bunfig` are detected, the results are shallow-merged, with local overriding global. CLI flags will override `bunfig` setting where applicable.
+如果检测到全局和本地 `bunfig`，结果将进行浅合并，本地覆盖全局。CLI 标志将在适用时覆盖 `bunfig` 设置。
 
-## Runtime
+## 运行时
 
-Bun's runtime behavior is configured using top-level fields in the `bunfig.toml` file.
+Bun 的运行时行为使用 `bunfig.toml` 文件中的顶级字段进行配置。
 
 ### `preload`
 
-An array of scripts/plugins to execute before running a file or script.
+运行文件或脚本之前要执行的脚本/插件数组。
 
 ```toml title="bunfig.toml" icon="settings"
-# scripts to run before `bun run`-ing a file or script
-# register plugins by adding them to this list
+# 在 `bun run` 一个文件或脚本之前运行的脚本
+# 通过将它们添加到此列表来注册插件
 preload = ["./preload.ts"]
 ```
 
 ### `jsx`
 
-Configure how Bun handles JSX. You can also set these fields in the `compilerOptions` of your `tsconfig.json`, but they are supported here as well for non-TypeScript projects.
+配置 Bun 如何处理 JSX。您也可以在 `tsconfig.json` 的 `compilerOptions` 中设置这些字段，但这里也支持非 TypeScript 项目。
 
 ```toml title="bunfig.toml" icon="settings"
 jsx = "react"
@@ -43,7 +43,7 @@ jsxFragment = "Fragment"
 jsxImportSource = "react"
 ```
 
-Refer to the tsconfig docs for more information on these fields.
+有关这些字段的更多信息，请参阅 tsconfig 文档。
 
 - [`jsx`](https://www.typescriptlang.org/tsconfig#jsx)
 - [`jsxFactory`](https://www.typescriptlang.org/tsconfig#jsxFactory)
@@ -52,16 +52,16 @@ Refer to the tsconfig docs for more information on these fields.
 
 ### `smol`
 
-Enable `smol` mode. This reduces memory usage at the cost of performance.
+启用 `smol` 模式。这会以性能为代价降低内存使用。
 
 ```toml title="bunfig.toml" icon="settings"
-# Reduce memory usage at the cost of performance
+# 以性能为代价降低内存使用
 smol = true
 ```
 
 ### `logLevel`
 
-Set the log level. This can be one of `"debug"`, `"warn"`, or `"error"`.
+设置日志级别。可以是 `"debug"`、`"warn"` 或 `"error"` 之一。
 
 ```toml title="bunfig.toml" icon="settings"
 logLevel = "debug" # "debug" | "warn" | "error"
@@ -69,27 +69,27 @@ logLevel = "debug" # "debug" | "warn" | "error"
 
 ### `define`
 
-The `define` field allows you to replace certain global identifiers with constant expressions. Bun will replace any usage of the identifier with the expression. The expression should be a JSON string.
+`define` 字段允许您用常量表达式替换某些全局标识符。Bun 会将标识符的任何使用替换为表达式。表达式应为 JSON 字符串。
 
 ```toml title="bunfig.toml" icon="settings"
 [define]
-# Replace any usage of "process.env.bagel" with the string `lox`.
-# The values are parsed as JSON, except single-quoted strings are supported and `'undefined'` becomes `undefined` in JS.
-# This will probably change in a future release to be just regular TOML instead. It is a holdover from the CLI argument parsing.
+# 将 "process.env.bagel" 的任何使用替换为字符串 `lox`。
+# 这些值被解析为 JSON，但支持单引号字符串，'undefined' 变为 JS 中的 undefined。
+# 这在未来的版本中可能会改变，改为常规的 TOML。它来自于 CLI 参数解析的遗留。
 "process.env.bagel" = "'lox'"
 ```
 
 ### `loader`
 
-Configure how Bun maps file extensions to loaders. This is useful for loading files that aren't natively supported by Bun.
+配置 Bun 如何将文件扩展名映射到加载器。这对于加载 Bun 本身不支持的文件很有用。
 
 ```toml title="bunfig.toml" icon="settings"
 [loader]
-# when a .bagel file is imported, treat it like a tsx file
+# 当导入 .bagel 文件时，将其视为 tsx 文件
 ".bagel" = "tsx"
 ```
 
-Bun supports the following loaders:
+Bun 支持以下加载器：
 
 - `jsx`
 - `js`
@@ -107,9 +107,9 @@ Bun supports the following loaders:
 
 ### `telemetry`
 
-The `telemetry` field is used to enable/disable analytics. By default, telemetry is enabled. This is equivalent to the `DO_NOT_TRACK` environment variable.
+`telemetry` 字段用于启用/禁用分析。默认情况下，遥测是启用的。这相当于 `DO_NOT_TRACK` 环境变量。
 
-Currently we do not collect telemetry and this setting is only used for enabling/disabling anonymous crash reports, but in the future we plan to collect information like which Bun APIs are used most or how long `bun build` takes.
+目前我们不收集遥测数据，此设置仅用于启用/禁用匿名崩溃报告，但未来我们计划收集有关哪些 Bun API 使用最多或 `bun build` 需要多长时间等信息。
 
 ```toml title="bunfig.toml" icon="settings"
 telemetry = false
@@ -117,51 +117,51 @@ telemetry = false
 
 ### `env`
 
-Configure automatic `.env` file loading. By default, Bun automatically loads `.env` files. To disable this behavior:
+配置自动加载 `.env` 文件。默认情况下，Bun 自动加载 `.env` 文件。要禁用此行为：
 
 ```toml title="bunfig.toml" icon="settings"
-# Disable automatic .env file loading
+# 禁用自动 .env 文件加载
 env = false
 ```
 
-You can also use object syntax with the `file` property:
+您还可以使用带有 `file` 属性的对象语法：
 
 ```toml title="bunfig.toml" icon="settings"
 [env]
 file = false
 ```
 
-This is useful in production environments or CI/CD pipelines where you want to rely solely on system environment variables.
+这在生产环境或 CI/CD 流水线中很有用，您只想依赖系统环境变量。
 
-Note: Explicitly provided environment files via `--env-file` will still be loaded even when default loading is disabled.
+注意：即使禁用了默认加载，通过 `--env-file` 显式提供的环境文件仍将被加载。
 
 ### `console`
 
-Configure console output behavior.
+配置控制台输出行为。
 
 #### `console.depth`
 
-Set the default depth for `console.log()` object inspection. Default `2`.
+设置 `console.log()` 对象检查的默认深度。默认值 `2`。
 
 ```toml title="bunfig.toml" icon="settings"
 [console]
 depth = 3
 ```
 
-This controls how deeply nested objects are displayed in console output. Higher values show more nested properties but may produce verbose output for complex objects. This setting can be overridden by the `--console-depth` CLI flag.
+这控制控制台输出中嵌套对象显示的深度。更高的值显示更多嵌套属性，但对于复杂对象可能产生冗长的输出。此设置可以被 `--console-depth` CLI 标志覆盖。
 
-## Test runner
+## 测试运行器
 
-The test runner is configured under the `[test]` section of your bunfig.toml.
+测试运行器在 bunfig.toml 的 `[test]` 部分下进行配置。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
-# configuration goes here
+# 配置放在这里
 ```
 
 ### `test.root`
 
-The root directory to run tests from. Default `.`.
+运行测试的根目录。默认值 `.`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
@@ -170,7 +170,7 @@ root = "./__tests__"
 
 ### `test.preload`
 
-Same as the top-level `preload` field, but only applies to `bun test`.
+与顶级 `preload` 字段相同，但仅适用于 `bun test`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
@@ -179,7 +179,7 @@ preload = ["./setup.ts"]
 
 ### `test.smol`
 
-Same as the top-level `smol` field, but only applies to `bun test`.
+与顶级 `smol` 字段相同，但仅适用于 `bun test`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
@@ -188,7 +188,7 @@ smol = true
 
 ### `test.coverage`
 
-Enables coverage reporting. Default `false`. Use `--coverage` to override.
+启用覆盖率报告。默认值 `false`。使用 `--coverage` 覆盖。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
@@ -197,16 +197,16 @@ coverage = false
 
 ### `test.coverageThreshold`
 
-To specify a coverage threshold. By default, no threshold is set. If your test suite does not meet or exceed this threshold, `bun test` will exit with a non-zero exit code to indicate the failure.
+指定覆盖率阈值。默认情况下，未设置阈值。如果您的测试套件未达到或超过此阈值，`bun test` 将以非零退出代码退出以指示失败。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
 
-# to require 90% line-level and function-level coverage
+# 要求 90% 的行级和函数级覆盖率
 coverageThreshold = 0.9
 ```
 
-Different thresholds can be specified for line-wise, function-wise, and statement-wise coverage.
+可以为行级、函数级和语句级覆盖率指定不同的阈值。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
@@ -215,7 +215,7 @@ coverageThreshold = { line = 0.7, function = 0.8, statement = 0.9 }
 
 ### `test.coverageSkipTestFiles`
 
-Whether to skip test files when computing coverage statistics. Default `false`.
+计算覆盖率统计信息时是否跳过测试文件。默认值 `false`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
@@ -224,14 +224,14 @@ coverageSkipTestFiles = false
 
 ### `test.coveragePathIgnorePatterns`
 
-Exclude specific files or file patterns from coverage reports using glob patterns. Can be a single string pattern or an array of patterns.
+使用 glob 模式从覆盖率报告中排除特定文件或文件模式。可以是单个字符串模式或模式数组。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
-# Single pattern
+# 单个模式
 coveragePathIgnorePatterns = "**/*.spec.ts"
 
-# Multiple patterns
+# 多个模式
 coveragePathIgnorePatterns = [
   "**/*.spec.ts",
   "**/*.test.ts",
@@ -242,38 +242,38 @@ coveragePathIgnorePatterns = [
 
 ### `test.coverageReporter`
 
-By default, coverage reports will be printed to the console. For persistent code coverage reports in CI environments and for other tools use `lcov`.
+默认情况下，覆盖率报告将打印到控制台。对于 CI 环境中的持久代码覆盖率报告和其他工具，请使用 `lcov`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
-coverageReporter  = ["text", "lcov"]  # default ["text"]
+coverageReporter  = ["text", "lcov"]  # 默认 ["text"]
 ```
 
 ### `test.coverageDir`
 
-Set path where coverage reports will be saved. Please notice, that it works only for persistent `coverageReporter` like `lcov`.
+设置保存覆盖率报告的路径。请注意，仅对持久的 `coverageReporter`（如 `lcov`）有效。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
-coverageDir = "path/to/somewhere"  # default "coverage"
+coverageDir = "path/to/somewhere"  # 默认 "coverage"
 ```
 
 ### `test.randomize`
 
-Run tests in random order. Default `false`.
+随机顺序运行测试。默认值 `false`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
 randomize = true
 ```
 
-This helps catch bugs related to test interdependencies by running tests in a different order each time. When combined with `seed`, the random order becomes reproducible.
+这有助于通过每次以不同顺序运行测试来捕获与测试相互依赖相关的错误。与 `seed` 结合使用时，随机顺序变得可重现。
 
-The `--randomize` CLI flag will override this setting when specified.
+指定 `--randomize` CLI 标志将覆盖此设置。
 
 ### `test.seed`
 
-Set the random seed for test randomization. This option requires `randomize` to be `true`.
+设置测试随机化的随机种子。此选项要求 `randomize` 为 `true`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
@@ -281,58 +281,58 @@ randomize = true
 seed = 2444615283
 ```
 
-Using a seed makes the randomized test order reproducible across runs, which is useful for debugging flaky tests. When you encounter a test failure with randomization enabled, you can use the same seed to reproduce the exact test order.
+使用种子使随机化测试顺序在运行间可重现，这对调试不稳定测试很有用。当您在启用随机化的情况下遇到测试失败时，您可以使用相同的种子重现确切的测试顺序。
 
-The `--seed` CLI flag will override this setting when specified.
+指定 `--seed` CLI 标志将覆盖此设置。
 
 ### `test.rerunEach`
 
-Re-run each test file a specified number of times. Default `0` (run once).
+重新运行每个测试文件指定次数。默认值 `0`（运行一次）。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
 rerunEach = 3
 ```
 
-This is useful for catching flaky tests or non-deterministic behavior. Each test file will be executed the specified number of times.
+这对于捕获不稳定测试或非确定性行为很有用。每个测试文件将被执行指定次数。
 
-The `--rerun-each` CLI flag will override this setting when specified.
+指定 `--rerun-each` CLI 标志将覆盖此设置。
 
 ### `test.concurrentTestGlob`
 
-Specify a glob pattern to automatically run matching test files with concurrent test execution enabled. Test files matching this pattern will behave as if the `--concurrent` flag was passed, running all tests within those files concurrently.
+指定一个 glob 模式以自动运行匹配的测试文件并启用并发测试执行。匹配此模式的测试文件的行为就像传递了 `--concurrent` 标志一样，在这些文件内的所有测试将并发运行。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
 concurrentTestGlob = "**/concurrent-*.test.ts"
 ```
 
-This is useful for:
+这对于：
 
-- Gradually migrating test suites to concurrent execution
-- Running integration tests concurrently while keeping unit tests sequential
-- Separating fast concurrent tests from tests that require sequential execution
+- 逐步迁移到并发执行的测试套件
+- 并发运行集成测试，同时保持单元测试顺序执行
+- 将快速并发测试与需要顺序执行的测试分离
 
-The `--concurrent` CLI flag will override this setting when specified.
+指定 `--concurrent` CLI 标志将覆盖此设置。
 
 ### `test.onlyFailures`
 
-When enabled, only failed tests are displayed in the output. This helps reduce noise in large test suites by hiding passing tests. Default `false`.
+启用后，仅在输出中显示失败的测试。这有助于通过隐藏通过的测试来减少大型测试套件中的噪音。默认值 `false`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
 onlyFailures = true
 ```
 
-This is equivalent to using the `--only-failures` flag when running `bun test`.
+这相当于在运行 `bun test` 时使用 `--only-failures` 标志。
 
 ### `test.reporter`
 
-Configure the test reporter settings.
+配置测试报告器设置。
 
 #### `test.reporter.dots`
 
-Enable the dots reporter, which displays a compact output showing a dot for each test. Default `false`.
+启用点状报告器，显示紧凑输出，每个测试显示一个点。默认值 `false`。
 
 ```toml title="bunfig.toml" icon="settings"
 [test.reporter]
@@ -341,27 +341,27 @@ dots = true
 
 #### `test.reporter.junit`
 
-Enable JUnit XML reporting and specify the output file path.
+启用 JUnit XML 报告并指定输出文件路径。
 
 ```toml title="bunfig.toml" icon="settings"
 [test.reporter]
 junit = "test-results.xml"
 ```
 
-This generates a JUnit XML report that can be consumed by CI systems and other tools.
+这生成一个 JUnit XML 报告，可以被 CI 系统和其他工具使用。
 
-## Package manager
+## 包管理器
 
-Package management is a complex issue; to support a range of use cases, the behavior of `bun install` can be configured under the `[install]` section.
+包管理是一个复杂的问题；为了支持一系列用例，`bun install` 的行为可以在 `[install]` 部分下进行配置。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
-# configuration here
+# 配置在这里
 ```
 
 ### `install.optional`
 
-Whether to install optional dependencies. Default `true`.
+是否安装可选依赖。默认值 `true`。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -370,7 +370,7 @@ optional = true
 
 ### `install.dev`
 
-Whether to install development dependencies. Default `true`.
+是否安装开发依赖。默认值 `true`。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -379,7 +379,7 @@ dev = true
 
 ### `install.peer`
 
-Whether to install peer dependencies. Default `true`.
+是否安装对等依赖。默认值 `true`。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -388,9 +388,9 @@ peer = true
 
 ### `install.production`
 
-Whether `bun install` will run in "production mode". Default `false`.
+`bun install` 是否将在"生产模式"下运行。默认值 `false`。
 
-In production mode, `"devDependencies"` are not installed. You can use `--production` in the CLI to override this setting.
+在生产模式下，不安装 `"devDependencies"`。您可以在 CLI 中使用 `--production` 覆盖此设置。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -399,9 +399,9 @@ production = false
 
 ### `install.exact`
 
-Whether to set an exact version in `package.json`. Default `false`.
+是否在 `package.json` 中设置精确版本。默认值 `false`。
 
-By default Bun uses caret ranges; if the `latest` version of a package is `2.4.1`, the version range in your `package.json` will be `^2.4.1`. This indicates that any version from `2.4.1` up to (but not including) `3.0.0` is acceptable.
+默认情况下，Bun 使用插入符号范围；如果包的 `latest` 版本是 `2.4.1`，则 `package.json` 中的版本范围将是 `^2.4.1`。这表示从 `2.4.1` 到（但不包括）`3.0.0` 的任何版本都是可接受的。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -410,9 +410,9 @@ exact = false
 
 ### `install.saveTextLockfile`
 
-If false, generate a binary `bun.lockb` instead of a text-based `bun.lock` file when running `bun install` and no lockfile is present.
+如果为 false，则在运行 `bun install` 且不存在锁文件时，生成二进制 `bun.lockb` 而不是基于文本的 `bun.lock` 文件。
 
-Default `true` (since Bun v1.2).
+默认值 `true`（自 Bun v1.2 起）。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -421,25 +421,25 @@ saveTextLockfile = false
 
 ### `install.auto`
 
-To configure Bun's package auto-install behavior. Default `"auto"` — when no `node_modules` folder is found, Bun will automatically install dependencies on the fly during execution.
+配置 Bun 的包自动安装行为。默认值 `"auto"` — 当未找到 `node_modules` 文件夹时，Bun 将在执行期间自动安装依赖。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
 auto = "auto"
 ```
 
-Valid values are:
+有效值为：
 
-| Value        | Description                                                                                                                         |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `"auto"`     | Resolve modules from local `node_modules` if it exists. Otherwise, auto-install dependencies on the fly.                            |
-| `"force"`    | Always auto-install dependencies, even if `node_modules` exists.                                                                    |
-| `"disable"`  | Never auto-install dependencies.                                                                                                    |
-| `"fallback"` | Check local `node_modules` first, then auto-install any packages that aren't found. You can enable this from the CLI with `bun -i`. |
+| 值           | 描述                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `"auto"`     | 如果本地 `node_modules` 存在，则从本地解析模块。否则，在执行时自动安装依赖。                                                    |
+| `"force"`    | 始终自动安装依赖，即使 `node_modules` 存在。                                                                                    |
+| `"disable"`  | 从不自动安装依赖。                                                                                                             |
+| `"fallback"` | 首先检查本地 `node_modules`，然后自动安装任何未找到的包。您可以使用 `bun -i` 从 CLI 启用此功能。                                  |
 
 ### `install.frozenLockfile`
 
-When true, `bun install` will not update `bun.lock`. Default `false`. If `package.json` and the existing `bun.lock` are not in agreement, this will error.
+当为 true 时，`bun install` 将不会更新 `bun.lock`。默认值 `false`。如果 `package.json` 和现有 `bun.lock` 不一致，这将报错。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -448,7 +448,7 @@ frozenLockfile = false
 
 ### `install.dryRun`
 
-Whether `bun install` will actually install dependencies. Default `false`. When true, it's equivalent to setting `--dry-run` on all `bun install` commands.
+`bun install` 是否实际安装依赖。默认值 `false`。当为 true 时，等同于在所有 `bun install` 命令上设置 `--dry-run`。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -457,47 +457,47 @@ dryRun = false
 
 ### `install.globalDir`
 
-To configure the directory where Bun puts globally installed packages.
+配置 Bun 放置全局安装包的目录。
 
-Environment variable: `BUN_INSTALL_GLOBAL_DIR`
+环境变量：`BUN_INSTALL_GLOBAL_DIR`
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
-# where `bun install --global` installs packages
+# `bun install --global` 安装包的位置
 globalDir = "~/.bun/install/global"
 ```
 
 ### `install.globalBinDir`
 
-To configure the directory where Bun installs globally installed binaries and CLIs.
+配置 Bun 安装全局安装的二进制文件和 CLI 的目录。
 
-Environment variable: `BUN_INSTALL_BIN`
+环境变量：`BUN_INSTALL_BIN`
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
-# where globally-installed package bins are linked
+# 全局安装包的 bin 链接到的位置
 globalBinDir = "~/.bun/bin"
 ```
 
 ### `install.registry`
 
-The default registry is `https://registry.npmjs.org/`. This can be globally configured in `bunfig.toml`:
+默认注册表是 `https://registry.npmjs.org/`。这可以在 `bunfig.toml` 中全局配置：
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
-# set default registry as a string
+# 将默认注册表设置为字符串
 registry = "https://registry.npmjs.org"
-# set a token
+# 设置令牌
 registry = { url = "https://registry.npmjs.org", token = "123456" }
-# set a username/password
+# 设置用户名/密码
 registry = "https://username:password@registry.npmjs.org"
 ```
 
 ### `install.linkWorkspacePackages`
 
-To configure how workspace packages are linked, use the `install.linkWorkspacePackages` option.
+要配置工作区包的链接方式，请使用 `install.linkWorkspacePackages` 选项。
 
-Whether to link workspace packages from the monorepo root to their respective `node_modules` directories. Default `true`.
+是否将单体仓库根目录的工作区包链接到各自 `node_modules` 目录。默认值 `true`。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
@@ -506,64 +506,64 @@ linkWorkspacePackages = true
 
 ### `install.scopes`
 
-To configure a registry for a particular scope (e.g. `@myorg/<package>`) use `install.scopes`. You can reference environment variables with `$variable` notation.
+要配置特定范围的注册表（例如 `@myorg/<package>`），请使用 `install.scopes`。您可以使用 `$variable` 符号引用环境变量。
 
 ```toml title="bunfig.toml" icon="settings"
 [install.scopes]
-# registry as string
+# 注册表作为字符串
 myorg = "https://username:password@registry.myorg.com/"
 
-# registry with username/password
-# you can reference environment variables
+# 带用户名/密码的注册表
+# 您可以引用环境变量
 myorg = { username = "myusername", password = "$npm_password", url = "https://registry.myorg.com/" }
 
-# registry with token
+# 带令牌的注册表
 myorg = { token = "$npm_token", url = "https://registry.myorg.com/" }
 ```
 
-### `install.ca` and `install.cafile`
+### `install.ca` 和 `install.cafile`
 
-To configure a CA certificate, use `install.ca` or `install.cafile` to specify a path to a CA certificate file.
+要配置 CA 证书，请使用 `install.ca` 或 `install.cafile` 指定 CA 证书文件的路径。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
-# The CA certificate as a string
+# CA 证书作为字符串
 ca = "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
 
-# A path to a CA certificate file. The file can contain multiple certificates.
+# CA 证书文件的路径。文件可以包含多个证书。
 cafile = "path/to/cafile"
 ```
 
 ### `install.cache`
 
-To configure the cache behavior:
+配置缓存行为：
 
 ```toml title="bunfig.toml" icon="settings"
 [install.cache]
 
-# the directory to use for the cache
+# 用于缓存的目录
 dir = "~/.bun/install/cache"
 
-# when true, don't load from the global cache.
-# Bun may still write to node_modules/.cache
+# 当为 true 时，不从全局缓存加载。
+# Bun 仍可能写入 node_modules/.cache
 disable = false
 
-# when true, always resolve the latest versions from the registry
+# 当为 true 时，始终从注册表解析最新版本
 disableManifest = false
 ```
 
 ### `install.lockfile`
 
-To configure lockfile behavior, use the `install.lockfile` section.
+要配置锁文件行为，请使用 `install.lockfile` 部分。
 
-Whether to generate a lockfile on `bun install`. Default `true`.
+是否在 `bun install` 时生成锁文件。默认值 `true`。
 
 ```toml title="bunfig.toml" icon="settings"
 [install.lockfile]
 save = true
 ```
 
-Whether to generate a non-Bun lockfile alongside `bun.lock`. (A `bun.lock` will always be created.) Currently `"yarn"` is the only supported value.
+是否在 `bun.lock` 旁边生成非 Bun 锁文件。（始终会创建 `bun.lock`。）当前唯一支持的值是 `"yarn"`。
 
 ```toml title="bunfig.toml" icon="settings"
 [install.lockfile]
@@ -572,31 +572,31 @@ print = "yarn"
 
 ### `install.linker`
 
-Configure the linker strategy for installing dependencies. Defaults to `"isolated"` for new workspaces, `"hoisted"` for new single-package projects and existing projects (made pre-v1.3.2).
+配置安装依赖的链接策略。对于新工作区，默认为 `"isolated"`，对于新单包项目和现有项目（v1.3.2 之前的项目）默认为 `"hoisted"`。
 
-For complete documentation refer to [Package manager > Isolated installs](/pm/isolated-installs).
+有关完整文档，请参阅 [包管理器 > 隔离安装](/pm/isolated-installs)。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
 linker = "hoisted"
 ```
 
-Valid values are:
+有效值为：
 
-| Value        | Description                                             |
-| ------------ | ------------------------------------------------------- |
-| `"hoisted"`  | Link dependencies in a shared `node_modules` directory. |
-| `"isolated"` | Link dependencies inside each package installation.     |
+| 值           | 描述                                             |
+| ------------ | ------------------------------------------------ |
+| `"hoisted"`  | 在共享的 `node_modules` 目录中链接依赖。         |
+| `"isolated"` | 在每个包安装内部链接依赖。                       |
 
 ```toml title="bunfig.toml" icon="settings"
 [debug]
-# When navigating to a blob: or src: link, open the file in your editor
-# If not, it tries $EDITOR or $VISUAL
-# If that still fails, it will try Visual Studio Code, then Sublime Text, then a few others
-# This is used by Bun.openInEditor()
+# 导航到 blob: 或 src: 链接时，在编辑器中打开文件
+# 如果没有，它会尝试 $EDITOR 或 $VISUAL
+# 如果仍然失败，它将尝试 Visual Studio Code，然后是 Sublime Text，以及其他一些编辑器
+# 这由 Bun.openInEditor() 使用
 editor = "code"
 
-# List of editors:
+# 编辑器列表：
 # - "subl", "sublime"
 # - "vscode", "code"
 # - "textmate", "mate"
@@ -609,92 +609,92 @@ editor = "code"
 
 ### `install.security.scanner`
 
-Configure a security scanner to scan packages for vulnerabilities before installation.
+配置安全扫描器，在安装前扫描包中的漏洞。
 
-First, install a security scanner from npm:
+首先从 npm 安装安全扫描器：
 
 ```bash terminal icon="terminal"
 bun add -d @acme/bun-security-scanner
 ```
 
-Then configure it in your `bunfig.toml`:
+然后在 `bunfig.toml` 中配置它：
 
 ```toml bunfig.toml icon="settings"
 [install.security]
 scanner = "@acme/bun-security-scanner"
 ```
 
-When a security scanner is configured:
+配置安全扫描器时：
 
-- Auto-install is automatically disabled for security
-- Packages are scanned before installation
-- Installation is cancelled if fatal issues are found
-- Security warnings are displayed during installation
+- 出于安全考虑，自动安装被自动禁用
+- 在安装前扫描包
+- 如果发现致命问题，则取消安装
+- 在安装期间显示安全警告
 
-Learn more about [using and writing security scanners](/pm/security-scanner-api).
+了解更多关于[使用和编写安全扫描器](/pm/security-scanner-api)的信息。
 
 ### `install.minimumReleaseAge`
 
-Configure a minimum age (in seconds) for npm package versions. Package versions published more recently than this threshold will be filtered out during installation. Default is `null` (disabled).
+配置 npm 包版本的最小年龄（以秒为单位）。发布日期比此阈值更近的包版本将在安装期间被过滤掉。默认值为 `null`（禁用）。
 
 ```toml title="bunfig.toml" icon="settings"
 [install]
-# Only install package versions published at least 3 days ago
+# 只安装至少 3 天前发布的包版本
 minimumReleaseAge = 259200
-# These packages will bypass the 3-day minimum age requirement
+# 这些包将绕过 3 天的最小年龄要求
 minimumReleaseAgeExcludes = ["@types/bun", "typescript"]
 ```
 
-For more details see [Minimum release age](/pm/cli/install#minimum-release-age) in the install documentation.
+有关更多详情，请参见安装文档中的[最小发布时间](/pm/cli/install#minimum-release-age)。
 
 ## `bun run`
 
-The `bun run` command can be configured under the `[run]` section. These apply to the `bun run` command and the `bun` command when running a file or executable or script.
+`bun run` 命令可以在 `[run]` 部分下进行配置。这些适用于 `bun run` 命令和 `bun` 命令在运行文件、可执行文件或脚本时。
 
-Currently, `bunfig.toml` is only automatically loaded for `bun run` in a local project (it doesn't check for a global `.bunfig.toml`).
+目前，`bunfig.toml` 仅在本地项目中为 `bun run` 自动加载（它不会检查全局 `.bunfig.toml`）。
 
-### `run.shell` - use the system shell or Bun's shell
+### `run.shell` - 使用系统 shell 或 Bun 的 shell
 
-The shell to use when running package.json scripts via `bun run` or `bun`. On Windows, this defaults to `"bun"` and on other platforms it defaults to `"system"`.
+通过 `bun run` 或 `bun` 运行 package.json 脚本时要使用的 shell。在 Windows 上，默认为 `"bun"`，在其他平台上默认为 `"system"`。
 
-To always use the system shell instead of Bun's shell (default behavior unless Windows):
+要始终使用系统 shell 而不是 Bun 的 shell（Windows 以外的默认行为）：
 
 ```toml title="bunfig.toml" icon="settings"
 [run]
-# default outside of Windows
+# Windows 以外的默认值
 shell = "system"
 ```
 
-To always use Bun's shell instead of the system shell:
+要始终使用 Bun 的 shell 而不是系统 shell：
 
 ```toml title="bunfig.toml" icon="settings"
 [run]
-# default on Windows
+# Windows 上的默认值
 shell = "bun"
 ```
 
-### `run.bun` - auto alias `node` to `bun`
+### `run.bun` - 自动将 `node` 别名为 `bun`
 
-When `true`, this prepends `$PATH` with a `node` symlink that points to the `bun` binary for all scripts or executables invoked by `bun run` or `bun`.
+当为 `true` 时，这会在 `$PATH` 前面添加一个指向 `bun` 二进制文件的 `node` 符号链接，用于所有由 `bun run` 或 `bun` 调用的脚本或可执行文件。
 
-This means that if you have a script that runs `node`, it will actually run `bun` instead, without needing to change your script. This works recursively, so if your script runs another script that runs `node`, it will also run `bun` instead. This applies to shebangs as well, so if you have a script with a shebang that points to `node`, it will actually run `bun` instead.
+这意味着如果您的脚本运行 `node`，它实际上会运行 `bun`，而无需更改脚本。这可以递归工作，因此如果您的脚本运行另一个运行 `node` 的脚本，它也会运行 `bun`。这也适用于 shebang，因此如果您有指向 `node` 的 shebang 的脚本，它实际上会运行 `bun`。
 
-By default, this is enabled if `node` is not already in your `$PATH`.
+默认情况下，如果您的 `$PATH` 中还没有 `node`，则启用此功能。
 
 ```toml title="bunfig.toml" icon="settings"
 [run]
-# equivalent to `bun --bun` for all `bun run` commands
+# 等同于 `bun --bun` 用于所有 `bun run` 命令
 bun = true
 ```
 
-You can test this by running:
+您可以通过运行以下命令进行测试：
 
 ```sh
 bun --bun which node # /path/to/bun
 bun which node # /path/to/node
 ```
 
-This option is equivalent to prefixing all `bun run` commands with `--bun`:
+此选项等同于为所有 `bun run` 命令添加 `--bun` 前缀：
 
 ```sh
 bun --bun run dev
@@ -702,18 +702,18 @@ bun --bun dev
 bun run --bun dev
 ```
 
-If set to `false`, this will disable the `node` symlink.
+如果设置为 `false`，这将禁用 `node` 符号链接。
 
-### `run.silent` - suppress reporting the command being run
+### `run.silent` - 抑制报告正在运行的命令
 
-When `true`, suppresses the output of the command being run by `bun run` or `bun`.
+当为 `true` 时，抑制 `bun run` 或 `bun` 运行的命令的输出。
 
 ```toml title="bunfig.toml" icon="settings"
 [run]
 silent = true
 ```
 
-Without this option, the command being run will be printed to the console:
+没有此选项，正在运行的命令将打印到控制台：
 
 ```sh terminal icon="terminal"
 bun run dev
@@ -724,7 +724,7 @@ echo "Running \"dev\"..."
 Running "dev"...
 ```
 
-With this option, the command being run will not be printed to the console:
+使用此选项，正在运行的命令不会打印到控制台：
 
 ```sh
 bun run dev
@@ -734,7 +734,7 @@ bun run dev
 Running "dev"...
 ```
 
-This is equivalent to passing `--silent` to all `bun run` commands:
+这等同于将 `--silent` 传递给所有 `bun run` 命令：
 
 ```sh
 bun --silent run dev

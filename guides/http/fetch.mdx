@@ -1,19 +1,19 @@
 ---
-title: Send an HTTP request using fetch
-sidebarTitle: Fetch with Bun
+title: 使用 fetch 发送 HTTP 请求
+sidebarTitle: 使用 Bun 的 Fetch
 mode: center
 ---
 
-Bun implements the Web-standard [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API for sending HTTP requests. To send a simple `GET` request to a URL:
+Bun 实现了 Web 标准的 [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API 用于发送 HTTP 请求。要向 URL 发送一个简单的 `GET` 请求：
 
 ```ts fetch.ts icon="/icons/typescript.svg"
 const response = await fetch("https://bun.com");
-const html = await response.text(); // HTML string
+const html = await response.text(); // HTML 字符串
 ```
 
 ---
 
-To send a `POST` request to an API endpoint.
+向 API 端点发送 `POST` 请求。
 
 ```ts fetch.ts icon="/icons/typescript.svg"
 const response = await fetch("https://bun.com/api", {

@@ -1,75 +1,75 @@
 ---
-title: Feedback
-description: Share feedback, bug reports, and feature requests
+title: 反馈
+description: 分享反馈、错误报告和功能请求
 mode: center
 ---
 
-Whether you've found a bug, have a performance issue, or just want to suggest an improvement, here's how you can open a helpful issue:
+无论您发现了错误、遇到了性能问题，还是想提出改进建议，以下是提交有效问题的方法：
 
-<Callout icon="discord">For general questions, please join our [Discord](https://bun.com/discord).</Callout>
+<Callout icon="discord">对于一般性问题，请加入我们的 [Discord](https://bun.com/discord)。</Callout>
 
-## Reporting Issues
+## 报告问题
 
 <Steps>
-	<Step title="Upgrade Bun">
-		Try upgrading Bun to the latest version with `bun upgrade`. This might fix your problem without having to open an issue.
+	<Step title="升级 Bun">
+		尝试使用 `bun upgrade` 将 Bun 升级到最新版本。这可能会在不需提交问题的情况下解决您的问题。
 
     	```bash terminal icon="terminal"
     	bun upgrade
     	```
 
-    	You can also try the latest canary release, which includes the most recent changes and bug fixes that haven't been released in a stable version yet.
+    	您也可以尝试最新的预览版，其中包含了最新的更改和错误修复，这些尚未在稳定版本中发布。
 
     	```bash terminal icon="terminal"
     	bun upgrade --canary
 
-    	# To revert back to the stable
+    	# 恢复到稳定版
     	bun upgrade --stable
     	```
 
-    	If the issue still persists after upgrading, continue to the next step.
+    	如果升级后问题仍然存在，请继续下一步。
     </Step>
-    <Step title="Review Existing Issues">
-    	First take a minute to check if the issue has already been reported. Don't open a new issue if it has already been reported, it saves time for everyone and helps us focus on fixing things faster.
+    <Step title="查看已有问题">
+    	首先花点时间检查该问题是否已经被报告过。如果已经报告过，请不要打开新问题，这样可以节省每个人的时间，帮助我们更快地解决问题。
 
-    	- 🔍 [**Search existing issues**](https://github.com/oven-sh/bun/issues)
-    	- 💬 [**Check discussions**](https://github.com/oven-sh/bun/discussions)
+    	- 🔍 [**搜索已有问题**](https://github.com/oven-sh/bun/issues)
+    	- 💬 [**查看讨论**](https://github.com/oven-sh/bun/discussions)
 
-    	If you find a related issue, add a 👍 reaction or comment with extra details instead of opening a new one.
+    	如果您找到了相关问题，请添加 👍 表情符号或评论补充细节，而不是开启新问题。
     </Step>
-    <Step title="Report the Issue">
-    	If no one has reported the issue, please open a new issue or suggest an improvement.
+    <Step title="报告问题">
+    	如果没有人为该问题提交报告，请开启一个新问题或建议改进。
 
-    	- 🐞 [**Report a Bug**](https://github.com/oven-sh/bun/issues/new?template=2-bug-report.yml)
-    	- ⚡ [**Suggest an Improvement**](https://github.com/oven-sh/bun/issues/new?template=4-feature-request.yml)
+    	- 🐞 [**报告错误**](https://github.com/oven-sh/bun/issues/new?template=2-bug-report.yml)
+    	- ⚡ [**建议改进**](https://github.com/oven-sh/bun/issues/new?template=4-feature-request.yml)
 
-    	Please provide as much detail as possible, including:
-    	- A clear and concise title
-    	- A code example or steps to reproduce the issue
-    	- The version of Bun you are using (run `bun --version`)
-    	- A detailed description of the issue (what happened, what you expected to happen, and what actually happened)
-    	- The operating system and version you are using
+    	请尽可能提供更多详细信息，包括：
+    	- 清晰简洁的标题
+    	- 代码示例或重现问题的步骤
+    	- 您使用的 Bun 版本（运行 `bun --version`）
+    	- 问题的详细描述（发生了什么，您期望发生什么，实际发生了什么）
+    	- 您正在使用的操作系统和版本
     		<Note>
-    			- For MacOS and Linux: copy the output of `uname -mprs`
-    		  - For Windows: copy the output of this command in the powershell console:
+    			- 对于 macOS 和 Linux：复制 `uname -mprs` 命令的输出
+    		  - 对于 Windows：在 PowerShell 控制台中复制此命令的输出：
     				`"$([Environment]::OSVersion | ForEach-Object VersionString) $(if ([Environment]::Is64BitOperatingSystem) { "x64" } else { "x86" })"`
     		</Note>
     </Step>
 
 </Steps>
 
-The Bun team will review the issue and get back to you as soon as possible!
+Bun 团队将审查问题并尽快回复您！
 
 ---
 
-## Use `bun feedback`
+## 使用 `bun feedback`
 
-Alternatively, you can use `bun feedback` to share feedback, bug reports, and feature requests directly with the Bun team.
+或者，您可以使用 `bun feedback` 直接向 Bun 团队分享反馈、错误报告和功能请求。
 
 ```bash terminal icon="terminal"
-bun feedback "Love the new release!"
+bun feedback "喜欢新版本！"
 bun feedback report.txt details.log
-echo "please document X" | bun feedback --email you@example.com
+echo "请记录 X 功能" | bun feedback --email you@example.com
 ```
 
-You can provide feedback as text arguments, file paths, or piped input.
+您可以提供文本参数、文件路径或管道输入的方式反馈。

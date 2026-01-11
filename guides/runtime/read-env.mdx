@@ -1,10 +1,10 @@
 ---
-title: Read environment variables
-sidebarTitle: Read env variables
+title: 读取环境变量
+sidebarTitle: 读取环境变量
 mode: center
 ---
 
-The current environment variables can be accessed via `process.env`.
+当前环境变量可以通过 `process.env` 访问。
 
 ```ts index.ts icon="/icons/typescript.svg"
 process.env.API_TOKEN; // => "secret"
@@ -12,7 +12,7 @@ process.env.API_TOKEN; // => "secret"
 
 ---
 
-Bun also exposes these variables via `Bun.env`, which is a simple alias of `process.env`.
+Bun 还通过 `Bun.env` 暴露这些变量，这是 `process.env` 的简单别名。
 
 ```ts index.ts icon="/icons/typescript.svg"
 Bun.env.API_TOKEN; // => "secret"
@@ -20,7 +20,7 @@ Bun.env.API_TOKEN; // => "secret"
 
 ---
 
-To print all currently-set environment variables to the command line, run `bun --print process.env`. This is useful for debugging.
+要将当前设置的所有环境变量打印到命令行，请运行 `bun --print process.env`。这对于调试很有用。
 
 ```sh terminal icon="terminal"
 bun --print process.env
@@ -34,4 +34,4 @@ FOOBAR=aaaaaa
 
 ---
 
-See [Docs > Runtime > Environment variables](/runtime/environment-variables) for more information on using environment variables with Bun.
+有关在 Bun 中使用环境变量的更多信息，请参阅 [文档 > 运行时 > 环境变量](/runtime/environment-variables)。

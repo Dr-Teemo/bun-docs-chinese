@@ -1,19 +1,19 @@
 ---
-title: Add a development dependency
-sidebarTitle: Add a dev dependency
+title: 添加开发依赖
+sidebarTitle: 添加开发依赖
 mode: center
 ---
 
-To add an npm package as a development dependency, use `bun add --development`.
+要将 npm 包添加为开发依赖，请使用 `bun add --development`。
 
 ```sh terminal icon="terminal"
 bun add zod --dev
-bun add zod -d # shorthand
+bun add zod -d # 简写
 ```
 
 ---
 
-This will add the package to `devDependencies` in `package.json`.
+这会将包添加到 [package.json] 中的 `devDependencies`。
 
 ```json
 {
@@ -25,4 +25,4 @@ This will add the package to `devDependencies` in `package.json`.
 
 ---
 
-See [Docs > Package manager](/pm/cli/install) for complete documentation of Bun's package manager.
+请参阅 [文档 > 包管理器](/pm/cli/install) 以获取 Bun 包管理器的完整文档。

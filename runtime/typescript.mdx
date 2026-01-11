@@ -1,28 +1,28 @@
 ---
 title: "TypeScript"
-description: "Using TypeScript with Bun, including type definitions and compiler options"
+description: "在 Bun 中使用 TypeScript，包括类型定义和编译器选项"
 ---
 
-To install the TypeScript definitions for Bun's built-in APIs, install `@types/bun`.
+要为 Bun 的内置 API 安装 TypeScript 定义，请安装 `@types/bun`。
 
 ```sh
 bun add -d @types/bun # dev dependency
 ```
 
-At this point, you should be able to reference the `Bun` global in your TypeScript files without seeing errors in your editor.
+此时，你应该能够在 TypeScript 文件中引用 `Bun` 全局变量，而不会在编辑器中看到错误。
 
 ```ts
 console.log(Bun.version);
 ```
 
-## Suggested `compilerOptions`
+## 推荐的 `compilerOptions`
 
-Bun supports things like top-level await, JSX, and extensioned `.ts` imports, which TypeScript doesn't allow by default. Below is a set of recommended `compilerOptions` for a Bun project, so you can use these features without seeing compiler warnings from TypeScript.
+Bun 支持顶层 await、JSX 和带扩展名的 `.ts` 导入等功能，而 TypeScript 默认不允许这些功能。下面是一组推荐的 Bun 项目的 `compilerOptions`，这样你就可以使用这些功能而不会看到来自 TypeScript 的编译器警告。
 
 ```jsonc
 {
   "compilerOptions": {
-    // Environment setup & latest features
+    // 环境设置和最新功能
     "lib": ["ESNext"],
     "target": "ESNext",
     "module": "Preserve",
@@ -30,20 +30,20 @@ Bun supports things like top-level await, JSX, and extensioned `.ts` imports, wh
     "jsx": "react-jsx",
     "allowJs": true,
 
-    // Bundler mode
+    // 打包器模式
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
 
-    // Best practices
+    // 最佳实践
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
-    // Some stricter flags (disabled by default)
+    // 一些更严格的标志（默认禁用）
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
@@ -51,7 +51,7 @@ Bun supports things like top-level await, JSX, and extensioned `.ts` imports, wh
 }
 ```
 
-If you run `bun init` in a new directory, this `tsconfig.json` will be generated for you. (The stricter flags are disabled by default.)
+如果你在一个新目录中运行 `bun init`，这个 `tsconfig.json` 将为你生成。（更严格的标志默认是禁用的。）
 
 ```sh
 bun init

@@ -1,14 +1,14 @@
 ---
-title: Use Drizzle ORM with Bun
-sidebarTitle: Drizzle with Bun
+title: 在 Bun 中使用 Drizzle ORM
+sidebarTitle: Drizzle 与 Bun
 mode: center
 ---
 
-Drizzle is an ORM that supports both a SQL-like "query builder" API and an ORM-like [Queries API](https://orm.drizzle.team/docs/rqb). It supports the `bun:sqlite` built-in module.
+Drizzle 是一个 ORM，同时支持类似 SQL 的"查询构建器"API 和类似 ORM 的[查询 API](https://orm.drizzle.team/docs/rqb)。它支持 `bun:sqlite` 内置模块。
 
 ---
 
-Let's get started by creating a fresh project with `bun init` and installing Drizzle.
+让我们通过使用 `bun init` 创建一个新项目并安装 Drizzle 来开始。
 
 ```sh terminal icon="terminal"
 bun init -y
@@ -18,7 +18,7 @@ bun add -D drizzle-kit
 
 ---
 
-Then we'll connect to a SQLite database using the `bun:sqlite` module and create the Drizzle database instance.
+然后我们将使用 `bun:sqlite` 模块连接到 SQLite 数据库并创建 Drizzle 数据库实例。
 
 ```ts db.ts icon="/icons/typescript.svg"
 import { drizzle } from "drizzle-orm/bun-sqlite";
@@ -30,7 +30,7 @@ export const db = drizzle(sqlite);
 
 ---
 
-To see the database in action, add these lines to `index.ts`.
+要查看数据库的实际运行情况，请在 [index.ts] 中添加这些行。
 
 ```ts index.ts icon="/icons/typescript.svg"
 import { db } from "./db";
@@ -43,7 +43,7 @@ console.log(result);
 
 ---
 
-Then run `index.ts` with Bun. Bun will automatically create `sqlite.db` and execute the query.
+然后使用 Bun 运行 [index.ts]。Bun 将自动创建 `sqlite.db` 并执行查询。
 
 ```sh terminal icon="terminal"
 bun run index.ts
@@ -57,7 +57,7 @@ bun run index.ts
 
 ---
 
-Lets give our database a proper schema. Create a `schema.ts` file and define a `movies` table.
+让我们给我们的数据库一个合适的模式。创建一个 [schema.ts]( 文件并定义一个 `movies` 表。
 
 ```ts schema.ts icon="/icons/typescript.svg"
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
@@ -71,7 +71,7 @@ export const movies = sqliteTable("movies", {
 
 ---
 
-We can use the `drizzle-kit` CLI to generate an initial SQL migration.
+我们可以使用 `drizzle-kit` CLI 生成初始 SQL 迁移。
 
 ```sh terminal icon="terminal"
 bunx drizzle-kit generate --dialect sqlite --schema ./schema.ts
@@ -79,7 +79,7 @@ bunx drizzle-kit generate --dialect sqlite --schema ./schema.ts
 
 ---
 
-This creates a new `drizzle` directory containing a `.sql` migration file and `meta` directory.
+这将创建一个新的 `drizzle` 目录，其中包含一个 `.sql` 迁移文件和 `meta` 目录。
 
 ```txt File Tree icon="folder-tree"
 drizzle
@@ -91,9 +91,9 @@ drizzle
 
 ---
 
-We can execute these migrations with a simple `migrate.ts` script.
+我们可以使用一个简单的 [migrate.ts] 脚本来执行这些迁移。
 
-This script creates a new connection to a SQLite database that writes to `sqlite.db`, then executes all unexecuted migrations in the `drizzle` directory.
+此脚本创建一个新的 SQLite 数据库连接，将数据写入 `sqlite.db`，然后执行 `drizzle` 目录中的所有未执行的迁移。
 
 ```ts migrate.ts icon="/icons/typescript.svg"
 import { migrate } from "drizzle-orm/bun-sqlite/migrator";
@@ -108,7 +108,7 @@ migrate(db, { migrationsFolder: "./drizzle" });
 
 ---
 
-We can run this script with `bun` to execute the migration.
+我们可以使用 `bun` 运行此脚本来执行迁移。
 
 ```sh terminal icon="terminal"
 bun run migrate.ts
@@ -116,7 +116,7 @@ bun run migrate.ts
 
 ---
 
-Now that we have a database, let's add some data to it. Create a `seed.ts` file with the following contents.
+现在我们有了一个数据库，让我们向其中添加一些数据。创建一个 [seed.ts] 文件，内容如下。
 
 ```ts seed.ts icon="/icons/typescript.svg"
 import { db } from "./db";
@@ -137,24 +137,24 @@ await db.insert(schema.movies).values([
   },
 ]);
 
-console.log(`Seeding complete.`);
+console.log(`播种完成。`);
 ```
 
 ---
 
-Then run this file.
+然后运行此文件。
 
 ```sh terminal icon="terminal"
 bun run seed.ts
 ```
 
 ```txt
-Seeding complete.
+播种完成。
 ```
 
 ---
 
-We finally have a database with a schema and some sample data. Let's use Drizzle to query it. Replace the contents of `index.ts` with the following.
+我们终于有了一个带有模式和一些示例数据的数据库。让我们使用 Drizzle 来查询它。将 [index.ts] 的内容替换为以下内容。
 
 ```ts index.ts icon="/icons/typescript.svg"
 import * as schema from "./schema";
@@ -166,7 +166,7 @@ console.log(result);
 
 ---
 
-Then run the file. You should see the three movies we inserted.
+然后运行该文件。您应该能看到我们插入的三部电影。
 
 ```sh terminal icon="terminal"
 bun run index.ts
@@ -192,4 +192,4 @@ bun run index.ts
 
 ---
 
-Refer to the [Drizzle website](https://orm.drizzle.team/docs/overview) for complete documentation.
+请参阅 [Drizzle 网站](https://orm.drizzle.team/docs/overview) 获取完整文档。

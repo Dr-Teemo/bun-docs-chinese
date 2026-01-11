@@ -1,55 +1,55 @@
 ---
-title: Containerize a Bun application with Docker
-sidebarTitle: Docker with Bun
+title: 使用 Docker 容器化 Bun 应用程序
+sidebarTitle: Docker 与 Bun
 mode: center
 ---
 
 <Note>
-  This guide assumes you already have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
+  本指南假定您已经安装了 [Docker Desktop](https://www.docker.com/products/docker-desktop/)。
 </Note>
 
-[Docker](https://www.docker.com) is a platform for packaging and running an application as a lightweight, portable _container_ that encapsulates all the necessary dependencies.
+[Docker](https://www.docker.com) 是一个平台，用于将应用程序打包并作为轻量级、便携的_容器_运行，封装所有必要的依赖项。
 
 ---
 
-To _containerize_ our application, we define a `Dockerfile`. This file contains a list of instructions to initialize the container, copy our local project files into it, install dependencies, and starts the application.
+要_容器化_我们的应用程序，我们定义一个 [Dockerfile]。该文件包含初始化容器、将我们的本地项目文件复制到其中、安装依赖项并启动应用程序的一系列指令。
 
 ```docker Dockerfile icon="docker"
-# use the official Bun image
-# see all versions at https://hub.docker.com/r/oven/bun/tags
+# 使用官方 Bun 镜像
+# 查看 https://hub.docker.com/r/oven/bun/tags 上的所有版本
 FROM oven/bun:1 AS base
 WORKDIR /usr/src/app
 
-# install dependencies into temp directory
-# this will cache them and speed up future builds
+# 将依赖项安装到临时目录
+# 这将缓存它们并加快未来构建的速度
 FROM base AS install
 RUN mkdir -p /temp/dev
 COPY package.json bun.lock /temp/dev/
 RUN cd /temp/dev && bun install --frozen-lockfile
 
-# install with --production (exclude devDependencies)
+# 使用 --production 安装（排除 devDependencies）
 RUN mkdir -p /temp/prod
 COPY package.json bun.lock /temp/prod/
 RUN cd /temp/prod && bun install --frozen-lockfile --production
 
-# copy node_modules from temp directory
-# then copy all (non-ignored) project files into the image
+# 从临时目录复制 node_modules
+# 然后将所有（非忽略的）项目文件复制到镜像中
 FROM base AS prerelease
 COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
 
-# [optional] tests & build
+# [可选] 测试和构建
 ENV NODE_ENV=production
 RUN bun test
 RUN bun run build
 
-# copy production dependencies and source code into final image
+# 将生产依赖项和源代码复制到最终镜像中
 FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/index.ts .
 COPY --from=prerelease /usr/src/app/package.json .
 
-# run the app
+# 运行应用
 USER bun
 EXPOSE 3000/tcp
 ENTRYPOINT [ "bun", "run", "index.ts" ]
@@ -57,7 +57,7 @@ ENTRYPOINT [ "bun", "run", "index.ts" ]
 
 ---
 
-Now that you have your docker image, let's look at `.dockerignore` which has the same syntax as `.gitignore`, here you need to specify the files/directories that must not go in any stage of the docker build. An example for a ignore file is
+现在您有了 Docker 镜像，让我们看看 [.dockerignore] 文件，它的语法与 [.gitignore] 相同，这里您需要指定在 Docker 构建的任何阶段都不应包含的文件/目录。一个示例忽略文件如下：
 
 ```txt .dockerignore icon="docker"
 node_modules
@@ -79,9 +79,9 @@ coverage*
 
 ---
 
-We'll now use `docker build` to convert this `Dockerfile` into a _Docker image_, a self-contained template containing all the dependencies and configuration required to run the application.
+我们现在将使用 `docker build` 将此 [Dockerfile] 转换为_ Docker 镜像_，这是一个自包含的模板，包含运行应用程序所需的所有依赖项和配置。
 
-The `-t` flag lets us specify a name for the image, and `--pull` tells Docker to automatically download the latest version of the base image (`oven/bun`). The initial build will take longer, as Docker will download all the base images and dependencies.
+`-t` 标志让我们指定镜像的名称，`--pull` 告诉 Docker 自动下载最新版本的基础镜像（`oven/bun`）。初始构建将花费较长时间，因为 Docker 将下载所有基础镜像和依赖项。
 
 ```bash terminal icon="terminal"
 docker build --pull -t bun-hello-world .
@@ -98,7 +98,7 @@ docker build --pull -t bun-hello-world .
  => [base 1/2] FROM docker.io/oven/bun:1@sha256:373265748d3cd3624cb3f3ee6004f45b1fc3edbd07a622aeeec17566d2756997                         0.0s
  => [internal] load build context                                                                                                        0.0s
  => => transferring context: 155B                                                                                                        0.0s
- # ...lots of commands...
+ # ...很多命令...
  => exporting to image                                                                                                                   0.0s
  => => exporting layers                                                                                                                  0.0s
  => => writing image sha256:360663f7fdcd6f11e8e94761d5592e2e4dfc8d167f034f15cd5a863d5dc093c4                                             0.0s
@@ -107,11 +107,11 @@ docker build --pull -t bun-hello-world .
 
 ---
 
-We've built a new _Docker image_. Now let's use that image to spin up an actual, running _container_.
+我们已经构建了一个新的_Docker 镜像_。现在让我们使用该镜像启动一个实际运行的_容器_。
 
-We'll use `docker run` to start a new container using the `bun-hello-world` image. It will be run in _detached_ mode (`-d`) and we'll map the container's port 3000 to our local machine's port 3000 (`-p 3000:3000`).
+我们将使用 `docker run` 启动一个使用 `bun-hello-world` 镜像的新容器。它将在_分离_模式（`-d`）下运行，我们将容器的 3000 端口映射到我们本地机器的 3000 端口（`-p 3000:3000`）。
 
-The `run` command prints a string representing the _container ID_.
+`run` 命令打印表示_容器 ID_的字符串。
 
 ```sh terminal icon="terminal"
 docker run -d -p 3000:3000 bun-hello-world
@@ -123,11 +123,11 @@ docker run -d -p 3000:3000 bun-hello-world
 
 ---
 
-The container is now running in the background. Visit [localhost:3000](http://localhost:3000). You should see a `Hello, World!` message.
+容器现在在后台运行。访问 [localhost:3000](http://localhost:3000)。您应该看到 `Hello, World!` 消息。
 
 ---
 
-To stop the container, we'll use `docker stop <container-id>`.
+要停止容器，我们将使用 `docker stop <container-id>`。
 
 ```sh terminal icon="terminal"
 docker stop 7f03e212a15ede8644379bce11a13589f563d3909a9640446c5bbefce993678d
@@ -135,7 +135,7 @@ docker stop 7f03e212a15ede8644379bce11a13589f563d3909a9640446c5bbefce993678d
 
 ---
 
-If you can't find the container ID, you can use `docker ps` to list all running containers.
+如果您找不到容器 ID，可以使用 `docker ps` 列出所有正在运行的容器。
 
 ```sh terminal icon="terminal"
 docker ps
@@ -148,4 +148,4 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 
 ---
 
-That's it! Refer to the [Docker documentation](https://docs.docker.com/) for more advanced usage.
+就是这样！请参阅 [Docker 文档](https://docs.docker.com/) 了解更高级的用法。

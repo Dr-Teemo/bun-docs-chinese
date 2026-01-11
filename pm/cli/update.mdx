@@ -1,19 +1,19 @@
 ---
 title: "bun update"
-description: "Update dependencies to latest versions"
+description: "将依赖更新到最新版本"
 ---
 
 import Update from "/snippets/cli/update.mdx";
 
-<Note>To upgrade your Bun CLI version, see [`bun upgrade`](/installation#upgrading).</Note>
+<Note>要升级你的 Bun CLI 版本，请参见 [`bun upgrade`](/installation#upgrading)。</Note>
 
-To update all dependencies to the latest version:
+要将所有依赖更新到最新版本：
 
 ```sh terminal icon="terminal"
 bun update
 ```
 
-To update a specific dependency to the latest version:
+要将特定依赖更新到最新版本：
 
 ```sh terminal icon="terminal"
 bun update [package]
@@ -21,18 +21,18 @@ bun update [package]
 
 ## `--interactive`
 
-For a more controlled update experience, use the `--interactive` flag to select which packages to update:
+为了获得更受控制的更新体验，使用 `--interactive` 标志来选择要更新的包：
 
 ```sh terminal icon="terminal"
 bun update --interactive
 bun update -i
 ```
 
-This launches an interactive terminal interface that shows all outdated packages with their current and target versions. You can then select which packages to update.
+这将启动一个交互式终端界面，显示所有过时的包及其当前和目标版本。然后你可以选择要更新的包。
 
-### Interactive Interface
+### 交互式界面
 
-The interface displays packages grouped by dependency type:
+界面显示按依赖类型分组的包：
 
 ```txt
 ? Select packages to update - Space to toggle, Enter to confirm, a to select all, n to select none, i to invert, l to toggle latest
@@ -49,80 +49,80 @@ The interface displays packages grouped by dependency type:
     □ some-optional-package   1.0.0    1.1.0    1.2.0
 ```
 
-**Sections:**
+**章节：**
 
-- Packages are grouped under section headers: `dependencies`, `devDependencies`, `peerDependencies`, `optionalDependencies`
-- Each section shows column headers aligned with the package data
+- 包在章节标题下分组：`dependencies`、`devDependencies`、`peerDependencies`、`optionalDependencies`
+- 每个章节显示与包数据对齐的列标题
 
-**Columns:**
+**列：**
 
-- **Package**: Package name (may have suffix like ` dev`, ` peer`, ` optional` for clarity)
-- **Current**: Currently installed version
-- **Target**: Version that would be installed (respects semver constraints)
-- **Latest**: Latest available version
+- **Package**: 包名（可能有后缀如 ` dev`、` peer`、` optional` 以增加清晰度）
+- **Current**: 当前安装的版本
+- **Target**: 将要安装的版本（遵守 semver 约束）
+- **Latest**: 最新可用版本
 
-### Keyboard Controls
+### 键盘控制
 
-**Selection:**
+**选择：**
 
-- **Space**: Toggle package selection
-- **Enter**: Confirm selections and update
-- **a/A**: Select all packages
-- **n/N**: Select none
-- **i/I**: Invert selection
+- **Space**: 切换包的选择状态
+- **Enter**: 确认选择并更新
+- **a/A**: 选择所有包
+- **n/N**: 全部不选
+- **i/I**: 反向选择
 
-**Navigation:**
+**导航：**
 
-- **↑/↓ Arrow keys** or **j/k**: Move cursor
-- **l/L**: Toggle between target and latest version for current package
+- **↑/↓ 箭头键** 或 **j/k**: 移动光标
+- **l/L**: 在当前包的目标版本和最新版本之间切换
 
-**Exit:**
+**退出：**
 
-- **Ctrl+C** or **Ctrl+D**: Cancel without updating
+- **Ctrl+C** 或 **Ctrl+D**: 取消更新
 
-### Visual Indicators
+### 视觉指示
 
-- **☑** Selected packages (will be updated)
-- **□** Unselected packages
-- **>** Current cursor position
-- **Colors**: Red (major), yellow (minor), green (patch) version changes
-- **Underlined**: Currently selected update target
+- **☑** 已选择的包（将被更新）
+- **□** 未选择的包
+- **>** 当前光标位置
+- **颜色**: 红色（重大版本）、黄色（次要版本）、绿色（补丁版本）变化
+- **下划线**: 当前选定的更新目标
 
-### Package Grouping
+### 包分组
 
-Packages are organized in sections by dependency type:
+包按依赖类型在章节中组织：
 
-- **dependencies** - Regular runtime dependencies
-- **devDependencies** - Development dependencies
-- **peerDependencies** - Peer dependencies
-- **optionalDependencies** - Optional dependencies
+- **dependencies** - 常规运行时依赖
+- **devDependencies** - 开发依赖
+- **peerDependencies** - 同级依赖
+- **optionalDependencies** - 可选依赖
 
-Within each section, individual packages may have additional suffixes (` dev`, ` peer`, ` optional`) for extra clarity.
+在每个章节内，单个包可能有额外的后缀（` dev`、` peer`、` optional`）以增加清晰度。
 
 ## `--recursive`
 
-Use the `--recursive` flag with `--interactive` to update dependencies across all workspaces in a monorepo:
+将 `--interactive` 与 `--recursive` 标志一起使用，以在单一代码库中的所有工作区中更新依赖：
 
 ```sh terminal icon="terminal"
 bun update --interactive --recursive
 bun update -i -r
 ```
 
-This displays an additional "Workspace" column showing which workspace each dependency belongs to.
+这会显示一个额外的 "Workspace" 列，显示每个依赖所属的工作区。
 
 ## `--latest`
 
-By default, `bun update` will update to the latest version of a dependency that satisfies the version range specified in your `package.json`.
+默认情况下，`bun update` 将更新到满足你在 [package.json] 中指定的版本范围的最新版本。
 
-To update to the latest version, regardless of if it's compatible with the current version range, use the `--latest` flag:
+要更新到最新版本，不管是否与当前版本范围兼容，请使用 `--latest` 标志：
 
 ```sh terminal icon="terminal"
 bun update --latest
 ```
 
-In interactive mode, you can toggle individual packages between their target version (respecting semver) and latest version using the **l** key.
+在交互模式下，你可以使用 **l** 键在单个包的目标版本（遵守 semver）和最新版本之间切换。
 
-For example, with the following `package.json`:
+例如，对于以下 [package.json]：
 
 ```json package.json icon="file-json"
 {
@@ -132,8 +132,8 @@ For example, with the following `package.json`:
 }
 ```
 
-- `bun update` would update to a version that matches `17.x`.
-- `bun update --latest` would update to a version that matches `18.x` or later.
+- `bun update` 将更新到匹配 `17.x` 的版本。
+- `bun update --latest` 将更新到匹配 `18.x` 或更高版本。
 
 ---
 

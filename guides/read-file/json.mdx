@@ -1,12 +1,12 @@
 ---
-title: Read a JSON file
-sidebarTitle: Read JSON file
+title: 读取 JSON 文件
+sidebarTitle: 读取 JSON 文件
 mode: center
 ---
 
-The `Bun.file()` function accepts a path and returns a `BunFile` instance. The `BunFile` class extends `Blob` and allows you to lazily read the file in a variety of formats. Use `.json()` to read and parse the contents of a `.json` file as a plain object.
+`Bun.file()` 函数接受一个路径并返回一个 [BunFile] 实例。[BunFile] 类扩展了 `Blob` 并允许您以多种格式延迟读取文件。使用 `.json()` 读取并解析 `.json` 文件的内容为普通对象。
 
-The MIME type of the `BunFile` will be set accordingly.
+[BunFile] 的 MIME 类型将相应设置。
 
 ```ts index.ts icon="/icons/typescript.svg"
 const path = "/path/to/package.json";

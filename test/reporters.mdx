@@ -1,17 +1,17 @@
 ---
-title: Test Reporters
+title: 测试报告器
 description:
 ---
 
-bun test supports different output formats through reporters. This document covers both built-in reporters and how to implement your own custom reporters.
+bun test 通过报告器支持不同的输出格式。本文档涵盖了内置报告器以及如何实现自己的自定义报告器。
 
 ---
 
-## Built-in Reporters
+## 内置报告器
 
-### Default Console Reporter
+### 默认控制台报告器
 
-By default, bun test outputs results to the console in a human-readable format:
+默认情况下，bun test 以人类可读的格式将结果输出到控制台：
 
 ```sh terminal icon="terminal"
 test/package-json-lint.test.ts:
@@ -26,7 +26,7 @@ test/package-json-lint.test.ts:
 Ran 4 tests in 1.44ms
 ```
 
-When a terminal doesn't support colors, the output avoids non-ascii characters:
+当终端不支持颜色时，输出会避免使用非 ASCII 字符：
 
 ```sh terminal icon="terminal"
 test/package-json-lint.test.ts:
@@ -41,86 +41,86 @@ test/package-json-lint.test.ts:
 Ran 4 tests across 1 files. [0.66ms]
 ```
 
-### Dots Reporter
+### 点状报告器
 
-The dots reporter shows `.` for passing tests and `F` for failures—useful for large test suites.
+点状报告器显示 `.` 表示通过的测试，`F` 表示失败的测试——适用于大型测试套件。
 
 ```sh terminal icon="terminal"
 bun test --dots
 bun test --reporter=dots
 ```
 
-### JUnit XML Reporter
+### JUnit XML 报告器
 
-For CI/CD environments, Bun supports generating JUnit XML reports. JUnit XML is a widely-adopted format for test results that can be parsed by many CI/CD systems, including GitLab, Jenkins, and others.
+对于 CI/CD 环境，Bun 支持生成 JUnit XML 报告。JUnit XML 是一种广泛采用的测试结果格式，可以被许多 CI/CD 系统（包括 GitLab、Jenkins 和其他系统）解析。
 
-#### Using the JUnit Reporter
+#### 使用 JUnit 报告器
 
-To generate a JUnit XML report, use the `--reporter=junit` flag along with `--reporter-outfile` to specify the output file:
+要生成 JUnit XML 报告，请使用 `--reporter=junit` 标志以及 `--reporter-outfile` 指定输出文件：
 
 ```sh terminal icon="terminal"
 bun test --reporter=junit --reporter-outfile=./junit.xml
 ```
 
-This continues to output to the console as usual while also writing the JUnit XML report to the specified path at the end of the test run.
+这将继续像往常一样输出到控制台，同时在测试运行结束时将 JUnit XML 报告写入指定路径。
 
-#### Configuring via bunfig.toml
+#### 通过 bunfig.toml 配置
 
-You can also configure the JUnit reporter in your `bunfig.toml` file:
+您还可以在 [bunfig.toml] 文件中配置 JUnit 报告器：
 
 ```toml title="bunfig.toml" icon="settings"
 [test.reporter]
-junit = "path/to/junit.xml"  # Output path for JUnit XML report
+junit = "path/to/junit.xml"  # JUnit XML 报告的输出路径
 ```
 
-#### Environment Variables in JUnit Reports
+#### JUnit 报告中的环境变量
 
-The JUnit reporter automatically includes environment information as `<properties>` in the XML output. This can be helpful for tracking test runs in CI environments.
+JUnit 报告器会自动在 XML 输出中包含环境信息作为 `<properties>`。这在 CI 环境中跟踪测试运行时很有帮助。
 
-Specifically, it includes the following environment variables when available:
+具体来说，它会在可用时包含以下环境变量：
 
-| Environment Variable                                                    | Property Name | Description            |
-| ----------------------------------------------------------------------- | ------------- | ---------------------- |
-| `GITHUB_RUN_ID`, `GITHUB_SERVER_URL`, `GITHUB_REPOSITORY`, `CI_JOB_URL` | `ci`          | CI build information   |
-| `GITHUB_SHA`, `CI_COMMIT_SHA`, `GIT_SHA`                                | `commit`      | Git commit identifiers |
-| System hostname                                                         | `hostname`    | Machine hostname       |
+| 环境变量                                                              | 属性名称 | 描述                   |
+| --------------------------------------------------------------------- | -------- | ---------------------- |
+| `GITHUB_RUN_ID`, `GITHUB_SERVER_URL`, `GITHUB_REPOSITORY`, `CI_JOB_URL` | `ci`     | CI 构建信息            |
+| `GITHUB_SHA`, `CI_COMMIT_SHA`, `GIT_SHA`                              | `commit` | Git 提交标识符         |
+| 系统主机名                                                            | `hostname` | 机器主机名             |
 
-This makes it easier to track which environment and commit a particular test run was for.
+这使得更容易跟踪特定测试运行对应的环境和提交。
 
-#### Current Limitations
+#### 当前限制
 
-The JUnit reporter currently has a few limitations that will be addressed in future updates:
+JUnit 报告器目前有一些限制，将在未来更新中解决：
 
-- `stdout` and `stderr` output from individual tests are not included in the report
-- Precise timestamp fields per test case are not included
+- 单个测试的 `stdout` 和 `stderr` 输出不会包含在报告中
+- 每个测试用例的精确时间戳字段不会包含在内
 
-### GitHub Actions reporter
+### GitHub Actions 报告器
 
-Bun test automatically detects when it's running inside GitHub Actions and emits GitHub Actions annotations to the console directly. No special configuration is needed beyond installing Bun and running `bun test`.
+Bun test 自动检测它是否在 GitHub Actions 内部运行，并直接将 GitHub Actions 注释发送到控制台。除了安装 Bun 并运行 `bun test` 外，无需特殊配置。
 
-For a GitHub Actions workflow configuration example, see the [CI/CD integration](/pm/cli/install#ci%2Fcd) section of the CLI documentation.
+有关 GitHub Actions 工作流配置示例，请参阅 CLI 文档中的 [CI/CD 集成](/pm/cli/install#ci%2Fcd) 部分。
 
 ---
 
-## Custom Reporters
+## 自定义报告器
 
-Bun allows developers to implement custom test reporters by extending the WebKit Inspector Protocol with additional testing-specific domains.
+Bun 允许开发人员通过扩展 WebKit 检查协议并添加额外的测试特定域来实现自定义测试报告器。
 
-### Inspector Protocol for Testing
+### 用于测试的检查协议
 
-To support test reporting, Bun extends the standard WebKit Inspector Protocol with two custom domains:
+为了支持测试报告，Bun 使用两个自定义域扩展标准 WebKit 检查协议：
 
-1. **TestReporter**: Reports test discovery, execution start, and completion events
-2. **LifecycleReporter**: Reports errors and exceptions during test execution
+1. **TestReporter**: 报告测试发现、执行开始和完成事件
+2. **LifecycleReporter**: 报告测试执行期间的错误和异常
 
-These extensions allow you to build custom reporting tools that can receive detailed information about test execution in real-time.
+这些扩展允许您构建自定义报告工具，实时接收有关测试执行的详细信息。
 
-### Key Events
+### 关键事件
 
-Custom reporters can listen for these key events:
+自定义报告器可以监听这些关键事件：
 
-- `TestReporter.found`: Emitted when a test is discovered
-- `TestReporter.start`: Emitted when a test starts running
-- `TestReporter.end`: Emitted when a test completes
-- `Console.messageAdded`: Emitted when console output occurs during a test
-- `LifecycleReporter.error`: Emitted when an error or exception occurs
+- `TestReporter.found`: 发现测试时发出
+- `TestReporter.start`: 测试开始运行时发出
+- `TestReporter.end`: 测试完成时发出
+- `Console.messageAdded`: 测试期间出现控制台输出时发出
+- `LifecycleReporter.error`: 发生错误或异常时发出

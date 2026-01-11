@@ -1,31 +1,31 @@
 ---
-title: "Test runner"
-description: "Bun's fast, built-in, Jest-compatible test runner with TypeScript support, lifecycle hooks, mocking, and watch mode"
+title: "测试运行器"
+description: "Bun 的快速、内置的与 Jest 兼容的测试运行器，支持 TypeScript、生命周期钩子、模拟和监视模式"
 ---
 
 import Test from "/snippets/cli/test.mdx";
 
-Bun ships with a fast, built-in, Jest-compatible test runner. Tests are executed with the Bun runtime, and support the following features.
+Bun 配备了一个快速、内置的与 Jest 兼容的测试运行器。测试使用 Bun 运行时执行，并支持以下功能。
 
-- TypeScript and JSX
-- Lifecycle hooks
-- Snapshot testing
-- UI & DOM testing
-- Watch mode with `--watch`
-- Script pre-loading with `--preload`
+- TypeScript 和 JSX
+- 生命周期钩子
+- 快照测试
+- UI 和 DOM 测试
+- 带 `--watch` 的监视模式
+- 带 `--preload` 的脚本预加载
 
 <Note>
-  Bun aims for compatibility with Jest, but not everything is implemented. To track compatibility, see [this tracking
-  issue](https://github.com/oven-sh/bun/issues/1825).
+  Bun 旨在与 Jest 兼容，但并非所有功能都已实现。要跟踪兼容性，请参阅 [此跟踪
+  问题](https://github.com/oven-sh/bun/issues/1825)。
 </Note>
 
-## Run tests
+## 运行测试
 
 ```bash terminal icon="terminal"
 bun test
 ```
 
-Tests are written in JavaScript or TypeScript with a Jest-like API. Refer to [Writing tests](/test/writing-tests) for full documentation.
+测试使用类似 Jest 的 API 用 JavaScript 或 TypeScript 编写。有关完整文档，请参阅 [编写测试](/test/writing-tests)。
 
 ```ts math.test.ts icon="/icons/typescript.svg"
 import { expect, test } from "bun:test";
@@ -35,47 +35,47 @@ test("2 + 2", () => {
 });
 ```
 
-The runner recursively searches the working directory for files that match the following patterns:
+运行器递归搜索工作目录中匹配以下模式的文件：
 
 - `*.test.{js|jsx|ts|tsx}`
 - `*_test.{js|jsx|ts|tsx}`
 - `*.spec.{js|jsx|ts|tsx}`
 - `*_spec.{js|jsx|ts|tsx}`
 
-You can filter the set of _test files_ to run by passing additional positional arguments to `bun test`. Any test file with a path that matches one of the filters will run. Commonly, these filters will be file or directory names; glob patterns are not yet supported.
+您可以通过向 `bun test` 传递额外的位置参数来筛选要运行的 _测试文件_。任何路径与筛选器匹配的测试文件都将运行。通常，这些筛选器将是文件或目录名；glob 模式尚不支持。
 
 ```bash terminal icon="terminal"
 bun test <filter> <filter> ...
 ```
 
-To filter by _test name_, use the `-t`/`--test-name-pattern` flag.
+要按 _测试名称_ 筛选，请使用 `-t`/`--test-name-pattern` 标志。
 
 ```sh terminal icon="terminal"
-# run all tests or test suites with "addition" in the name
+# 运行所有名称中包含"addition"的测试或测试套件
 bun test --test-name-pattern addition
 ```
 
-To run a specific file in the test runner, make sure the path starts with `./` or `/` to distinguish it from a filter name.
+要运行测试运行器中的特定文件，请确保路径以 `./` 或 `/` 开头，以将其与筛选器名称区分开。
 
 ```bash terminal icon="terminal"
 bun test ./test/specific-file.test.ts
 ```
 
-The test runner runs all tests in a single process. It loads all `--preload` scripts (see [Lifecycle](/test/lifecycle) for details), then runs all tests. If a test fails, the test runner will exit with a non-zero exit code.
+测试运行器在单个进程中运行所有测试。它加载所有 `--preload` 脚本（有关详细信息，请参见 [生命周期](/test/lifecycle)），然后运行所有测试。如果测试失败，测试运行器将以非零退出代码退出。
 
-## CI/CD integration
+## CI/CD 集成
 
-`bun test` supports a variety of CI/CD integrations.
+`bun test` 支持多种 CI/CD 集成。
 
 ### GitHub Actions
 
-`bun test` automatically detects if it's running inside GitHub Actions and will emit GitHub Actions annotations to the console directly.
+`bun test` 自动检测是否在 GitHub Actions 中运行，并将 GitHub Actions 注释直接发送到控制台。
 
-No configuration is needed, other than installing `bun` in the workflow and running `bun test`.
+除了在工作流程中安装 `bun` 并运行 `bun test` 之外，无需其他配置。
 
-#### How to install `bun` in a GitHub Actions workflow
+#### 如何在 GitHub Actions 工作流程中安装 `bun`
 
-To use `bun test` in a GitHub Actions workflow, add the following step:
+要在 GitHub Actions 工作流程中使用 `bun test`，请添加以下步骤：
 
 ```yaml title=".github/workflows/test.yml" icon="file-code"
 jobs:
@@ -87,72 +87,72 @@ jobs:
         uses: actions/checkout@v4
       - name: Install bun
         uses: oven-sh/setup-bun@v2
-      - name: Install dependencies # (assuming your project has dependencies)
-        run: bun install # You can use npm/yarn/pnpm instead if you prefer
+      - name: Install dependencies # (假设您的项目有依赖项)
+        run: bun install # 如果愿意，您可以使用 npm/yarn/pnpm 替代
       - name: Run tests
         run: bun test
 ```
 
-From there, you'll get GitHub Actions annotations.
+从此处，您将获得 GitHub Actions 注释。
 
-### JUnit XML reports (GitLab, etc.)
+### JUnit XML 报告 (GitLab 等)
 
-To use `bun test` with a JUnit XML reporter, you can use the `--reporter=junit` in combination with `--reporter-outfile`.
+要将 `bun test` 与 JUnit XML 报告器一起使用，您可以将 `--reporter=junit` 与 `--reporter-outfile` 结合使用。
 
 ```sh terminal icon="terminal"
 bun test --reporter=junit --reporter-outfile=./bun.xml
 ```
 
-This will continue to output to stdout/stderr as usual, and also write a JUnit
-XML report to the given path at the very end of the test run.
+这将继续像往常一样输出到 stdout/stderr，并在测试运行结束时还将 JUnit
+XML 报告写入给定路径。
 
-JUnit XML is a popular format for reporting test results in CI/CD pipelines.
+JUnit XML 是 CI/CD 管道中报告测试结果的流行格式。
 
-## Timeouts
+## 超时
 
-Use the `--timeout` flag to specify a _per-test_ timeout in milliseconds. If a test times out, it will be marked as failed. The default value is `5000`.
+使用 `--timeout` 标志指定以毫秒为单位的 _每个测试_ 超时。如果测试超时，它将被标记为失败。默认值为 `5000`。
 
 ```bash terminal icon="terminal"
-# default value is 5000
+# 默认值为 5000
 bun test --timeout 20
 ```
 
-## Concurrent test execution
+## 并发测试执行
 
-By default, Bun runs all tests sequentially within each test file. You can enable concurrent execution to run async tests in parallel, significantly speeding up test suites with independent tests.
+默认情况下，Bun 在每个测试文件内按顺序运行所有测试。您可以启用并发执行以并行运行异步测试，显著加快具有独立测试的测试套件。
 
-### `--concurrent` flag
+### `--concurrent` 标志
 
-Use the `--concurrent` flag to run all tests concurrently within their respective files:
+使用 `--concurrent` 标志在各自文件中并发运行所有测试：
 
 ```sh terminal icon="terminal"
 bun test --concurrent
 ```
 
-When this flag is enabled, all tests will run in parallel unless explicitly marked with `test.serial`.
+启用此标志后，除非明确标记为 `test.serial`，否则所有测试将并行运行。
 
-### `--max-concurrency` flag
+### `--max-concurrency` 标志
 
-Control the maximum number of tests running simultaneously with the `--max-concurrency` flag:
+使用 `--max-concurrency` 标志控制同时运行的最大测试数：
 
 ```sh terminal icon="terminal"
-# Limit to 4 concurrent tests
+# 限制为 4 个并发测试
 bun test --concurrent --max-concurrency 4
 
-# Default: 20
+# 默认值：20
 bun test --concurrent
 ```
 
-This helps prevent resource exhaustion when running many concurrent tests. The default value is 20.
+这有助于在运行许多并发测试时防止资源耗尽。默认值为 20。
 
 ### `test.concurrent`
 
-Mark individual tests to run concurrently, even when the `--concurrent` flag is not used:
+标记单个测试以并发运行，即使未使用 `--concurrent` 标志：
 
 ```ts title="math.test.ts" icon="/icons/typescript.svg"
 import { test, expect } from "bun:test";
 
-// These tests run in parallel with each other
+// 这些测试彼此并行运行
 test.concurrent("concurrent test 1", async () => {
   await fetch("/api/endpoint1");
   expect(true).toBe(true);
@@ -163,7 +163,7 @@ test.concurrent("concurrent test 2", async () => {
   expect(true).toBe(true);
 });
 
-// This test runs sequentially
+// 此测试按顺序运行
 test("sequential test", () => {
   expect(1 + 1).toBe(2);
 });
@@ -171,119 +171,119 @@ test("sequential test", () => {
 
 ### `test.serial`
 
-Force tests to run sequentially, even when the `--concurrent` flag is enabled:
+强制测试按顺序运行，即使启用了 `--concurrent` 标志：
 
 ```ts title="math.test.ts" icon="/icons/typescript.svg"
 import { test, expect } from "bun:test";
 
 let sharedState = 0;
 
-// These tests must run in order
+// 这些测试必须按顺序运行
 test.serial("first serial test", () => {
   sharedState = 1;
   expect(sharedState).toBe(1);
 });
 
 test.serial("second serial test", () => {
-  // Depends on the previous test
+  // 依赖于之前的测试
   expect(sharedState).toBe(1);
   sharedState = 2;
 });
 
-// This test can run concurrently if --concurrent is enabled
+// 如果启用了 --concurrent，此测试可以并发运行
 test("independent test", () => {
   expect(true).toBe(true);
 });
 
-// Chaining test qualifiers
+// 链式测试限定符
 test.failing.each([1, 2, 3])("chained qualifiers %d", input => {
-  expect(input).toBe(0); // This test is expected to fail for each input
+  expect(input).toBe(0); // 预期每个输入都会失败
 });
 ```
 
-## Rerun tests
+## 重新运行测试
 
-Use the `--rerun-each` flag to run each test multiple times. This is useful for detecting flaky or non-deterministic test failures.
+使用 `--rerun-each` 标志多次运行每个测试。这对于检测不稳定或不确定的测试失败很有用。
 
 ```sh terminal icon="terminal"
 bun test --rerun-each 100
 ```
 
-## Randomize test execution order
+## 随机化测试执行顺序
 
-Use the `--randomize` flag to run tests in a random order. This helps detect tests that depend on shared state or execution order.
+使用 `--randomize` 标志以随机顺序运行测试。这有助于检测依赖于共享状态或执行顺序的测试。
 
 ```sh terminal icon="terminal"
 bun test --randomize
 ```
 
-When using `--randomize`, the seed used for randomization will be displayed in the test summary:
+使用 `--randomize` 时，用于随机化的种子将在测试摘要中显示：
 
 ```sh terminal icon="terminal"
 bun test --randomize
 ```
 
 ```txt
-# ... test output ...
+# ... 测试输出 ...
  --seed=12345
  2 pass
  8 fail
 Ran 10 tests across 2 files. [50.00ms]
 ```
 
-### Reproducible random order with `--seed`
+### 使用 `--seed` 的可重现随机顺序
 
-Use the `--seed` flag to specify a seed for the randomization. This allows you to reproduce the same test order when debugging order-dependent failures.
+使用 `--seed` 标志为随机化指定种子。这允许您在调试顺序相关故障时重现相同的测试顺序。
 
 ```sh terminal icon="terminal"
-# Reproduce a previous randomized run
+# 重现以前的随机运行
 bun test --seed 123456
 ```
 
-The `--seed` flag implies `--randomize`, so you don't need to specify both. Using the same seed value will always produce the same test execution order, making it easier to debug intermittent failures caused by test interdependencies.
+`--seed` 标志意味着 `--randomize`，因此您无需同时指定两者。使用相同的种子值将始终产生相同的测试执行顺序，从而更容易调试由测试相互依赖引起的间歇性故障。
 
-## Bail out with `--bail`
+## 使用 `--bail` 退出
 
-Use the `--bail` flag to abort the test run early after a pre-determined number of test failures. By default Bun will run all tests and report all failures, but sometimes in CI environments it's preferable to terminate earlier to reduce CPU usage.
+使用 `--bail` 标志在预定数量的测试失败后提前中止测试运行。默认情况下，Bun 将运行所有测试并报告所有失败，但在某些 CI 环境中，最好提前终止以减少 CPU 使用量。
 
 ```sh terminal icon="terminal"
-# bail after 1 failure
+# 在 1 次失败后退出
 bun test --bail
 
-# bail after 10 failure
+# 在 10 次失败后退出
 bun test --bail=10
 ```
 
-## Watch mode
+## 监视模式
 
-Similar to `bun run`, you can pass the `--watch` flag to `bun test` to watch for changes and re-run tests.
+类似于 `bun run`，您可以向 `bun test` 传递 `--watch` 标志以监视更改并重新运行测试。
 
 ```bash terminal icon="terminal"
 bun test --watch
 ```
 
-## Lifecycle hooks
+## 生命周期钩子
 
-Bun supports the following lifecycle hooks:
+Bun 支持以下生命周期钩子：
 
-| Hook         | Description                 |
-| ------------ | --------------------------- |
-| `beforeAll`  | Runs once before all tests. |
-| `beforeEach` | Runs before each test.      |
-| `afterEach`  | Runs after each test.       |
-| `afterAll`   | Runs once after all tests.  |
+| 钩子         | 描述                    |
+| ------------ | ----------------------- |
+| `beforeAll`  | 在所有测试之前运行一次。 |
+| `beforeEach` | 在每个测试之前运行。     |
+| `afterEach`  | 在每个测试之后运行。     |
+| `afterAll`   | 在所有测试之后运行一次。 |
 
-These hooks can be defined inside test files, or in a separate file that is preloaded with the `--preload` flag.
+这些钩子可以在测试文件内部定义，也可以在使用 `--preload` 标志预加载的单独文件中定义。
 
 ```sh terminal icon="terminal"
 bun test --preload ./setup.ts
 ```
 
-See [Test > Lifecycle](/test/lifecycle) for complete documentation.
+有关完整文档，请参阅 [测试 > 生命周期](/test/lifecycle)。
 
-## Mocks
+## 模拟
 
-Create mock functions with the `mock` function.
+使用 `mock` 函数创建模拟函数。
 
 ```ts title="math.test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
@@ -297,7 +297,7 @@ test("random", () => {
 });
 ```
 
-Alternatively, you can use `jest.fn()`, it behaves identically.
+或者，您可以使用 `jest.fn()`，它的行为相同。
 
 ```ts title="math.test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test"; // [!code --]
@@ -307,14 +307,14 @@ const random = mock(() => Math.random()); // [!code --]
 const random = jest.fn(() => Math.random()); // [!code ++]
 ```
 
-See [Test > Mocks](/test/mocks) for complete documentation.
+有关完整文档，请参阅 [测试 > 模拟](/test/mocks)。
 
-## Snapshot testing
+## 快照测试
 
-Snapshots are supported by `bun test`.
+`bun test` 支持快照。
 
 ```ts title="math.test.ts" icon="/icons/typescript.svg"
-// example usage of toMatchSnapshot
+// toMatchSnapshot 的示例用法
 import { test, expect } from "bun:test";
 
 test("snapshot", () => {
@@ -322,58 +322,58 @@ test("snapshot", () => {
 });
 ```
 
-To update snapshots, use the `--update-snapshots` flag.
+要更新快照，请使用 `--update-snapshots` 标志。
 
 ```sh terminal icon="terminal"
 bun test --update-snapshots
 ```
 
-See [Test > Snapshots](/test/snapshots) for complete documentation.
+有关完整文档，请参阅 [测试 > 快照](/test/snapshots)。
 
-## UI & DOM testing
+## UI 和 DOM 测试
 
-Bun is compatible with popular UI testing libraries:
+Bun 与流行的 UI 测试库兼容：
 
 - [HappyDOM](https://github.com/capricorn86/happy-dom)
 - [DOM Testing Library](https://testing-library.com/docs/dom-testing-library/intro/)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 
-See [Test > DOM Testing](/test/dom) for complete documentation.
+有关完整文档，请参阅 [测试 > DOM 测试](/test/dom)。
 
-## Performance
+## 性能
 
-Bun's test runner is fast.
+Bun 的测试运行器很快。
 
-<Frame>![Running 266 React SSR tests faster than Jest can print its version number.](/images/buntest.jpeg)</Frame>
+<Frame>![运行 266 个 React SSR 测试比 Jest 打印其版本号更快。](/images/buntest.jpeg)</Frame>
 
-## AI Agent Integration
+## AI 代理集成
 
-When using Bun's test runner with AI coding assistants, you can enable quieter output to improve readability and reduce context noise. This feature minimizes test output verbosity while preserving essential failure information.
+将 Bun 的测试运行器与 AI 编码助手一起使用时，您可以启用更安静的输出以提高可读性并减少上下文噪音。此功能在保留基本故障信息的同时最小化测试输出冗长度。
 
-### Environment Variables
+### 环境变量
 
-Set any of the following environment variables to enable AI-friendly output:
+设置以下任意环境变量以启用 AI 友好输出：
 
-- `CLAUDECODE=1` - For Claude Code
-- `REPL_ID=1` - For Replit
-- `AGENT=1` - Generic AI agent flag
+- `CLAUDECODE=1` - 用于 Claude Code
+- `REPL_ID=1` - 用于 Replit
+- `AGENT=1` - 通用 AI 代理标志
 
-### Behavior
+### 行为
 
-When an AI agent environment is detected:
+检测到 AI 代理环境时：
 
-- Only test failures are displayed in detail
-- Passing, skipped, and todo test indicators are hidden
-- Summary statistics remain intact
+- 仅详细显示测试失败
+- 隐藏通过、跳过和待办测试指示器
+- 摘要统计保持不变
 
 ```bash terminal icon="terminal"
-# Example: Enable quiet output for Claude Code
+# 示例：为 Claude Code 启用静默输出
 CLAUDECODE=1 bun test
 
-# Still shows failures and summary, but hides verbose passing test output
+# 仍显示失败和摘要，但隐藏冗长的通过测试输出
 ```
 
-This feature is particularly useful in AI-assisted development workflows where reduced output verbosity improves context efficiency while maintaining visibility into test failures.
+此功能在 AI 辅助开发工作流中特别有用，因为减少的输出冗长度提高了上下文效率，同时保持了对测试失败的可见性。
 
 ---
 

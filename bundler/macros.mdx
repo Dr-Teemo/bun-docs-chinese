@@ -1,11 +1,11 @@
 ---
-title: Macros
-description: Run JavaScript functions at bundle-time with Bun macros
+title: 宏
+description: 使用Bun宏在打包时运行JavaScript函数
 ---
 
-Macros are a mechanism for running JavaScript functions at bundle-time. The value returned from these functions are directly inlined into your bundle.
+宏是一种在打包时运行JavaScript函数的机制。这些函数返回的值直接内联到您的包中。
 
-As a toy example, consider this simple function that returns a random number.
+作为一个简单的例子，考虑这个返回随机数的简单函数。
 
 ```ts title="random.ts" icon="/icons/typescript.svg"
 export function random() {
@@ -13,7 +13,7 @@ export function random() {
 }
 ```
 
-This is just a regular function in a regular file, but we can use it as a macro like so:
+这只是一个普通文件中的普通函数，但我们可以像这样将其用作宏：
 
 ```tsx title="cli.tsx" icon="/icons/typescript.svg"
 import { random } from "./random.ts" with { type: "macro" };
@@ -22,11 +22,10 @@ console.log(`Your random number is ${random()}`);
 ```
 
 <Note>
-  Macros are indicated using import attribute syntax. If you haven't seen this syntax before, it's a Stage 3 TC39
-  proposal that lets you attach additional metadata to import statements.
+  宏使用导入属性语法表示。如果您之前没见过这种语法，它是Stage 3 TC39提案，可以让您向import语句附加额外元数据。
 </Note>
 
-Now we'll bundle this file with `bun build`. The bundled file will be printed to stdout.
+现在我们将使用`bun build`打包此文件。打包的文件将打印到stdout。
 
 ```bash terminal icon="terminal"
 bun build ./cli.tsx
@@ -36,26 +35,26 @@ bun build ./cli.tsx
 console.log(`Your random number is ${0.6805550949689833}`);
 ```
 
-As you can see, the source code of the `random` function occurs nowhere in the bundle. Instead, it is executed during bundling and function call (`random()`) is replaced with the result of the function. Since the source code will never be included in the bundle, macros can safely perform privileged operations like reading from a database.
+如您所见，`random`函数的源代码在包中任何地方都不存在。相反，它在打包期间执行，函数调用（`random()`）被函数的结果替换。由于源代码永远不会包含在包中，宏可以安全地执行特权操作，如从数据库读取。
 
-## When to use macros
+## 何时使用宏
 
-If you have several build scripts for small things where you would otherwise have a one-off build script, bundle-time code execution can be easier to maintain. It lives with the rest of your code, it runs with the rest of the build, it is automatically parallelized, and if it fails, the build fails too.
+如果您有几个用于小事物的构建脚本，而您本来会有一个一次性构建脚本，那么在构建时执行代码可能更容易维护。它与您的其余代码一起存在，与构建的其余部分一起运行，自动并行化，如果失败，构建也会失败。
 
-If you find yourself running a lot of code at bundle-time though, consider running a server instead.
+不过，如果您发现自己在运行大量构建时代码，请考虑运行服务器。
 
-## Import attributes
+## 导入属性
 
-Bun Macros are import statements annotated using either:
+Bun宏是使用以下方式注释的导入语句：
 
-- `with { type: 'macro' }` — an import attribute, a Stage 3 ECMA Script proposal
-- `assert { type: 'macro' }` — an import assertion, an earlier incarnation of import attributes that has now been abandoned (but is already supported by a number of browsers and runtimes)
+- `with { type: 'macro' }` — 一个导入属性，一个Stage 3 ECMA Script提案
+- `assert { type: 'macro' }` — 一个导入断言，是导入属性的早期版本，现在已经废弃（但已被许多浏览器和运行时支持）
 
-## Security considerations
+## 安全考虑
 
-Macros must explicitly be imported with `{ type: "macro" }` in order to be executed at bundle-time. These imports have no effect if they are not called, unlike regular JavaScript imports which may have side effects.
+宏必须显式使用`{ type: "macro" }`导入才能在构建时执行。与常规JavaScript导入可能有副作用不同，这些导入如果不被调用则没有效果。
 
-You can disable macros entirely by passing the `--no-macros` flag to Bun. It produces a build error like this:
+您可以通过向Bun传递`--no-macros`标志完全禁用宏。它会产生这样的构建错误：
 
 ```
 error: Macros are disabled
@@ -65,7 +64,7 @@ foo();
 ./hello.js:3:1 53
 ```
 
-To reduce the potential attack surface for malicious packages, macros cannot be invoked from inside `node_modules/**/*`. If a package attempts to invoke a macro, you'll see an error like this:
+为了减少恶意包的潜在攻击面，宏不能从`node_modules/**/*`内部调用。如果包试图调用宏，您会看到这样的错误：
 
 ```
 error: For security reasons, macros cannot be run from node_modules.
@@ -75,7 +74,7 @@ beEvil();
 node_modules/evil/index.js:3:1 50
 ```
 
-Your application code can still import macros from `node_modules` and invoke them.
+您的应用程序代码仍然可以从`node_modules`导入宏并调用它们。
 
 ```ts title="cli.tsx" icon="/icons/typescript.svg"
 import { macro } from "some-package" with { type: "macro" };
@@ -83,9 +82,9 @@ import { macro } from "some-package" with { type: "macro" };
 macro();
 ```
 
-## Export condition "macro"
+## 导出条件"macro"
 
-When shipping a library containing a macro to npm or another package registry, use the `"macro"` export condition to provide a special version of your package exclusively for the macro environment.
+当发布包含宏的库到npm或其他包注册表时，使用"macro"导出条件为宏环境提供一个专门的包版本。
 
 ```json title="package.json" icon="file-json"
 {
@@ -99,26 +98,26 @@ When shipping a library containing a macro to npm or another package registry, u
 }
 ```
 
-With this configuration, users can consume your package at runtime or at bundle-time using the same import specifier:
+通过此配置，用户可以使用相同的导入标识符在运行时或构建时消费您的包：
 
 ```ts title="index.ts" icon="/icons/typescript.svg"
-import pkg from "my-package"; // runtime import
-import { macro } from "my-package" with { type: "macro" }; // macro import
+import pkg from "my-package"; // 运行时导入
+import { macro } from "my-package" with { type: "macro" }; // 宏导入
 ```
 
-The first import will resolve to `./node_modules/my-package/index.js`, while the second will be resolved by Bun's bundler to `./node_modules/my-package/index.macro.js`.
+第一个导入将解析为`./node_modules/my-package/index.js`，而第二个将由Bun的打包器解析为`./node_modules/my-package/index.macro.js`。
 
-## Execution
+## 执行
 
-When Bun's transpiler sees a macro import, it calls the function inside the transpiler using Bun's JavaScript runtime and converts the return value from JavaScript into an AST node. These JavaScript functions are called at bundle-time, not runtime.
+当Bun的转译器看到宏导入时，它使用Bun的JavaScript运行时在转译器内部调用函数，并将返回值从JavaScript转换为AST节点。这些JavaScript函数在构建时被调用，而不是运行时。
 
-Macros are executed synchronously in the transpiler during the visiting phase—before plugins and before the transpiler generates the AST. They are executed in the order they are imported. The transpiler will wait for the macro to finish executing before continuing. The transpiler will also await any Promise returned by a macro.
+宏在转译器的访问阶段同步执行——在插件之前和转译器生成AST之前。它们按导入的顺序执行。转译器将等待宏完成执行后再继续。转译器也将等待宏返回的任何Promise。
 
-Bun's bundler is multi-threaded. As such, macros execute in parallel inside of multiple spawned JavaScript "workers".
+Bun的打包器是多线程的。因此，宏在多个生成的JavaScript"worker"中并行执行。
 
-## Dead code elimination
+## 死代码消除
 
-The bundler performs dead code elimination after running and inlining macros. So given the following macro:
+打包器在运行和内联宏后执行死代码消除。因此，给定以下宏：
 
 ```ts title="returnFalse.ts" icon="/icons/typescript.svg"
 export function returnFalse() {
@@ -126,7 +125,7 @@ export function returnFalse() {
 }
 ```
 
-...then bundling the following file will produce an empty bundle, provided that the minify syntax option is enabled.
+...然后打包以下文件将产生一个空包，前提是启用了缩小语法选项。
 
 ```ts title="index.ts" icon="/icons/typescript.svg"
 import { returnFalse } from "./returnFalse.ts" with { type: "macro" };
@@ -136,9 +135,9 @@ if (returnFalse()) {
 }
 ```
 
-## Serializability
+## 可序列化性
 
-Bun's transpiler needs to be able to serialize the result of the macro so it can be inlined into the AST. All JSON-compatible data structures are supported:
+Bun的转译器需要能够序列化宏的结果，以便它可以内联到AST中。所有JSON兼容的数据结构都受支持：
 
 ```ts title="macro.ts" icon="/icons/typescript.svg"
 export function getObject() {
@@ -150,7 +149,7 @@ export function getObject() {
 }
 ```
 
-Macros can be async, or return Promise instances. Bun's transpiler will automatically await the Promise and inline the result.
+宏可以是异步的，或返回Promise实例。Bun的转译器将自动等待Promise并内联结果。
 
 ```ts title="macro.ts" icon="/icons/typescript.svg"
 export async function getText() {
@@ -158,13 +157,13 @@ export async function getText() {
 }
 ```
 
-The transpiler implements special logic for serializing common data formats like `Response`, `Blob`, `TypedArray`.
+转译器为序列化常见数据格式（如`Response`、`Blob`、`TypedArray`）实现了特殊逻辑。
 
-- **TypedArray**: Resolves to a base64-encoded string.
-- **Response**: Bun will read the `Content-Type` and serialize accordingly; for instance, a Response with type `application/json` will be automatically parsed into an object and `text/plain` will be inlined as a string. Responses with an unrecognized or undefined type will be base-64 encoded.
-- **Blob**: As with Response, the serialization depends on the `type` property.
+- **TypedArray**: 解析为base64编码的字符串。
+- **Response**: Bun将读取`Content-Type`并相应序列化；例如，类型为`application/json`的Response将自动解析为对象，`text/plain`将作为字符串内联。具有无法识别或未定义类型的Response将被base-64编码。
+- **Blob**: 与Response一样，序列化取决于`type`属性。
 
-The result of `fetch` is `Promise<Response>`, so it can be directly returned.
+`fetch`的结果是`Promise<Response>`，所以它可以被直接返回。
 
 ```ts title="macro.ts" icon="/icons/typescript.svg"
 export function getObject() {
@@ -172,24 +171,24 @@ export function getObject() {
 }
 ```
 
-Functions and instances of most classes (except those mentioned above) are not serializable.
+函数和大多数类的实例（除了上面提到的那些）是不可序列化的。
 
 ```ts title="macro.ts" icon="/icons/typescript.svg"
 export function getText(url: string) {
-  // this doesn't work!
+  // 这不起作用！
   return () => {};
 }
 ```
 
-## Arguments
+## 参数
 
-Macros can accept inputs, but only in limited cases. The value must be statically known. For example, the following is not allowed:
+宏可以接受输入，但仅限于有限的情况。值必须是静态已知的。例如，以下内容是不允许的：
 
 ```ts title="index.ts" icon="/icons/typescript.svg"
 import { getText } from "./getText.ts" with { type: "macro" };
 
 export function howLong() {
-  // the value of `foo` cannot be statically known
+  // `foo`的值不能静态已知
   const foo = Math.random() ? "foo" : "bar";
 
   const text = getText(`https://example.com/${foo}`);
@@ -197,21 +196,21 @@ export function howLong() {
 }
 ```
 
-However, if the value of `foo` is known at bundle-time (say, if it's a constant or the result of another macro) then it's allowed:
+但是，如果`foo`的值在构建时已知（比如说，如果它是一个常量或其他宏的结果），那么这是允许的：
 
 ```ts title="index.ts" icon="/icons/typescript.svg"
 import { getText } from "./getText.ts" with { type: "macro" };
 import { getFoo } from "./getFoo.ts" with { type: "macro" };
 
 export function howLong() {
-  // this works because getFoo() is statically known
+  // 这可以工作，因为getFoo()是静态已知的
   const foo = getFoo();
   const text = getText(`https://example.com/${foo}`);
   console.log("The page is", text.length, "characters long");
 }
 ```
 
-This outputs:
+这输出：
 
 ```js
 function howLong() {
@@ -220,9 +219,9 @@ function howLong() {
 export { howLong };
 ```
 
-## Examples
+## 示例
 
-### Embed latest git commit hash
+### 嵌入最新的git提交哈希
 
 ```ts title="getGitCommitHash.ts" icon="/icons/typescript.svg"
 export function getGitCommitHash() {
@@ -235,7 +234,7 @@ export function getGitCommitHash() {
 }
 ```
 
-When we build it, the `getGitCommitHash` is replaced with the result of calling the function:
+当我们构建时，`getGitCommitHash`被调用函数的结果替换：
 
 <CodeGroup>
 
@@ -252,13 +251,12 @@ console.log(`The current Git commit hash is 3ee3259104e4507cf62c160f0ff5357ec4c7
 </CodeGroup>
 
 <Info>
-  You're probably thinking "Why not just use `process.env.GIT_COMMIT_HASH`?" Well, you can do that too. But can you do
-  this with an environment variable?
+  您可能在想"为什么不只使用`process.env.GIT_COMMIT_HASH`？"好吧，您也可以这样做。但是，您可以使用环境变量做到这一点吗？
 </Info>
 
-### Make fetch() requests at bundle-time
+### 在构建时发出fetch()请求
 
-In this example, we make an outgoing HTTP request using `fetch()`, parse the HTML response using `HTMLRewriter`, and return an object containing the title and meta tags–all at bundle-time.
+在此示例中，我们使用`fetch()`发出传出HTTP请求，使用`HTMLRewriter`解析HTML响应，并返回一个包含标题和meta标签的对象——全部在构建时。
 
 ```ts title="meta.ts" icon="/icons/typescript.svg"
 export async function extractMetaTags(url: string) {
@@ -286,7 +284,7 @@ export async function extractMetaTags(url: string) {
 }
 ```
 
-The `extractMetaTags` function is erased at bundle-time and replaced with the result of the function call. This means that the fetch request happens at bundle-time, and the result is embedded in the bundle. Also, the branch throwing the error is eliminated since it's unreachable.
+`extractMetaTags`函数在构建时被擦除并替换为函数调用的结果。这意味着fetch请求发生在构建时，结果被嵌入到包中。此外，抛出错误的分支也被消除了，因为它不可达。
 
 <CodeGroup>
 

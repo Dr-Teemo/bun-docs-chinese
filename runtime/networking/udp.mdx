@@ -1,18 +1,18 @@
 ---
 title: UDP
-description: Use Bun's UDP API to implement services with advanced real-time requirements, such as voice chat.
+description: 使用 Bun 的 UDP API 实现具有高级实时要求的服务，例如语音聊天。
 ---
 
-## Bind a UDP socket (`Bun.udpSocket()`)
+## 绑定 UDP 套接字 (`Bun.udpSocket()`)
 
-To create a new (bound) UDP socket:
+要创建一个新的（已绑定的）UDP 套接字：
 
 ```ts
 const socket = await Bun.udpSocket({});
-console.log(socket.port); // assigned by the operating system
+console.log(socket.port); // 由操作系统分配
 ```
 
-Specify a port:
+指定一个端口：
 
 ```ts
 const socket = await Bun.udpSocket({
@@ -22,26 +22,26 @@ const socket = await Bun.udpSocket({
 console.log(socket.port); // 41234
 ```
 
-### Send a datagram
+### 发送数据报
 
-Specify the data to send, as well as the destination port and address.
+指定要发送的数据以及目标端口和地址。
 
 ```ts
 socket.send("Hello, world!", 41234, "127.0.0.1");
 ```
 
-Note that the address must be a valid IP address - `send` does not perform
-DNS resolution, as it is intended for low-latency operations.
+请注意，地址必须是有效的 IP 地址 - `send` 不执行
+DNS 解析，因为它旨在用于低延迟操作。
 
-### Receive datagrams
+### 接收数据报
 
-When creating your socket, add a callback to specify what should be done when packets are received:
+创建套接字时，添加一个回调函数以指定接收到数据包时应执行的操作：
 
 ```ts server.ts icon="/icons/typescript.svg"
 const server = await Bun.udpSocket({
   socket: {
     data(socket, buf, port, addr) {
-      console.log(`message from ${addr}:${port}:`);
+      console.log(`来自 ${addr}:${port} 的消息:`);
       console.log(buf.toString());
     },
   },
@@ -51,17 +51,17 @@ const client = await Bun.udpSocket({});
 client.send("Hello!", server.port, "127.0.0.1");
 ```
 
-### Connections
+### 连接
 
-While UDP does not have a concept of a connection, many UDP communications (especially as a client) involve only one peer.
-In such cases it can be beneficial to connect the socket to that peer, which specifies to which address all packets are sent
-and restricts incoming packets to that peer only.
+虽然 UDP 没有连接的概念，但许多 UDP 通信（尤其是作为客户端）仅涉及一个对等方。
+在这种情况下，将套接字连接到该对等方可能是有益的，这指定了所有数据包发送到的地址
+并将传入数据包限制为仅来自该对等方。
 
 ```ts server.ts icon="/icons/typescript.svg"
 const server = await Bun.udpSocket({
   socket: {
     data(socket, buf, port, addr) {
-      console.log(`message from ${addr}:${port}:`);
+      console.log(`来自 ${addr}:${port} 的消息:`);
       console.log(buf.toString());
     },
   },
@@ -77,24 +77,24 @@ const client = await Bun.udpSocket({
 client.send("Hello");
 ```
 
-Because connections are implemented on the operating system level, you can potentially observe performance benefits, too.
+由于连接是在操作系统级别实现的，您也可能观察到性能提升。
 
-### Send many packets at once using `sendMany()`
+### 使用 `sendMany()` 一次发送多个数据包
 
-If you want to send a large volume of packets at once, it can make sense to batch them all together to avoid the overhead
-of making a system call for each. This is made possible by the `sendMany()` API:
+如果您想一次发送大量数据包，将它们全部批处理在一起是有意义的，以避免
+每次进行系统调用的开销。这可以通过 `sendMany()` API 实现：
 
-For an unconnected socket, `sendMany` takes an array as its only argument. Each set of three array elements describes a packet:
-The first item is the data to be sent, the second is the target port, and the last is the target address.
+对于未连接的套接字，`sendMany` 以一个数组作为其唯一参数。每三个数组元素描述一个数据包：
+第一项是要发送的数据，第二项是目标端口，最后一项是目标地址。
 
 ```ts server.ts icon="/icons/typescript.svg"
 const socket = await Bun.udpSocket({});
 
-// sends 'Hello' to 127.0.0.1:41234, and 'foo' to 1.1.1.1:53 in a single operation
+// 在单个操作中发送 'Hello' 到 127.0.0.1:41234，以及 'foo' 到 1.1.1.1:53
 socket.sendMany(["Hello", 41234, "127.0.0.1", "foo", 53, "1.1.1.1"]);
 ```
 
-With a connected socket, `sendMany` simply takes an array, where each element represents the data to be sent to the peer.
+对于已连接的套接字，`sendMany` 只需一个数组，其中每个元素代表要发送到对等方的数据。
 
 ```ts server.ts icon="/icons/typescript.svg"
 const socket = await Bun.udpSocket({
@@ -107,72 +107,71 @@ const socket = await Bun.udpSocket({
 socket.sendMany(["foo", "bar", "baz"]);
 ```
 
-`sendMany` returns the number of packets that were successfully sent. As with `send`, `sendMany` only takes valid IP addresses
-as destinations, as it does not perform DNS resolution.
+`sendMany` 返回成功发送的数据包数量。与 `send` 一样，`sendMany` 仅接受有效的 IP 地址
+作为目标，因为它不执行 DNS 解析。
 
-### Handle backpressure
+### 处理背压
 
-It may happen that a packet that you're sending does not fit into the operating system's packet buffer. You can detect that this
-has happened when:
+您发送的数据包可能不适合操作系统的数据包缓冲区。您可以通过以下方式检测到这种情况：
 
-- `send` returns `false`
-- `sendMany` returns a number smaller than the number of packets you specified. In this case, the `drain` socket handler will be called once the socket becomes writable again:
+- `send` 返回 `false`
+- `sendMany` 返回一个小于您指定的数据包数量的数字。在这种情况下，一旦套接字再次变为可写，将调用 `drain` 套接字处理程序：
 
 ```ts
 const socket = await Bun.udpSocket({
   socket: {
     drain(socket) {
-      // continue sending data
+      // 继续发送数据
     },
   },
 });
 ```
 
-### Socket options
+### 套接字选项
 
-UDP sockets support setting various socket options:
+UDP 套接字支持设置各种套接字选项：
 
 ```ts
 const socket = await Bun.udpSocket({});
 
-// Enable broadcasting to send packets to a broadcast address
+// 启用广播以向广播地址发送数据包
 socket.setBroadcast(true);
 
-// Set the IP TTL (time to live) for outgoing packets
+// 为传出数据包设置 IP TTL（生存时间）
 socket.setTTL(64);
 ```
 
-### Multicast
+### 多播
 
-Bun supports multicast operations for UDP sockets. Use `addMembership` and `dropMembership` to join and leave multicast groups:
+Bun 支持 UDP 套接字的多播操作。使用 `addMembership` 和 `dropMembership` 加入和离开多播组：
 
 ```ts
 const socket = await Bun.udpSocket({});
 
-// Join a multicast group
+// 加入一个多播组
 socket.addMembership("224.0.0.1");
 
-// Join with a specific interface
+// 使用特定接口加入
 socket.addMembership("224.0.0.1", "192.168.1.100");
 
-// Leave a multicast group
+// 离开一个多播组
 socket.dropMembership("224.0.0.1");
 ```
 
-Additional multicast options:
+额外的多播选项：
 
 ```ts
-// Set TTL for multicast packets (number of network hops)
+// 为多播数据包设置 TTL（网络跳数）
 socket.setMulticastTTL(2);
 
-// Control whether multicast packets loop back to the local socket
+// 控制多播数据包是否循环回到本地套接字
 socket.setMulticastLoopback(true);
 
-// Specify which interface to use for outgoing multicast packets
+// 指定用于传出多播数据包的接口
 socket.setMulticastInterface("192.168.1.100");
 ```
 
-For source-specific multicast (SSM), use `addSourceSpecificMembership` and `dropSourceSpecificMembership`:
+对于源特定多播 (SSM)，使用 `addSourceSpecificMembership` 和 `dropSourceSpecificMembership`：
 
 ```ts
 socket.addSourceSpecificMembership("10.0.0.1", "232.0.0.1");

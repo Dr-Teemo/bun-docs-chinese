@@ -1,10 +1,10 @@
 ---
-title: Import a YAML file
-sidebarTitle: Import YAML
+title: 导入 YAML 文件
+sidebarTitle: 导入 YAML
 mode: center
 ---
 
-Bun natively supports `.yaml` and `.yml` imports.
+Bun 原生支持 `.yaml` 和 `.yml` 导入。
 
 ```yaml config.yaml icon="file-code"
 database:
@@ -23,7 +23,7 @@ features:
 
 ---
 
-Import the file like any other source file.
+像任何其他源文件一样导入该文件。
 
 ```ts config.ts icon="/icons/typescript.svg"
 import config from "./config.yaml";
@@ -35,7 +35,7 @@ config.features.auth; // => true
 
 ---
 
-You can also use named imports to destructure top-level properties:
+您也可以使用命名导入来解构顶层属性：
 
 ```ts config.ts icon="/icons/typescript.svg"
 import { database, server, features } from "./config.yaml";
@@ -47,7 +47,7 @@ console.log(features.rateLimit); // => true
 
 ---
 
-Bun also supports [Import Attributes](https://github.com/tc39/proposal-import-attributes) syntax:
+Bun 还支持 [导入属性](https://github.com/tc39/proposal-import-attributes) 语法：
 
 ```ts config.ts icon="/icons/typescript.svg"
 import config from "./config.yaml" with { type: "yaml" };
@@ -57,7 +57,7 @@ config.database.port; // => 5432
 
 ---
 
-For parsing YAML strings at runtime, use `Bun.YAML.parse()`:
+要在运行时解析 YAML 字符串，请使用 `Bun.YAML.parse()`：
 
 ```ts config.ts icon="/icons/typescript.svg"
 const yamlString = `
@@ -75,9 +75,9 @@ console.log(data.hobbies); // => ["reading", "coding"]
 
 ---
 
-## TypeScript Support
+## TypeScript 支持
 
-To add TypeScript support for your YAML imports, create a declaration file with `.d.ts` appended to the YAML filename (e.g., `config.yaml` → `config.yaml.d.ts`);
+要为您的 YAML 导入添加 TypeScript 支持，请创建一个声明文件，文件名以 `.d.ts` 结尾（例如，`config.yaml` → `config.yaml.d.ts`）；
 
 ```ts config.yaml.d.ts icon="/icons/typescript.svg"
 const contents: {
@@ -101,4 +101,4 @@ export = contents;
 
 ---
 
-See [Docs > API > YAML](/runtime/yaml) for complete documentation on YAML support in Bun.
+请参阅 [文档 > API > YAML](/runtime/yaml) 了解 Bun 中 YAML 支持的完整文档。

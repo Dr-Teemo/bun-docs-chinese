@@ -1,16 +1,16 @@
 ---
-title: Generate code coverage reports with the Bun test runner
-sidebarTitle: Coverage reports
+title: 使用 Bun 测试运行器生成代码覆盖率报告
+sidebarTitle: 覆盖率报告
 mode: center
 ---
 
-Bun's test runner supports built-in _code coverage reporting_. This makes it easy to see how much of the codebase is covered by tests and find areas that are not currently well-tested.
+Bun 的测试运行器支持内置的_代码覆盖率报告_。这使得很容易看到代码库中有多少代码被测试覆盖，以及找到当前测试不足的区域。
 
 ---
 
-Pass the `--coverage` flag to `bun test` to enable this feature. This will print a coverage report after the test run.
+传递 `--coverage` 标志给 `bun test` 来启用此功能。这将在测试运行后打印覆盖率报告。
 
-The coverage report lists the source files that were executed during the test run, the percentage of functions and lines that were executed, and the line ranges that were not executed during the run.
+覆盖率报告列出了在测试运行期间执行的源文件、执行的函数和行的百分比，以及在运行期间未执行的行范围。
 
 ```sh terminal icon="terminal"
 bun test --coverage
@@ -37,13 +37,13 @@ All files    |   66.67 |   77.78 |
 
 ---
 
-To always enable coverage reporting by default, add the following line to your `bunfig.toml`:
+要始终默认启用覆盖率报告，请将以下行添加到您的 [bunfig.toml] 中：
 
 ```toml bunfig.toml icon="settings"
 [test]
-coverage = true # always enable coverage
+coverage = true # 始终启用覆盖率
 ```
 
 ---
 
-Refer to [Docs > Test runner > Coverage](/test/code-coverage) for complete documentation on code coverage reporting in Bun.
+请参阅 [文档 > 测试运行器 > 覆盖率](/test/code-coverage) 了解 Bun 中代码覆盖率报告的完整文档。

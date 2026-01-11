@@ -1,24 +1,24 @@
 ---
 title: Glob
-description: Use Bun's fast native implementation of file globbing
+description: 使用 Bun 快速的原生文件通配实现
 ---
 
-## Quickstart
+## 快速入门
 
-**Scan a directory for files matching `*.ts`**:
+**扫描目录以查找匹配 `*.ts` 的文件**：
 
 ```ts
 import { Glob } from "bun";
 
 const glob = new Glob("**/*.ts");
 
-// Scans the current working directory and each of its sub-directories recursively
+// 扫描当前工作目录及其每个子目录
 for await (const file of glob.scan(".")) {
   console.log(file); // => "index.ts"
 }
 ```
 
-**Match a string against a glob pattern**:
+**将字符串与通配模式匹配**：
 
 ```ts
 import { Glob } from "bun";
@@ -29,7 +29,7 @@ glob.match("index.ts"); // => true
 glob.match("index.js"); // => false
 ```
 
-`Glob` is a class which implements the following interface:
+`Glob` 是一个实现以下接口的类：
 
 ```ts
 class Glob {
@@ -41,40 +41,40 @@ class Glob {
 
 interface ScanOptions {
   /**
-   * The root directory to start matching from. Defaults to `process.cwd()`
+   * 开始匹配的根目录。默认为 `process.cwd()`
    */
   cwd?: string;
 
   /**
-   * Allow patterns to match entries that begin with a period (`.`).
+   * 允许模式匹配以点（`.`）开头的条目。
    *
    * @default false
    */
   dot?: boolean;
 
   /**
-   * Return the absolute path for entries.
+   * 为条目返回绝对路径。
    *
    * @default false
    */
   absolute?: boolean;
 
   /**
-   * Indicates whether to traverse descendants of symbolic link directories.
+   * 指示是否遍历符号链接目录的后代。
    *
    * @default false
    */
   followSymlinks?: boolean;
 
   /**
-   * Throw an error when symbolic link is broken
+   * 符号链接损坏时抛出错误
    *
    * @default false
    */
   throwErrorOnBrokenSymlink?: boolean;
 
   /**
-   * Return only files.
+   * 仅返回文件。
    *
    * @default true
    */
@@ -82,11 +82,11 @@ interface ScanOptions {
 }
 ```
 
-## Supported Glob Patterns
+## 支持的通配模式
 
-Bun supports the following glob patterns:
+Bun 支持以下通配模式：
 
-### `?` - Match any single character
+### `?` - 匹配任意单个字符
 
 ```ts
 const glob = new Glob("???.ts");
@@ -94,15 +94,16 @@ glob.match("foo.ts"); // => true
 glob.match("foobar.ts"); // => false
 ```
 
-### `*` - Matches zero or more characters, except for path separators (`/` or `\`)
+### `*` - 匹配零个或多个字符，但不包括路径分隔符（`/` 或 `\`）
 
 ```ts
 const glob = new Glob("*.ts");
+
 glob.match("index.ts"); // => true
 glob.match("src/index.ts"); // => false
 ```
 
-### `**` - Match any number of characters including `/`
+### `**` - 匹配任意数量的字符，包括 `/`
 
 ```ts
 const glob = new Glob("**/*.ts");
@@ -111,7 +112,7 @@ glob.match("src/index.ts"); // => true
 glob.match("src/index.js"); // => false
 ```
 
-### `[ab]` - Matches one of the characters contained in the brackets, as well as character ranges
+### `[ab]` - 匹配括号中包含的字符之一，以及字符范围
 
 ```ts
 const glob = new Glob("ba[rz].ts");
@@ -120,7 +121,7 @@ glob.match("baz.ts"); // => true
 glob.match("bat.ts"); // => false
 ```
 
-You can use character ranges (e.g `[0-9]`, `[a-z]`) as well as the negation operators `^` or `!` to match anything _except_ the characters contained within the braces (e.g `[^ab]`, `[!a-z]`)
+您可以使用字符范围（例如 `[0-9]`、`[a-z]`）以及否定运算符 `^` 或 `!` 来匹配除括号内字符之外的任何内容（例如 `[^ab]`、`[!a-z]`）
 
 ```ts
 const glob = new Glob("ba[a-z][0-9][^4-9].ts");
@@ -131,7 +132,7 @@ glob.match("bat24.ts"); // => false
 glob.match("ba0a8.ts"); // => false
 ```
 
-### `{a,b,c}` - Match any of the given patterns
+### `{a,b,c}` - 匹配给定模式中的任何一个
 
 ```ts
 const glob = new Glob("{a,b,c}.ts");
@@ -141,9 +142,9 @@ glob.match("c.ts"); // => true
 glob.match("d.ts"); // => false
 ```
 
-These match patterns can be deeply nested (up to 10 levels), and contain any of the wildcards from above.
+这些匹配模式可以深度嵌套（最多 10 层），并且可以包含上述任何通配符。
 
-### `!` - Negates the result at the start of a pattern
+### `!` - 否定模式开头的结果
 
 ```ts
 const glob = new Glob("!index.ts");
@@ -151,7 +152,7 @@ glob.match("index.ts"); // => false
 glob.match("foo.ts"); // => true
 ```
 
-### `\` - Escapes any of the special characters above
+### `\` - 转义上述任何特殊字符
 
 ```ts
 const glob = new Glob("\\!index.ts");
@@ -159,23 +160,23 @@ glob.match("!index.ts"); // => true
 glob.match("index.ts"); // => false
 ```
 
-## Node.js `fs.glob()` compatibility
+## Node.js `fs.glob()` 兼容性
 
-Bun also implements Node.js's `fs.glob()` functions with additional features:
+Bun 还实现了 Node.js 的 `fs.glob()` 函数并增加了额外功能：
 
 ```ts
 import { glob, globSync, promises } from "node:fs";
 
-// Array of patterns
+// 模式数组
 const files = await promises.glob(["**/*.ts", "**/*.js"]);
 
-// Exclude patterns
+// 排除模式
 const filtered = await promises.glob("**/*", {
   exclude: ["node_modules/**", "*.test.*"],
 });
 ```
 
-All three functions (`fs.glob()`, `fs.globSync()`, `fs.promises.glob()`) support:
+所有三个函数（`fs.glob()`、`fs.globSync()`、`fs.promises.glob()`）都支持：
 
-- Array of patterns as the first argument
-- `exclude` option to filter results
+- 模式数组作为第一个参数
+- `exclude` 选项来过滤结果

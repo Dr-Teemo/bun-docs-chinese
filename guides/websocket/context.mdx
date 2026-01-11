@@ -1,12 +1,12 @@
 ---
-title: Set per-socket contextual data on a WebSocket
-sidebarTitle: Contextual data
+title: 在 WebSocket 上设置每个套接字的上下文数据
+sidebarTitle: 上下文数据
 mode: center
 ---
 
-When building a WebSocket server, it's typically necessary to store some identifying information or context associated with each connected client.
+在构建 WebSocket 服务器时，通常需要存储与每个连接客户端相关的一些标识信息或上下文。
 
-With [Bun.serve()](/runtime/http/websockets#contextual-data), this "contextual data" is set when the connection is initially upgraded by passing a `data` parameter in the `server.upgrade()` call.
+使用 [Bun.serve()](/runtime/http/websockets#contextual-data)，当连接最初通过在 `server.upgrade()` 调用中传递 [data] 参数进行升级时，这个"上下文数据"会被设置。
 
 ```ts server.ts icon="/icons/typescript.svg"
 Bun.serve({
@@ -18,17 +18,16 @@ Bun.serve({
     });
     if (success) return undefined;
 
-    // handle HTTP request normally
+    // 正常处理 HTTP 请求
     // ...
   },
   websocket: {
-    // TypeScript: specify the type of ws.data like this
+    // TypeScript: 像这样指定 ws.data 的类型
     data: {} as { socketId: number },
 
-    // define websocket handlers
+    // 定义 websocket 处理程序
     async message(ws, message) {
-      // the contextual data is available as the `data` property
-      // on the WebSocket instance
+      // 上下文数据作为 WebSocket 实例上的 [data] 属性可用
       console.log(`Received ${message} from ${ws.data.socketId}}`);
     },
   },
@@ -37,7 +36,7 @@ Bun.serve({
 
 ---
 
-It's common to read cookies/headers from the incoming request to identify the connecting client.
+通常需要从传入的请求中读取 cookies/headers 以识别连接的客户端。
 
 ```ts server.ts icon="/icons/typescript.svg"
 type WebSocketData = {
@@ -48,7 +47,7 @@ type WebSocketData = {
 
 Bun.serve({
   async fetch(req, server) {
-    // use a library to parse cookies
+    // 使用库来解析 cookies
     const cookies = parseCookies(req.headers.get("Cookie"));
     const token = cookies["X-Token"];
     const user = await getUserFromToken(token);
@@ -64,11 +63,11 @@ Bun.serve({
     if (upgraded) return undefined;
   },
   websocket: {
-    // TypeScript: specify the type of ws.data like this
+    // TypeScript: 像这样指定 ws.data 的类型
     data: {} as WebSocketData,
 
     async message(ws, message) {
-      // save the message to a database
+      // 将消息保存到数据库
       await saveMessageToDatabase({
         message: String(message),
         userId: ws.data.userId,

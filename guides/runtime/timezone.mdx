@@ -1,15 +1,15 @@
 ---
-title: Set a time zone in Bun
-sidebarTitle: Set time zone
+title: 在 Bun 中设置时区
+sidebarTitle: 设置时区
 mode: center
 ---
 
-Bun supports programmatically setting a default time zone for the lifetime of the `bun` process. To do set, set the value of the `TZ` environment variable to a [valid timezone identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+Bun 支持在 `bun` 进程的生命周期内以编程方式设置默认时区。为此，请将 `TZ` 环境变量的值设置为 [有效的时区标识符](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)。
 
 <Note>
-When running a file with `bun`, the timezone defaults to your system's configured local time zone.
+运行 `bun` 文件时，默认时区为系统配置的本地时区。
 
-When running tests with `bun test`, the timezone is set to `UTC` to make tests more deterministic.
+使用 `bun test` 运行测试时，时区被设置为 `UTC`，以使测试更具确定性。
 
 </Note>
 
@@ -19,7 +19,7 @@ process.env.TZ = "America/New_York";
 
 ---
 
-Alternatively, this can be set from the command line when running a Bun command.
+或者，这也可以在运行 Bun 命令时从命令行设置。
 
 ```sh terminal icon="terminal"
 TZ=America/New_York bun run dev
@@ -27,7 +27,7 @@ TZ=America/New_York bun run dev
 
 ---
 
-Once `TZ` is set, any `Date` instances will have that time zone. By default all dates use your system's configured time zone.
+一旦设置了 `TZ`，任何 `Date` 实例都将具有该时区。默认情况下，所有日期使用系统配置的时区。
 
 ```ts process.ts icon="/icons/typescript.svg"
 new Date().getHours(); // => 18

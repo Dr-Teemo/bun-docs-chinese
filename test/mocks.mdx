@@ -1,13 +1,13 @@
 ---
-title: "Mocks"
-description: "Learn how to create and use mock functions, spies, and module mocks in Bun tests"
+title: "模拟"
+description: "学习如何在 Bun 测试中创建和使用模拟函数、间谍和模块模拟"
 ---
 
-Mocking is essential for testing by allowing you to replace dependencies with controlled implementations. Bun provides comprehensive mocking capabilities including function mocks, spies, and module mocks.
+模拟是测试的关键，因为它允许您用受控的实现替换依赖项。Bun 提供了全面的模拟功能，包括函数模拟、间谍和模块模拟。
 
-## Basic Function Mocks
+## 基础函数模拟
 
-Create mocks with the `mock` function.
+使用 [mock] 函数创建模拟。
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
@@ -22,9 +22,9 @@ test("random", () => {
 });
 ```
 
-### Jest Compatibility
+### Jest 兼容性
 
-Alternatively, you can use the `jest.fn()` function, as in Jest. It behaves identically.
+另外，您可以使用 Jest 中的 [jest.fn()] 函数。它的行为完全相同。
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, jest } from "bun:test";
@@ -39,9 +39,9 @@ test("random", () => {
 });
 ```
 
-## Mock Function Properties
+## 模拟函数属性
 
-The result of `mock()` is a new function that's been decorated with some additional properties.
+[mock()] 的结果是一个被添加了一些额外属性的新函数。
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { mock } from "bun:test";
@@ -61,36 +61,36 @@ random.mock.results;
 //  ]
 ```
 
-### Available Properties and Methods
+### 可用属性和方法
 
-The following properties and methods are implemented on mock functions:
+以下属性和方法在模拟函数上实现：
 
-| Property/Method                           | Description                                    |
-| ----------------------------------------- | ---------------------------------------------- |
-| `mockFn.getMockName()`                    | Returns the mock name                          |
-| `mockFn.mock.calls`                       | Array of call arguments for each invocation    |
-| `mockFn.mock.results`                     | Array of return values for each invocation     |
-| `mockFn.mock.instances`                   | Array of `this` contexts for each invocation   |
-| `mockFn.mock.contexts`                    | Array of `this` contexts for each invocation   |
-| `mockFn.mock.lastCall`                    | Arguments of the most recent call              |
-| `mockFn.mockClear()`                      | Clears call history                            |
-| `mockFn.mockReset()`                      | Clears call history and removes implementation |
-| `mockFn.mockRestore()`                    | Restores original implementation               |
-| `mockFn.mockImplementation(fn)`           | Sets a new implementation                      |
-| `mockFn.mockImplementationOnce(fn)`       | Sets implementation for next call only         |
-| `mockFn.mockName(name)`                   | Sets the mock name                             |
-| `mockFn.mockReturnThis()`                 | Sets the return value to `this`                |
-| `mockFn.mockReturnValue(value)`           | Sets a return value                            |
-| `mockFn.mockReturnValueOnce(value)`       | Sets return value for next call only           |
-| `mockFn.mockResolvedValue(value)`         | Sets a resolved Promise value                  |
-| `mockFn.mockResolvedValueOnce(value)`     | Sets resolved Promise for next call only       |
-| `mockFn.mockRejectedValue(value)`         | Sets a rejected Promise value                  |
-| `mockFn.mockRejectedValueOnce(value)`     | Sets rejected Promise for next call only       |
-| `mockFn.withImplementation(fn, callback)` | Temporarily changes implementation             |
+| 属性/方法                                    | 描述                                         |
+| ------------------------------------------- | -------------------------------------------- |
+| [mockFn.getMockName()]                      | 返回模拟名称                                  |
+| [mockFn.mock.calls]                         | 每次调用的参数数组                             |
+| [mockFn.mock.results]                       | 每次调用的返回值数组                           |
+| [mockFn.mock.instances]                     | 每次调用的 `this` 上下文数组                   |
+| [mockFn.mock.contexts]                      | 每次调用的 `this` 上下文数组                   |
+| [mockFn.mock.lastCall]                      | 最近一次调用的参数                             |
+| [mockFn.mockClear()]                        | 清除调用历史                                  |
+| [mockFn.mockReset()]                        | 清除调用历史并删除实现                         |
+| [mockFn.mockRestore()]                      | 恢复原始实现                                  |
+| [mockFn.mockImplementation(fn)]             | 设置新实现                                    |
+| [mockFn.mockImplementationOnce(fn)]         | 仅为下次调用设置实现                           |
+| [mockFn.mockName(name)]                     | 设置模拟名称                                  |
+| [mockFn.mockReturnThis()]                   | 设置返回值为 `this`                           |
+| [mockFn.mockReturnValue(value)]             | 设置返回值                                    |
+| [mockFn.mockReturnValueOnce(value)]         | 仅为下次调用设置返回值                         |
+| [mockFn.mockResolvedValue(value)]           | 设置解析的 Promise 值                         |
+| [mockFn.mockResolvedValueOnce(value)]       | 仅为下次调用设置解析的 Promise                 |
+| [mockFn.mockRejectedValue(value)]           | 设置拒绝的 Promise 值                         |
+| [mockFn.mockRejectedValueOnce(value)]       | 仅为下次调用设置拒绝的 Promise                 |
+| [mockFn.withImplementation(fn, callback)]   | 临时更改实现                                  |
 
-### Practical Examples
+### 实际示例
 
-#### Basic Mock Usage
+#### 基础模拟用法
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
@@ -98,20 +98,20 @@ import { test, expect, mock } from "bun:test";
 test("mock function behavior", () => {
   const mockFn = mock((x: number) => x * 2);
 
-  // Call the mock
+  // 调用模拟
   const result1 = mockFn(5);
   const result2 = mockFn(10);
 
-  // Verify calls
+  // 验证调用
   expect(mockFn).toHaveBeenCalledTimes(2);
   expect(mockFn).toHaveBeenCalledWith(5);
   expect(mockFn).toHaveBeenLastCalledWith(10);
 
-  // Check results
+  // 检查结果
   expect(result1).toBe(10);
   expect(result2).toBe(20);
 
-  // Inspect call history
+  // 检查调用历史
   expect(mockFn.mock.calls).toEqual([[5], [10]]);
   expect(mockFn.mock.results).toEqual([
     { type: "return", value: 10 },
@@ -120,7 +120,7 @@ test("mock function behavior", () => {
 });
 ```
 
-#### Dynamic Mock Implementations
+#### 动态模拟实现
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
@@ -128,7 +128,7 @@ import { test, expect, mock } from "bun:test";
 test("dynamic mock implementations", () => {
   const mockFn = mock();
 
-  // Set different implementations
+  // 设置不同的实现
   mockFn.mockImplementationOnce(() => "first");
   mockFn.mockImplementationOnce(() => "second");
   mockFn.mockImplementation(() => "default");
@@ -136,11 +136,11 @@ test("dynamic mock implementations", () => {
   expect(mockFn()).toBe("first");
   expect(mockFn()).toBe("second");
   expect(mockFn()).toBe("default");
-  expect(mockFn()).toBe("default"); // Uses default implementation
+  expect(mockFn()).toBe("default"); // 使用默认实现
 });
 ```
 
-#### Async Mocks
+#### 异步模拟
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
@@ -148,14 +148,14 @@ import { test, expect, mock } from "bun:test";
 test("async mock functions", async () => {
   const asyncMock = mock();
 
-  // Mock resolved values
+  // 模拟解析值
   asyncMock.mockResolvedValueOnce("first result");
   asyncMock.mockResolvedValue("default result");
 
   expect(await asyncMock()).toBe("first result");
   expect(await asyncMock()).toBe("default result");
 
-  // Mock rejected values
+  // 模拟拒绝值
   const rejectMock = mock();
   rejectMock.mockRejectedValue(new Error("Mock error"));
 
@@ -163,9 +163,9 @@ test("async mock functions", async () => {
 });
 ```
 
-## Spies with spyOn()
+## 使用 spyOn() 创建间谍
 
-It's possible to track calls to a function without replacing it with a mock. Use `spyOn()` to create a spy; these spies can be passed to `.toHaveBeenCalled()` and `.toHaveBeenCalledTimes()`.
+可以跟踪函数调用而不将其替换为模拟。使用 [spyOn()] 创建间谍；这些间谍可以传递给 [.toHaveBeenCalled()] 和 [.toHaveBeenCalledTimes()]。
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, spyOn } from "bun:test";
@@ -186,19 +186,19 @@ test("spyon", () => {
 });
 ```
 
-### Advanced Spy Usage
+### 高级间谍用法
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, spyOn, afterEach } from "bun:test";
 
 class UserService {
   async getUser(id: string) {
-    // Original implementation
+    // 原始实现
     return { id, name: `User ${id}` };
   }
 
   async saveUser(user: any) {
-    // Original implementation
+    // 原始实现
     return { ...user, saved: true };
   }
 }
@@ -206,26 +206,26 @@ class UserService {
 const userService = new UserService();
 
 afterEach(() => {
-  // Restore all spies after each test
+  // 在每个测试后恢复所有间谍
   jest.restoreAllMocks();
 });
 
 test("spy on service methods", async () => {
-  // Spy without changing implementation
+  // 间谍而不更改实现
   const getUserSpy = spyOn(userService, "getUser");
   const saveUserSpy = spyOn(userService, "saveUser");
 
-  // Use the service normally
+  // 正常使用服务
   const user = await userService.getUser("123");
   await userService.saveUser(user);
 
-  // Verify calls
+  // 验证调用
   expect(getUserSpy).toHaveBeenCalledWith("123");
   expect(saveUserSpy).toHaveBeenCalledWith(user);
 });
 
 test("spy with mock implementation", async () => {
-  // Spy and override implementation
+  // 间谍并覆盖实现
   const getUserSpy = spyOn(userService, "getUser").mockResolvedValue({
     id: "123",
     name: "Mocked User",
@@ -238,9 +238,9 @@ test("spy with mock implementation", async () => {
 });
 ```
 
-## Module Mocks with mock.module()
+## 使用 mock.module() 模拟模块
 
-Module mocking lets you override the behavior of a module. Use `mock.module(path: string, callback: () => Object)` to mock a module.
+模块模拟允许您覆盖模块的行为。使用 `mock.module(path: string, callback: () => Object)` 来模拟模块。
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
@@ -260,16 +260,16 @@ test("mock.module", async () => {
 });
 ```
 
-Like the rest of Bun, module mocks support both `import` and `require`.
+与其他 Bun 功能一样，模块模拟同时支持 [import] 和 [require]。
 
-### Overriding Already Imported Modules
+### 覆盖已导入的模块
 
-If you need to override a module that's already been imported, there's nothing special you need to do. Just call `mock.module()` and the module will be overridden.
+如果您需要覆盖已导入的模块，无需特殊操作。只需调用 `mock.module()`，模块就会被覆盖。
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
 
-// The module we're going to mock is here:
+// 我们要模拟的模块在这里：
 import { foo } from "./module";
 
 test("mock.module", async () => {
@@ -277,24 +277,24 @@ test("mock.module", async () => {
   expect(foo).toBe("bar");
   expect(cjs.foo).toBe("bar");
 
-  // We update it here:
+  // 我们在这里更新它：
   mock.module("./module", () => {
     return {
       foo: "baz",
     };
   });
 
-  // And the live bindings are updated.
+  // 活跃绑定也被更新了。
   expect(foo).toBe("baz");
 
-  // The module is also updated for CJS.
+  // CJS 的模块也被更新了。
   expect(cjs.foo).toBe("baz");
 });
 ```
 
-### Hoisting & Preloading
+### 提升和预加载
 
-If you need to ensure a module is mocked before it's imported, you should use `--preload` to load your mocks before your tests run.
+如果您需要确保模块在导入前被模拟，应使用 `--preload` 在测试运行前加载您的模拟。
 
 ```ts title="my-preload.ts" icon="/icons/typescript.svg"
 import { mock } from "bun:test";
@@ -310,30 +310,30 @@ mock.module("./module", () => {
 bun test --preload ./my-preload
 ```
 
-To make your life easier, you can put preload in your `bunfig.toml`:
+为了简化操作，您可以在 [bunfig.toml] 中放置预加载配置：
 
 ```toml title="bunfig.toml" icon="settings"
 [test]
-# Load these modules before running tests.
+# 在运行测试前加载这些模块。
 preload = ["./my-preload"]
 ```
 
-### Module Mock Best Practices
+### 模块模拟最佳实践
 
-#### When to Use Preload
+#### 何时使用预加载
 
-**What happens if I mock a module that's already been imported?**
+**如果我模拟一个已经被导入的模块会发生什么？**
 
-If you mock a module that's already been imported, the module will be updated in the module cache. This means that any modules that import the module will get the mocked version, BUT the original module will still have been evaluated. That means that any side effects from the original module will still have happened.
+如果您模拟一个已被导入的模块，该模块将在模块缓存中被更新。这意味着任何导入该模块的模块将获得模拟版本，但是原始模块仍会被评估。这意味着原始模块的所有副作用仍将发生。
 
-If you want to prevent the original module from being evaluated, you should use `--preload` to load your mocks before your tests run.
+如果您想阻止原始模块被评估，应使用 `--preload` 在测试运行前加载您的模拟。
 
-#### Practical Module Mock Examples
+#### 实际模块模拟示例
 
 ```ts title="api-client.test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock, beforeEach } from "bun:test";
 
-// Mock the API client module
+// 模拟 API 客户端模块
 mock.module("./api-client", () => ({
   fetchUser: mock(async (id: string) => ({ id, name: `User ${id}` })),
   createUser: mock(async (user: any) => ({ ...user, id: "new-id" })),
@@ -352,12 +352,12 @@ test("user service with mocked API", async () => {
 });
 ```
 
-#### Mocking External Dependencies
+#### 模拟外部依赖
 
 ```ts title="database.test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
 
-// Mock external database library
+// 模拟外部数据库库
 mock.module("pg", () => ({
   Client: mock(function () {
     return {
@@ -380,11 +380,11 @@ test("database operations", async () => {
 });
 ```
 
-## Global Mock Functions
+## 全局模拟函数
 
-### Clear All Mocks
+### 清除所有模拟
 
-Reset all mock function state (calls, results, etc.) without restoring their original implementation:
+重置所有模拟函数状态（调用、结果等），但不恢复其原始实现：
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { expect, mock, test } from "bun:test";
@@ -404,17 +404,17 @@ test("clearing all mocks", () => {
   expect(random1).toHaveBeenCalledTimes(0);
   expect(random2).toHaveBeenCalledTimes(0);
 
-  // Note: implementations are preserved
+  // 注意：实现被保留
   expect(typeof random1()).toBe("number");
   expect(typeof random2()).toBe("number");
 });
 ```
 
-This resets the `.mock.calls`, `.mock.instances`, `.mock.contexts`, and `.mock.results` properties of all mocks, but unlike `mock.restore()`, it does not restore the original implementation.
+这将重置所有模拟的 [.mock.calls]、[.mock.instances]、[.mock.contexts] 和 [.mock.results]属性，但与 [mock.restore()]不同，它不会恢复原始实现。
 
-### Restore All Mocks
+### 恢复所有模拟
 
-Instead of manually restoring each mock individually with `mockFn.mockRestore()`, restore all mocks with one command by calling `mock.restore()`. Doing so does not reset the value of modules overridden with `mock.module()`.
+与其单独使用 [mockFn.mockRestore()] 恢复每个模拟，不如通过调用 [mock.restore()] 用一条命令恢复所有模拟。这样做不会重置使用 `mock.module()` 覆盖的模块的值。
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { expect, mock, spyOn, test } from "bun:test";
@@ -428,12 +428,12 @@ test("foo, bar, baz", () => {
   const barSpy = spyOn(barModule, "bar");
   const bazSpy = spyOn(bazModule, "baz");
 
-  // Original implementations still work
+  // 原始实现仍能正常工作
   expect(fooModule.foo()).toBe("foo");
   expect(barModule.bar()).toBe("bar");
   expect(bazModule.baz()).toBe("baz");
 
-  // Mock implementations
+  // 模拟实现
   fooSpy.mockImplementation(() => 42);
   barSpy.mockImplementation(() => 43);
   bazSpy.mockImplementation(() => 44);
@@ -442,7 +442,7 @@ test("foo, bar, baz", () => {
   expect(barModule.bar()).toBe(43);
   expect(bazModule.baz()).toBe(44);
 
-  // Restore all
+  // 恢复所有
   mock.restore();
 
   expect(fooModule.foo()).toBe("foo");
@@ -451,23 +451,23 @@ test("foo, bar, baz", () => {
 });
 ```
 
-Using `mock.restore()` can reduce the amount of code in your tests by adding it to `afterEach` blocks in each test file or even in your test preload code.
+通过在每个测试文件的 [afterEach] 块中甚至在您的测试预加载代码中添加 [mock.restore()]，可以减少测试中的代码量。
 
-## Vitest Compatibility
+## Vitest 兼容性
 
-For added compatibility with tests written for Vitest, Bun provides the `vi` object as an alias for parts of the Jest mocking API:
+为了增强针对 Vitest 编写的测试的兼容性，Bun 提供了 [vi] 对象作为 Jest 模拟 API 部分功能的别名：
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, vi } from "bun:test";
 
-// Using the 'vi' alias similar to Vitest
+// 使用类似 Vitest 的 'vi' 别名
 test("vitest compatibility", () => {
   const mockFn = vi.fn(() => 42);
 
   mockFn();
   expect(mockFn).toHaveBeenCalled();
 
-  // The following functions are available on the vi object:
+  // 以下函数在 vi 对象上可用：
   // vi.fn
   // vi.spyOn
   // vi.mock
@@ -476,42 +476,42 @@ test("vitest compatibility", () => {
 });
 ```
 
-This makes it easier to port tests from Vitest to Bun without having to rewrite all your mocks.
+这使得从 Vitest 到 Bun 的测试迁移更加容易，无需重写所有模拟。
 
-## Implementation Details
+## 实现细节
 
-Understanding how `mock.module()` works helps you use it more effectively:
+了解 `mock.module()` 如何工作有助于您更有效地使用它：
 
-### Cache Interaction
+### 缓存交互
 
-Module mocks interact with both ESM and CommonJS module caches.
+模块模拟与 ESM 和 CommonJS 模块缓存交互。
 
-### Lazy Evaluation
+### 惰性评估
 
-The mock factory callback is only evaluated when the module is actually imported or required.
+只有在实际导入或需要模块时才会评估模拟工厂回调。
 
-### Path Resolution
+### 路径解析
 
-Bun automatically resolves the module specifier as though you were doing an import, supporting:
+Bun 自动解析模块说明符，就像您在做导入一样，支持：
 
-- Relative paths (`'./module'`)
-- Absolute paths (`'/path/to/module'`)
-- Package names (`'lodash'`)
+- 相对路径 (`'./module'`)
+- 绝对路径 (`'/path/to/module'`)
+- 包名 (`'lodash'`)
 
-### Import Timing Effects
+### 导入时机效果
 
-- **When mocking before first import**: No side effects from the original module occur
-- **When mocking after import**: The original module's side effects have already happened
+- **在首次导入前模拟**：原始模块不会产生副作用
+- **在导入后模拟**：原始模块的副作用已经发生
 
-For this reason, using `--preload` is recommended for mocks that need to prevent side effects.
+因此，对于需要防止副作用的模拟，建议使用 `--preload`。
 
-### Live Bindings
+### 活跃绑定
 
-Mocked ESM modules maintain live bindings, so changing the mock will update all existing imports.
+模拟的 ESM 模块保持活跃绑定，因此更改模拟将更新所有现有导入。
 
-## Advanced Patterns
+## 高级模式
 
-### Factory Functions
+### 工厂函数
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { mock } from "bun:test";
@@ -532,7 +532,7 @@ const mockUserService = {
 };
 ```
 
-### Conditional Mocking
+### 条件模拟
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { test, expect, mock } from "bun:test";
@@ -555,13 +555,13 @@ test("conditional API usage", async () => {
 });
 ```
 
-### Mock Cleanup Patterns
+### 模拟清理模式
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 import { afterEach, beforeEach } from "bun:test";
 
 beforeEach(() => {
-  // Set up common mocks
+  // 设置通用模拟
   mock.module("./logger", () => ({
     log: mock(() => {}),
     error: mock(() => {}),
@@ -570,34 +570,34 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // Clean up all mocks
+  // 清理所有模拟
   mock.restore();
   mock.clearAllMocks();
 });
 ```
 
-## Best Practices
+## 最佳实践
 
-### Keep Mocks Simple
+### 保持模拟简单
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
-// Good: Simple, focused mock
+// 好：简单、专注的模拟
 const mockUserApi = {
   getUser: mock(async id => ({ id, name: "Test User" })),
 };
 
-// Avoid: Overly complex mock behavior
+// 避免：过于复杂的模拟行为
 const complexMock = mock(input => {
   if (input.type === "A") {
     return processTypeA(input);
   } else if (input.type === "B") {
     return processTypeB(input);
   }
-  // ... lots of complex logic
+  // ... 大量复杂逻辑
 });
 ```
 
-### Use Type-Safe Mocks
+### 使用类型安全的模拟
 
 ```ts
 interface UserService {
@@ -611,7 +611,7 @@ const mockUserService: UserService = {
 };
 ```
 
-### Test Mock Behavior
+### 测试模拟行为
 
 ```ts title="test.ts" icon="/icons/typescript.svg"
 test("service calls API correctly", async () => {
@@ -620,18 +620,18 @@ test("service calls API correctly", async () => {
   const service = new UserService(mockApi);
   await service.getUser("123");
 
-  // Verify the mock was called correctly
+  // 验证模拟被正确调用
   expect(mockApi.fetchUser).toHaveBeenCalledWith("123");
   expect(mockApi.fetchUser).toHaveBeenCalledTimes(1);
 });
 ```
 
-## Notes
+## 注意事项
 
-### Auto-mocking
+### 自动模拟
 
-`__mocks__` directory and auto-mocking are not supported yet. If this is blocking you from switching to Bun, please [file an issue](https://github.com/oven-sh/bun/issues).
+`__mocks__` 目录和自动模拟尚未支持。如果这阻碍您切换到 Bun，请 [提交问题](https://github.com/oven-sh/bun/issues)。
 
 ### ESM vs CommonJS
 
-Module mocks have different implementations for ESM and CommonJS modules. For ES Modules, Bun has added patches to JavaScriptCore that allow Bun to override export values at runtime and update live bindings recursively.
+模块模拟对 ESM 和 CommonJS 模块有不同的实现。对于 ES 模块，Bun 在 JavaScriptCore 中添加了补丁，允许 Bun 在运行时覆盖导出值并递归更新活跃绑定。

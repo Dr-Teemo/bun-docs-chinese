@@ -1,10 +1,10 @@
 ---
-title: Read stdout from a child process
-sidebarTitle: Read stdout
+title: 从子进程中读取 stdout
+sidebarTitle: 读取 stdout
 mode: center
 ---
 
-When using [`Bun.spawn()`](/runtime/child-process), the `stdout` of the child process can be consumed as a `ReadableStream` via `proc.stdout`.
+当使用 [`Bun.spawn()`](/runtime/child-process) 时，子进程的 `stdout` 可以通过 `proc.stdout` 作为 `ReadableStream` 来消费。
 
 ```ts
 const proc = Bun.spawn(["echo", "hello"]);
@@ -15,7 +15,7 @@ output; // => "hello"
 
 ---
 
-To instead pipe the `stdout` of the child process to `stdout` of the parent process, set "inherit".
+要将子进程的 `stdout` 传输到父进程的 `stdout`，请设置为 "inherit"。
 
 ```ts
 const proc = Bun.spawn(["echo", "hello"], {
@@ -25,4 +25,4 @@ const proc = Bun.spawn(["echo", "hello"], {
 
 ---
 
-See [Docs > API > Child processes](/runtime/child-process) for complete documentation.
+请参阅 [文档 > API > 子进程](/runtime/child-process) 以获取完整文档。

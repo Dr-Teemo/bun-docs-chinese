@@ -1,12 +1,12 @@
 ---
-title: Write a Response to a file
-sidebarTitle: Write Response
+title: 将响应写入文件
+sidebarTitle: 写入响应
 mode: center
 ---
 
-This code snippet writes a `Response` to disk at a particular path. Bun will consume the `Response` body according to its `Content-Type` header.
+此代码片段将 `Response` 写入特定路径的磁盘。Bun 将根据其 `Content-Type` 头来消费 [Response] 主体。
 
-It uses the fast [`Bun.write()`](/runtime/file-io#writing-files-bun-write) API to efficiently write data to disk. The first argument is a _destination_, like an absolute path or `BunFile` instance. The second argument is the _data_ to write.
+它使用快速的 [`Bun.write()`](/runtime/file-io#writing-files-bun-write) API 高效地将数据写入磁盘。第一个参数是_目标_，比如绝对路径或 [BunFile] 实例。第二个参数是要写入的_数据_。
 
 ```ts
 const result = await fetch("https://bun.com");
@@ -16,4 +16,4 @@ await Bun.write(path, result);
 
 ---
 
-See [Docs > API > File I/O](/runtime/file-io#writing-files-bun-write) for complete documentation of `Bun.write()`.
+请参阅 [文档 > API > 文件 I/O](/runtime/file-io#writing-files-bun-write) 了解 `Bun.write()` 的完整文档。

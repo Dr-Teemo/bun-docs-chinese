@@ -1,9 +1,9 @@
 ---
-title: "Fullstack dev server"
-description: "Build fullstack applications with Bun's integrated dev server that bundles frontend assets and handles API routes"
+title: "全栈开发服务器"
+description: "使用Bun的集成开发服务器构建全栈应用程序，该服务器打包前端资源并处理API路由"
 ---
 
-To get started, import HTML files and pass them to the `routes` option in `Bun.serve()`.
+要开始，导入HTML文件并将它们传递给`Bun.serve()`中的`routes`选项。
 
 ```ts title="app.ts" icon="/icons/typescript.svg"
 import { serve } from "bun";
@@ -12,16 +12,16 @@ import homepage from "./index.html";
 
 const server = serve({
   routes: {
-    // ** HTML imports **
-    // Bundle & route index.html to "/". This uses HTMLRewriter to scan
-    // the HTML for `<script>` and `<link>` tags, runs Bun's JavaScript
-    // & CSS bundler on them, transpiles any TypeScript, JSX, and TSX,
-    // downlevels CSS with Bun's CSS parser and serves the result.
+    // ** HTML导入 **
+    // 将index.html打包并路由到"/"。这使用HTMLRewriter扫描
+    // HTML中的`<script>`和`<link>`标签，运行Bun的JavaScript
+    // 和CSS打包器，转译任何TypeScript、JSX和TSX，
+    // 使用Bun的CSS解析器降级CSS，并提供结果。
     "/": homepage,
-    // Bundle & route dashboard.html to "/dashboard"
+    // 将dashboard.html打包并路由到"/dashboard"
     "/dashboard": dashboard,
 
-    // ** API endpoints ** (Bun v1.2.3+ required)
+    // ** API端点 ** (需要Bun v1.2.3+)
     "/api/users": {
       async GET(req) {
         const users = await sql`SELECT * FROM users`;
@@ -40,9 +40,9 @@ const server = serve({
     },
   },
 
-  // Enable development mode for:
-  // - Detailed error messages
-  // - Hot reloading (Bun v1.2.3+ required)
+  // 启用开发模式以获得：
+  // - 详细的错误消息
+  // - 热重载（需要Bun v1.2.3+）
   development: true,
 });
 
@@ -53,20 +53,20 @@ console.log(`Listening on ${server.url}`);
 bun run app.ts
 ```
 
-## HTML Routes
+## HTML路由
 
-### HTML Imports as Routes
+### HTML导入作为路由
 
-The web starts with HTML, and so does Bun's fullstack dev server.
+Web从HTML开始，Bun的全栈开发服务器也是如此。
 
-To specify entrypoints to your frontend, import HTML files into your JavaScript/TypeScript/TSX/JSX files.
+要指定前端的入口点，请将HTML文件导入到JavaScript/TypeScript/TSX/JSX文件中。
 
 ```ts title="app.ts" icon="/icons/typescript.svg"
 import dashboard from "./dashboard.html";
 import homepage from "./index.html";
 ```
 
-These HTML files are used as routes in Bun's dev server you can pass to `Bun.serve()`.
+这些HTML文件用作Bun开发服务器中的路由，您可以传递给`Bun.serve()`。
 
 ```ts title="app.ts" icon="/icons/typescript.svg"
 Bun.serve({
@@ -76,18 +76,18 @@ Bun.serve({
   },
 
   fetch(req) {
-    // ... api requests
+    // ... api请求
   },
 });
 ```
 
-When you make a request to `/dashboard` or `/`, Bun automatically bundles the `<script>` and `<link>` tags in the HTML files, exposes them as static routes, and serves the result.
+当您请求`/dashboard`或`/`时，Bun会自动打包HTML文件中的`<script>`和`<link>`标签，将它们作为静态路由暴露，并提供结果。
 
-### HTML Processing Example
+### HTML处理示例
 
-An `index.html` file like this:
+像这样的`index.html`文件：
 
-```html title="index.html" icon="file-code"
+``html title="index.html" icon="file-code"
 <!DOCTYPE html>
 <html>
   <head>
@@ -103,9 +103,9 @@ An `index.html` file like this:
 </html>
 ```
 
-Becomes something like this:
+变成类似这样的内容：
 
-```html title="index.html" icon="file-code"
+``html title="index.html" icon="file-code"
 <!DOCTYPE html>
 <html>
   <head>
@@ -119,9 +119,9 @@ Becomes something like this:
 </html>
 ```
 
-## React Integration
+## React集成
 
-To use React in your client-side code, import `react-dom/client` and render your app.
+要在客户端代码中使用React，请导入`react-dom/client`并渲染您的应用。
 
 <CodeGroup>
 ```ts title="src/backend.ts" icon="/icons/typescript.svg"
@@ -133,7 +133,7 @@ routes: {
 "/": dashboard,
 },
 async fetch(req) {
-// ...api requests
+// ...api请求
 return new Response("hello world");
 },
 });
@@ -180,9 +180,9 @@ export default function App() {
 
 </CodeGroup>
 
-## Development Mode
+## 开发模式
 
-When building locally, enable development mode by setting `development: true` in `Bun.serve()`.
+在本地构建时，通过在`Bun.serve()`中设置`development: true`来启用开发模式。
 
 ```ts title="src/backend.ts" icon="/icons/typescript.svg"
 import homepage from "./index.html";
@@ -197,37 +197,37 @@ Bun.serve({
   development: true,
 
   fetch(req) {
-    // ... api requests
+    // ... api请求
   },
 });
 ```
 
-### Development Mode Features
+### 开发模式特性
 
-When `development` is `true`, Bun will:
+当`development`为`true`时，Bun将：
 
-- Include the SourceMap header in the response so that devtools can show the original source code
-- Disable minification
-- Re-bundle assets on each request to a `.html` file
-- Enable hot module reloading (unless `hmr: false` is set)
-- Echo console logs from browser to terminal
+- 在响应中包含SourceMap头，以便devtools可以显示原始源代码
+- 禁用压缩
+- 在每次请求`.html`文件时重新打包资源
+- 启用热模块重载（除非设置了`hmr: false`）
+- 将浏览器的控制台日志回显到终端
 
-### Advanced Development Configuration
+### 高级开发配置
 
-`Bun.serve()` supports echoing console logs from the browser to the terminal.
+`Bun.serve()`支持将浏览器的控制台日志回显到终端。
 
-To enable this, pass `console: true` in the development object in `Bun.serve()`.
+要启用此功能，请在`Bun.serve()`的开发对象中传递`console: true`。
 
 ```ts title="src/backend.ts" icon="/icons/typescript.svg"
 import homepage from "./index.html";
 
 Bun.serve({
-  // development can also be an object.
+  // development也可以是一个对象。
   development: {
-    // Enable Hot Module Reloading
+    // 启用热模块重载
     hmr: true,
 
-    // Echo console logs from the browser to the terminal
+    // 将浏览器的控制台日志回显到终端
     console: true,
   },
 
@@ -237,32 +237,32 @@ Bun.serve({
 });
 ```
 
-When `console: true` is set, Bun will stream console logs from the browser to the terminal. This reuses the existing WebSocket connection from HMR to send the logs.
+当设置`console: true`时，Bun将从浏览器流式传输控制台日志到终端。这重用HMR的现有WebSocket连接来发送日志。
 
-### Development vs Production
+### 开发与生产
 
-| Feature             | Development           | Production  |
+| 特性             | 开发           | 生产  |
 | ------------------- | --------------------- | ----------- |
-| **Source maps**     | ✅ Enabled            | ❌ Disabled |
-| **Minification**    | ❌ Disabled           | ✅ Enabled  |
-| **Hot reloading**   | ✅ Enabled            | ❌ Disabled |
-| **Asset bundling**  | 🔄 On each request    | 💾 Cached   |
-| **Console logging** | 🖥️ Browser → Terminal | ❌ Disabled |
-| **Error details**   | 📝 Detailed           | 🔒 Minimal  |
+| **源映射**     | ✅ 启用            | ❌ 禁用 |
+| **压缩**    | ❌ 禁用           | ✅ 启用  |
+| **热重载**   | ✅ 启用            | ❌ 禁用 |
+| **资源打包**  | 🔄 每个请求    | 💾 缓存   |
+| **控制台日志** | 🖥️ 浏览器 → 终端 | ❌ 禁用 |
+| **错误详情**   | 📝 详细           | 🔒 最小  |
 
-## Production Mode
+## 生产模式
 
-Hot reloading and `development: true` helps you iterate quickly, but in production, your server should be as fast as possible and have as few external dependencies as possible.
+热重载和`development: true`帮助您快速迭代，但在生产环境中，您的服务器应该尽可能快，并且外部依赖尽可能少。
 
-### Ahead of Time Bundling (Recommended)
+### 预先打包（推荐）
 
-As of Bun v1.2.17, you can use `Bun.build` or `bun build` to bundle your full-stack application ahead of time.
+从Bun v1.2.17开始，您可以使用`Bun.build`或`bun build`预先打包全栈应用程序。
 
 ```bash terminal icon="terminal"
 bun build --target=bun --production --outdir=dist ./src/index.ts
 ```
 
-When Bun's bundler sees an HTML import from server-side code, it will bundle the referenced JavaScript/TypeScript/TSX/JSX and CSS files into a manifest object that `Bun.serve()` can use to serve the assets.
+当Bun的打包器看到服务器端代码中的HTML导入时，它会将引用的JavaScript/TypeScript/TSX/JSX和CSS文件打包到一个清单对象中，`Bun.serve()`可以使用该对象来提供资源。
 
 ```ts title="src/backend.ts" icon="/icons/typescript.svg"
 import { serve } from "bun";
@@ -273,15 +273,15 @@ serve({
 });
 ```
 
-### Runtime Bundling
+### 运行时打包
 
-When adding a build step is too complicated, you can set `development: false` in `Bun.serve()`.
+当添加构建步骤过于复杂时，您可以在`Bun.serve()`中设置`development: false`。
 
-This will:
+这将：
 
-- Enable in-memory caching of bundled assets. Bun will bundle assets lazily on the first request to an `.html` file, and cache the result in memory until the server restarts.
-- Enable `Cache-Control` headers and `ETag` headers
-- Minify JavaScript/TypeScript/TSX/JSX files
+- 启用打包资源的内存缓存。Bun将在第一次请求`.html`文件时延迟打包资源，并将结果缓存在内存中，直到服务器重启。
+- 启用`Cache-Control`头和`ETag`头
+- 压缩JavaScript/TypeScript/TSX/JSX文件
 
 ```ts title="src/backend.ts" icon="/icons/typescript.svg"
 import { serve } from "bun";
@@ -292,16 +292,16 @@ serve({
     "/": homepage,
   },
 
-  // Production mode
+  // 生产模式
   development: false,
 });
 ```
 
-## API Routes
+## API路由
 
-### HTTP Method Handlers
+### HTTP方法处理器
 
-Define API endpoints with HTTP method handlers:
+使用HTTP方法处理器定义API端点：
 
 ```ts title="src/backend.ts" icon="/icons/typescript.svg"
 import { serve } from "bun";
@@ -310,27 +310,27 @@ serve({
   routes: {
     "/api/users": {
       async GET(req) {
-        // Handle GET requests
+        // 处理GET请求
         const users = await getUsers();
         return Response.json(users);
       },
 
       async POST(req) {
-        // Handle POST requests
+        // 处理POST请求
         const userData = await req.json();
         const user = await createUser(userData);
         return Response.json(user, { status: 201 });
       },
 
       async PUT(req) {
-        // Handle PUT requests
+        // 处理PUT请求
         const userData = await req.json();
         const user = await updateUser(userData);
         return Response.json(user);
       },
 
       async DELETE(req) {
-        // Handle DELETE requests
+        // 处理DELETE请求
         await deleteUser(req.params.id);
         return new Response(null, { status: 204 });
       },
@@ -339,28 +339,28 @@ serve({
 });
 ```
 
-### Dynamic Routes
+### 动态路由
 
-Use URL parameters in your routes:
+在路由中使用URL参数：
 
 ```ts title="src/backend.ts" icon="/icons/typescript.svg"
 serve({
   routes: {
-    // Single parameter
+    // 单个参数
     "/api/users/:id": async req => {
       const { id } = req.params;
       const user = await getUserById(id);
       return Response.json(user);
     },
 
-    // Multiple parameters
+    // 多个参数
     "/api/users/:userId/posts/:postId": async req => {
       const { userId, postId } = req.params;
       const post = await getPostByUser(userId, postId);
       return Response.json(post);
     },
 
-    // Wildcard routes
+    // 通配符路由
     "/api/files/*": async req => {
       const filePath = req.params["*"];
       const file = await getFile(filePath);
@@ -370,27 +370,27 @@ serve({
 });
 ```
 
-### Request Handling
+### 请求处理
 
-```ts title="src/backend.ts" icon="/icons/typescript.svg"
+``ts title="src/backend.ts" icon="/icons/typescript.svg"
 serve({
   routes: {
     "/api/data": {
       async POST(req) {
-        // Parse JSON body
+        // 解析JSON主体
         const body = await req.json();
 
-        // Access headers
+        // 访问头
         const auth = req.headers.get("Authorization");
 
-        // Access URL parameters
+        // 访问URL参数
         const { id } = req.params;
 
-        // Access query parameters
+        // 访问查询参数
         const url = new URL(req.url);
         const page = url.searchParams.get("page") || "1";
 
-        // Return response
+        // 返回响应
         return Response.json({
           message: "Data processed",
           page: parseInt(page),
@@ -402,15 +402,15 @@ serve({
 });
 ```
 
-## Plugins
+## 插件
 
-Bun's bundler plugins are also supported when bundling static routes.
+在打包静态路由时，也支持Bun的打包器插件。
 
-To configure plugins for `Bun.serve`, add a `plugins` array in the `[serve.static]` section of your `bunfig.toml`.
+要为`Bun.serve`配置插件，请在`bunfig.toml`的`[serve.static]`部分添加一个`plugins`数组。
 
-### TailwindCSS Plugin
+### TailwindCSS插件
 
-You can use TailwindCSS by installing and adding the `tailwindcss` package and `bun-plugin-tailwind` plugin.
+您可以通过安装并添加`tailwindcss`包和`bun-plugin-tailwind`插件来使用TailwindCSS。
 
 ```bash terminal icon="terminal"
 bun add tailwindcss bun-plugin-tailwind
@@ -421,9 +421,9 @@ bun add tailwindcss bun-plugin-tailwind
 plugins = ["bun-plugin-tailwind"]
 ```
 
-This will allow you to use TailwindCSS utility classes in your HTML and CSS files. All you need to do is import `tailwindcss` somewhere:
+这将允许您在HTML和CSS文件中使用TailwindCSS实用类。您只需要在某处导入`tailwindcss`：
 
-```html title="index.html" icon="file-code"
+``html title="index.html" icon="file-code"
 <!doctype html>
 <html>
   <head>
@@ -434,9 +434,9 @@ This will allow you to use TailwindCSS utility classes in your HTML and CSS file
 </html>
 ```
 
-Alternatively, you can import TailwindCSS in your CSS file:
+或者，您可以在CSS文件中导入TailwindCSS：
 
-```css title="style.css" icon="file-code"
+``css title="style.css" icon="file-code"
 @import "tailwindcss";
 
 .custom-class {
@@ -455,11 +455,11 @@ Alternatively, you can import TailwindCSS in your CSS file:
 </html>
 ```
 
-### Custom Plugins
+### 自定义插件
 
-Any JS file or module which exports a valid bundler plugin object (essentially an object with a `name` and `setup` field) can be placed inside the plugins array:
+任何导出有效打包器插件对象（本质上是一个具有`name`和`setup`字段的对象）的JS文件或模块都可以放在插件数组中：
 
-```toml title="bunfig.toml" icon="settings"
+``toml title="bunfig.toml" icon="settings"
 [serve.static]
 plugins = ["./my-plugin-implementation.ts"]
 ```
@@ -470,7 +470,7 @@ import type { BunPlugin } from "bun";
 const myPlugin: BunPlugin = {
   name: "my-custom-plugin",
   setup(build) {
-    // Plugin implementation
+    // 插件实现
     build.onLoad({ filter: /\.custom$/ }, async args => {
       const text = await Bun.file(args.path).text();
       return {
@@ -484,90 +484,88 @@ const myPlugin: BunPlugin = {
 export default myPlugin;
 ```
 
-Bun will lazily resolve and load each plugin and use them to bundle your routes.
+Bun将延迟解析和加载每个插件，并使用它们来打包您的路由。
 
 <Note>
-  This is currently in `bunfig.toml` to make it possible to know statically which plugins are in use when we eventually
-  integrate this with the `bun build` CLI. These plugins work in `Bun.build()`'s JS API, but are not yet supported in
-  the CLI.
+  目前这在`bunfig.toml`中，以便在我们最终将此功能与`bun build` CLI集成时，可以静态地知道使用了哪些插件。这些插件在`Bun.build()`的JS API中工作，但CLI中尚不支持。
 </Note>
 
-## Inline Environment Variables
+## 内联环境变量
 
-Bun can replace `process.env.*` references in your frontend JavaScript and TypeScript with their actual values at build time. Configure the `env` option in your `bunfig.toml`:
+Bun可以在构建时将前端JavaScript和TypeScript中的`process.env.*`引用替换为它们的实际值。在`bunfig.toml`中配置`env`选项：
 
-```toml title="bunfig.toml" icon="settings"
+``toml title="bunfig.toml" icon="settings"
 [serve.static]
-env = "PUBLIC_*"  # only inline env vars starting with PUBLIC_ (recommended)
-# env = "inline"  # inline all environment variables
-# env = "disable" # disable env var replacement (default)
+env = "PUBLIC_*"  # 只内联以PUBLIC_开头的环境变量（推荐）
+# env = "inline"  # 内联所有环境变量
+# env = "disable" # 禁用环境变量替换（默认）
 ```
 
 <Note>
-  This only works with literal `process.env.FOO` references, not `import.meta.env` or indirect access like `const env =
-  process.env; env.FOO`.
+  这仅适用于字面量`process.env.FOO`引用，不适用于`import.meta.env`或间接访问如`const env =
+  process.env; env.FOO`。
 
-If an environment variable is not set, you may see runtime errors like `ReferenceError: process
-  is not defined` in the browser.
+如果未设置环境变量，您可能会在浏览器中看到运行时错误，如`ReferenceError: process
+  is not defined`。
 
 </Note>
 
-See the [HTML & static sites documentation](/bundler/html-static#inline-environment-variables) for more details on build-time configuration and examples.
+有关构建时配置和示例的更多详细信息，请参见[HTML和静态站点文档](/bundler/html-static#inline-environment-variables)。
 
-## How It Works
+## 工作原理
 
-Bun uses `HTMLRewriter` to scan for `<script>` and `<link>` tags in HTML files, uses them as entrypoints for Bun's bundler, generates an optimized bundle for the JavaScript/TypeScript/TSX/JSX and CSS files, and serves the result.
+Bun使用`HTMLRewriter`扫描HTML文件中的`<script>`和`<link>`标签，将它们用作Bun打包器的入口点，为JavaScript/TypeScript/TSX/JSX和CSS文件生成优化的包，并提供结果。
 
-### Processing Pipeline
+### 处理流水线
 
 <Steps>
-<Step title="1. <script> Processing">
-- Transpiles TypeScript, JSX, and TSX in `<script>` tags
-- Bundles imported dependencies
-- Generates sourcemaps for debugging
-- Minifies when `development` is not `true` in `Bun.serve()`
+<Step title="1. <script> 处理">
+- 转译`<script>`标签中的TypeScript、JSX和TSX
+- 打包导入的依赖项
+- 生成源映射以进行调试
+- 当`Bun.serve()`中`development`不为`true`时进行压缩
 
 ```html title="index.html" icon="file-code"
 <script type="module" src="./counter.tsx"></script>
 ```
 
 </Step>
-<Step title="2. <link> Processing">
-- Processes CSS imports and `<link>` tags
-- Concatenates CSS files
-- Rewrites url and asset paths to include content-addressable hashes in URLs
+<Step title="2. <link> 处理">
+- 处理CSS导入和`<link>`标签
+- 连接CSS文件
+- 重写URL和资源路径，以便在URL中包含内容可寻址哈希
 
 ```html title="index.html" icon="file-code"
 <link rel="stylesheet" href="./styles.css" />
 ```
 
 </Step>
-<Step title="3. <img> & Asset Processing">
-- Links to assets are rewritten to include content-addressable hashes in URLs
-- Small assets in CSS files are inlined into `data:` URLs, reducing the total number of HTTP requests sent over the wire
+<Step title="3. <img> 和资源处理">
+- 重写资源链接，以便在URL中包含内容可寻址哈希
+- CSS文件中的小资源被内联到`data:` URL中，减少了传输的HTTP请求数量
 </Step>
-<Step title="4. HTML Rewriting">
-- Combines all `<script>` tags into a single `<script>` tag with a content-addressable hash in the URL
-- Combines all `<link>` tags into a single `<link>` tag with a content-addressable hash in the URL
-- Outputs a new HTML file
+<Step title="4. HTML重写">
+- 将所有`<script>`标签合并为一个包含URL中内容可寻址哈希的`<script>`标签
+- 将所有`<link>`标签合并为一个包含URL中内容可寻址哈希的`<link>`标签
+- 输出新的HTML文件
 </Step>
-<Step title="5. Serving">
-- All the output files from the bundler are exposed as static routes, using the same mechanism internally as when you pass a Response object to `static` in `Bun.serve()`.
-- This works similarly to how `Bun.build` processes HTML files.
+<Step title="5. 提供服务">
+- 打包器的所有输出文件都作为静态路由暴露，使用与将Response对象传递给`Bun.serve()`中的`static`时相同的内部机制。
+- 这类似于`Bun.build`如何处理HTML文件。
 </Step>
 </Steps>
 
-## Complete Example
+## 完整示例
 
-Here's a complete fullstack application example:
+这是一个完整的全栈应用程序示例：
 
-```ts title="server.ts" icon="/icons/typescript.svg"
+``ts title="server.ts" icon="/icons/typescript.svg"
 import { serve } from "bun";
 import { Database } from "bun:sqlite";
 import homepage from "./public/index.html";
 import dashboard from "./public/dashboard.html";
 
-// Initialize database
+// 初始化数据库
 const db = new Database("app.db");
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
@@ -580,11 +578,11 @@ db.exec(`
 
 const server = serve({
   routes: {
-    // Frontend routes
+    // 前端路由
     "/": homepage,
     "/dashboard": dashboard,
 
-    // API routes
+    // API路由
     "/api/users": {
       async GET() {
         const users = db.query("SELECT * FROM users").all();
@@ -628,7 +626,7 @@ const server = serve({
       },
     },
 
-    // Health check endpoint
+    // 健康检查端点
     "/api/health": {
       GET() {
         return Response.json({
@@ -639,13 +637,13 @@ const server = serve({
     },
   },
 
-  // Enable development mode
+  // 启用开发模式
   development: {
     hmr: true,
     console: true,
   },
 
-  // Fallback for unmatched routes
+  // 未匹配路由的回退
   fetch(req) {
     return new Response("Not Found", { status: 404 });
   },
@@ -873,9 +871,9 @@ h1 {
 }
 ```
 
-## Best Practices
+## 最佳实践
 
-### Project Structure
+### 项目结构
 
 ```
 my-app/
@@ -905,9 +903,9 @@ my-app/
 └── package.json
 ```
 
-### Environment-Based Configuration
+### 基于环境的配置
 
-```ts title="server/config.ts" icon="/icons/typescript.svg"
+``ts title="server/config.ts" icon="/icons/typescript.svg"
 export const config = {
   development: process.env.NODE_ENV !== "production",
   port: process.env.PORT || 3000,
@@ -920,9 +918,9 @@ export const config = {
 };
 ```
 
-### Error Handling
+### 错误处理
 
-```ts title="server/middleware.ts" icon="/icons/typescript.svg"
+``ts title="server/middleware.ts" icon="/icons/typescript.svg"
 export function errorHandler(error: Error, req: Request) {
   console.error("Server error:", error);
 
@@ -940,9 +938,9 @@ export function errorHandler(error: Error, req: Request) {
 }
 ```
 
-### API Response Helpers
+### API响应辅助
 
-```ts title="server/utils.ts" icon="/icons/typescript.svg"
+``ts title="server/utils.ts" icon="/icons/typescript.svg"
 export function json(data: any, status = 200) {
   return Response.json(data, { status });
 }
@@ -960,9 +958,9 @@ export function unauthorized(message = "Unauthorized") {
 }
 ```
 
-### Type Safety
+### 类型安全
 
-```ts title="types/api.ts" icon="/icons/typescript.svg"
+``ts title="types/api.ts" icon="/icons/typescript.svg"
 export interface User {
   id: number;
   name: string;
@@ -981,11 +979,11 @@ export interface ApiResponse<T> {
 }
 ```
 
-## Deployment
+## 部署
 
-### Production Build
+### 生产构建
 
-```bash terminal icon="terminal"
+``bash terminal icon="terminal"
 # Build for production
 bun build --target=bun --production --outdir=dist ./server/index.ts
 
@@ -993,9 +991,9 @@ bun build --target=bun --production --outdir=dist ./server/index.ts
 NODE_ENV=production bun dist/index.js
 ```
 
-### Docker Deployment
+### Docker部署
 
-```dockerfile title="Dockerfile" icon="docker"
+``dockerfile title="Dockerfile" icon="docker"
 FROM oven/bun:1 as base
 WORKDIR /usr/src/app
 
@@ -1019,20 +1017,20 @@ EXPOSE 3000
 CMD ["bun", "index.js"]
 ```
 
-### Environment Variables
+### 环境变量
 
-```ini title=".env.production" icon="file-code"
+``ini title=".env.production" icon="file-code"
 NODE_ENV=production
 PORT=3000
 DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
 CORS_ORIGIN=https://myapp.com
 ```
 
-## Migration from Other Frameworks
+## 从其他框架迁移
 
-### From Express + Webpack
+### 从Express + Webpack
 
-```ts title="server.ts" icon="/icons/typescript.svg"
+``ts title="server.ts" icon="/icons/typescript.svg"
 // Before (Express + Webpack)
 app.use(express.static("dist"));
 app.get("/api/users", (req, res) => {
@@ -1052,9 +1050,9 @@ serve({
 });
 ```
 
-### From Next.js API Routes
+### 从Next.js API Routes
 
-```ts title="server.ts" icon="/icons/typescript.svg"
+``ts title="server.ts" icon="/icons/typescript.svg"
 // Before (Next.js)
 export default function handler(req, res) {
   if (req.method === 'GET') {
@@ -1068,19 +1066,19 @@ export default function handler(req, res) {
 }
 ```
 
-## Limitations and Future Plans
+## 限制和未来计划
 
-### Current Limitations
+### 当前限制
 
-- `bun build` CLI integration is not yet available for fullstack apps
-- Auto-discovery of API routes is not implemented
-- Server-side rendering (SSR) is not built-in
+- `bun build` CLI集成尚未可用于全栈应用程序
+- API路由的自动发现尚未实现
+- 服务器端渲染（SSR）不是内置的
 
-### Planned Features
+### 计划中的功能
 
-- Integration with `bun build` CLI
-- File-based routing for API endpoints
-- Built-in SSR support
-- Enhanced plugin ecosystem
+- 与`bun build` CLI集成
+- 基于文件的API端点路由
+- 内置SSR支持
+- 增强的插件生态系统
 
-<Note>This is a work in progress. Features and APIs may change as Bun continues to evolve.</Note>
+<Note>Bun正在开发中。随着Bun的不断发展，功能和API可能会发生变化。</Note>

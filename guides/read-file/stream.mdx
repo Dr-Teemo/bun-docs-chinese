@@ -1,10 +1,10 @@
 ---
-title: Read a file as a ReadableStream
-sidebarTitle: Read as stream
+title: 将文件作为 ReadableStream 读取
+sidebarTitle: 作为流读取
 mode: center
 ---
 
-The `Bun.file()` function accepts a path and returns a `BunFile` instance. The `BunFile` class extends `Blob` and allows you to lazily read the file in a variety of formats. Use `.stream()` to consume the file incrementally as a `ReadableStream`.
+`Bun.file()` 函数接受一个路径并返回一个 [BunFile] 实例。[BunFile] 类扩展了 `Blob` 并允许您以多种格式延迟读取文件。使用 `.stream()` 将文件作为 `ReadableStream` 逐步消费。
 
 ```ts
 const path = "/path/to/package.json";
@@ -15,7 +15,7 @@ const stream = file.stream();
 
 ---
 
-The chunks of the stream can be consumed as an [async iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols) using `for await`.
+流的块可以使用 `for await` 作为[异步可迭代对象](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols) 消费。
 
 ```ts
 for await (const chunk of stream) {
@@ -25,4 +25,4 @@ for await (const chunk of stream) {
 
 ---
 
-Refer to the [Streams](/runtime/streams) documentation for more information on working with streams in Bun.
+有关在 Bun 中使用流的更多信息，请参阅 [流](/runtime/streams) 文档。

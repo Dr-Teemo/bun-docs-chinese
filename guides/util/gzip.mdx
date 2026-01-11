@@ -1,10 +1,10 @@
 ---
-title: Compress and decompress data with gzip
-sidebarTitle: Gzip compression
+title: 使用 gzip 压缩和解压缩数据
+sidebarTitle: Gzip 压缩
 mode: center
 ---
 
-Use `Bun.gzipSync()` to compress a `Uint8Array` with gzip.
+使用 `Bun.gzipSync()` 通过 gzip 压缩 [Uint8Array]。
 
 ```ts
 const data = Buffer.from("Hello, world!");
@@ -17,4 +17,4 @@ const decompressed = Bun.gunzipSync(compressed);
 
 ---
 
-See [Docs > API > Utils](/runtime/utils) for more useful utilities.
+请参阅 [文档 > API > 工具](/runtime/utils) 了解更多的实用工具。

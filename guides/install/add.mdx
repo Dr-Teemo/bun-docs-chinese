@@ -1,10 +1,10 @@
 ---
-title: Add a dependency
-sidebarTitle: Add a dependency
+title: 添加依赖
+sidebarTitle: 添加依赖
 mode: center
 ---
 
-To add an npm package as a dependency, use `bun add`.
+要将 npm 包添加为依赖，请使用 `bun add`。
 
 ```sh terminal icon="terminal"
 bun add zod
@@ -12,7 +12,7 @@ bun add zod
 
 ---
 
-This will add the package to `dependencies` in `package.json`. By default, the `^` range specifier will be used, to indicate that any future minor or patch versions are acceptable.
+这会将包添加到 [package.json] 中的 `dependencies`。默认情况下，将使用 `^` 范围指定符，表示任何未来的小版本或补丁版本都是可接受的。
 
 ```json package.json icon="file-json"
 {
@@ -24,7 +24,7 @@ This will add the package to `dependencies` in `package.json`. By default, the `
 
 ---
 
-To "pin" to an exact version of the package, use `--exact`. This will add the package to `dependencies` without the `^`, pinning your project to the exact version you installed.
+要"固定"到包的确切版本，请使用 `--exact`。这会将包添加到 `dependencies` 而不使用 `^`，将您的项目固定到您安装的确切版本。
 
 ```sh terminal icon="terminal"
 bun add zod --exact
@@ -32,7 +32,7 @@ bun add zod --exact
 
 ---
 
-To specify an exact version or a tag:
+要指定确切版本或标签：
 
 ```sh terminal icon="terminal"
 bun add zod@3.0.0
@@ -41,4 +41,4 @@ bun add zod@next
 
 ---
 
-See [Docs > Package manager](/pm/cli/install) for complete documentation of Bun's package manager.
+请参阅 [文档 > 包管理器](/pm/cli/install) 以获取 Bun 包管理器的完整文档。

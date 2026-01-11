@@ -1,35 +1,35 @@
 ---
 title: Cookies
-description: Work with cookies in HTTP requests and responses using Bun's built-in Cookie API.
+description: 使用Bun内置的Cookie API在HTTP请求和响应中处理cookie。
 ---
 
-Bun provides a built-in API for working with cookies in HTTP requests and responses. The `BunRequest` object includes a `cookies` property that provides a `CookieMap` for easily accessing and manipulating cookies. When using `routes`, `Bun.serve()` automatically tracks `request.cookies.set` and applies them to the response.
+Bun提供了用于在HTTP请求和响应中处理cookie的内置API。[BunRequest](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/typescript/bun-request.md#L1-L1)对象包含一个[cookies](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/bun-server.md#L188-L188)属性，该属性提供了一个[CookieMap](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/typescript/cookie-map.md#L1-L1)用于轻松访问和操作cookie。使用[routes](file:///Users/tianyufu/Desktop/mintlify_docs/docs/runtime/router.md#L64-L64)时，[Bun.serve()](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/bun-server.md#L7-L7)会自动跟踪[request.cookies.set](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/bun-request.md#L189-L189)并将它们应用到响应中。
 
-## Reading cookies
+## 读取cookies
 
-Read cookies from incoming requests using the `cookies` property on the `BunRequest` object:
+使用[BunRequest](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/typescript/bun-request.md#L1-L1)对象上的[cookies](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/bun-request.md#L188-L188)属性从传入的请求中读取cookie：
 
 ```ts
 Bun.serve({
   routes: {
     "/profile": req => {
-      // Access cookies from the request
+      // 从请求中访问cookie
       const userId = req.cookies.get("user_id");
       const theme = req.cookies.get("theme") || "light";
 
       return Response.json({
         userId,
         theme,
-        message: "Profile page",
+        message: "个人资料页面",
       });
     },
   },
 });
 ```
 
-## Setting cookies
+## 设置cookies
 
-To set cookies, use the `set` method on the `CookieMap` from the `BunRequest` object.
+要设置cookie，请使用[BunRequest](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/typescript/bun-request.md#L1-L1)对象的[CookieMap](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/typescript/cookie-map.md#L1-L1)上的[set](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/cookie-map.md#L22-L22)方法。
 
 ```ts
 Bun.serve({
@@ -37,43 +37,43 @@ Bun.serve({
     "/login": req => {
       const cookies = req.cookies;
 
-      // Set a cookie with various options
+      // 使用各种选项设置cookie
       cookies.set("user_id", "12345", {
-        maxAge: 60 * 60 * 24 * 7, // 1 week
+        maxAge: 60 * 60 * 24 * 7, // 1周
         httpOnly: true,
         secure: true,
         path: "/",
       });
 
-      // Add a theme preference cookie
+      // 添加主题偏好cookie
       cookies.set("theme", "dark");
 
-      // Modified cookies from the request are automatically applied to the response
-      return new Response("Login successful");
+      // 请求中修改的cookie会自动应用到响应中
+      return new Response("登录成功");
     },
   },
 });
 ```
 
-`Bun.serve()` automatically tracks modified cookies from the request and applies them to the response.
+[Bun.serve()](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/bun-server.md#L7-L7) 自动跟踪请求中修改的cookie并将它们应用到响应中。
 
-## Deleting cookies
+## 删除cookies
 
-To delete a cookie, use the `delete` method on the `request.cookies` (`CookieMap`) object:
+要删除cookie，请在请求的[request.cookies](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/bun-request.md#L189-L189) ([CookieMap](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/typescript/cookie-map.md#L1-L1))对象上使用[delete](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/cookie-map.md#L45-L45)方法：
 
 ```ts
 Bun.serve({
   routes: {
     "/logout": req => {
-      // Delete the user_id cookie
+      // 删除user_id cookie
       req.cookies.delete("user_id", {
         path: "/",
       });
 
-      return new Response("Logged out successfully");
+      return new Response("退出成功");
     },
   },
 });
 ```
 
-Deleted cookies become a `Set-Cookie` header on the response with the `maxAge` set to `0` and an empty `value`.
+删除的cookie将成为响应上的`Set-Cookie`头，其中`maxAge`设置为`0`且[value](file:///Users/tianyufu/Desktop/mintlify_docs/docs/api/cookie-map.md#L15-L15)为空。

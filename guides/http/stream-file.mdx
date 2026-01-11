@@ -1,10 +1,10 @@
 ---
-title: Stream a file as an HTTP Response
-sidebarTitle: Stream file response
+title: 将文件作为 HTTP 响应流式传输
+sidebarTitle: 流式传输文件响应
 mode: center
 ---
 
-This snippet reads a file from disk using [`Bun.file()`](/runtime/file-io#reading-files-bun-file). This returns a `BunFile` instance, which can be passed directly into the `new Response` constructor.
+此代码片段使用 [`Bun.file()`](/runtime/file-io#reading-files-bun-file) 从磁盘读取文件。这将返回一个 `BunFile` 实例，可以直接传递给 `new Response` 构造函数。
 
 ```ts server.ts icon="/icons/typescript.svg"
 const path = "/path/to/file.txt";
@@ -14,7 +14,7 @@ const resp = new Response(file);
 
 ---
 
-The `Content-Type` is read from the file and automatically set on the `Response`.
+`Content-Type` 从文件中读取并自动设置到 `Response` 上。
 
 ```ts server.ts icon="/icons/typescript.svg"
 new Response(Bun.file("./package.json")).headers.get("Content-Type");
@@ -32,10 +32,10 @@ new Response(Bun.file("./img.png")).headers.get("Content-Type");
 
 ---
 
-Putting it all together with [`Bun.serve()`](/runtime/http/server).
+使用 [`Bun.serve()`](/runtime/http/server) 将所有内容组合在一起。
 
 ```ts server.ts icon="/icons/typescript.svg"
-// static file server
+// 静态文件服务器
 Bun.serve({
   async fetch(req) {
     const path = new URL(req.url).pathname;
@@ -47,4 +47,4 @@ Bun.serve({
 
 ---
 
-See [Docs > API > File I/O](/runtime/file-io#writing-files-bun-write) for complete documentation of `Bun.write()`.
+请参阅 [文档 > API > 文件 I/O](/runtime/file-io#writing-files-bun-write) 以获取 `Bun.write()` 的完整文档。
