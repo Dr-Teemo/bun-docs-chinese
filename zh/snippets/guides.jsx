@@ -1,4 +1,4 @@
-export const GuidesList = () => {
+export const GuidesListZH = () => {
   const guidesData = {
     hero: {
       title: "指南",
