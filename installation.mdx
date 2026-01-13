@@ -134,20 +134,19 @@ bun --revision
     <Tab title="Windows">
       <Steps>
         <Step title="确定 bun 二进制文件是否正确安装">
-        ```bash terminal icon="terminal"
-        & "$env:USERPROFILE\.bun\bin\bun" --version
-        ```
+          ```bash terminal icon="terminal"
+          & "$env:USERPROFILE\.bun\bin\bun" --version
+          ```
 
-        如果命令运行成功但 `bun --version` 未被识别，这意味着 bun 不在系统 PATH 中。要解决这个问题，请打开 Powershell 终端并运行以下命令：
+          如果命令运行成功但 `bun --version` 未被识别，这意味着 bun 不在系统 PATH 中。要解决这个问题，请打开 Powershell 终端并运行以下命令：
 
-        ```bash terminal icon="terminal"
-        [System.Environment]::SetEnvironmentVariable(
-          "Path",
-          [System.Environment]::GetEnvironmentVariable("Path", "User") + ";$env:USERPROFILE\.bun\bin",
-          [System.EnvironmentVariableTarget]::User
-        )
-        ```
-
+          ```bash terminal icon="terminal"
+          [System.Environment]::SetEnvironmentVariable(
+            "Path",
+            [System.Environment]::GetEnvironmentVariable("Path", "User") + ";$env:USERPROFILE\.bun\bin",
+            [System.EnvironmentVariableTarget]::User
+          )
+          ```
         </Step>
         <Step title="重启您的终端">
            运行命令后，重启您的终端并使用 `bun --version` 测试
