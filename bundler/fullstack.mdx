@@ -87,7 +87,7 @@ Bun.serve({
 
 像这样的`index.html`文件：
 
-``html title="index.html" icon="file-code"
+```html title="index.html" icon="file-code"
 <!DOCTYPE html>
 <html>
   <head>
@@ -105,7 +105,7 @@ Bun.serve({
 
 变成类似这样的内容：
 
-``html title="index.html" icon="file-code"
+```html title="index.html" icon="file-code"
 <!DOCTYPE html>
 <html>
   <head>
@@ -372,7 +372,7 @@ serve({
 
 ### 请求处理
 
-``ts title="src/backend.ts" icon="/icons/typescript.svg"
+```ts title="src/backend.ts" icon="/icons/typescript.svg"
 serve({
   routes: {
     "/api/data": {
@@ -423,7 +423,7 @@ plugins = ["bun-plugin-tailwind"]
 
 这将允许您在HTML和CSS文件中使用TailwindCSS实用类。您只需要在某处导入`tailwindcss`：
 
-``html title="index.html" icon="file-code"
+```html title="index.html" icon="file-code"
 <!doctype html>
 <html>
   <head>
@@ -436,7 +436,7 @@ plugins = ["bun-plugin-tailwind"]
 
 或者，您可以在CSS文件中导入TailwindCSS：
 
-``css title="style.css" icon="file-code"
+```css title="style.css" icon="file-code"
 @import "tailwindcss";
 
 .custom-class {
@@ -459,7 +459,7 @@ plugins = ["bun-plugin-tailwind"]
 
 任何导出有效打包器插件对象（本质上是一个具有`name`和`setup`字段的对象）的JS文件或模块都可以放在插件数组中：
 
-``toml title="bunfig.toml" icon="settings"
+```toml title="bunfig.toml" icon="settings"
 [serve.static]
 plugins = ["./my-plugin-implementation.ts"]
 ```
@@ -494,7 +494,7 @@ Bun将延迟解析和加载每个插件，并使用它们来打包您的路由�
 
 Bun可以在构建时将前端JavaScript和TypeScript中的`process.env.*`引用替换为它们的实际值。在`bunfig.toml`中配置`env`选项：
 
-``toml title="bunfig.toml" icon="settings"
+```toml title="bunfig.toml" icon="settings"
 [serve.static]
 env = "PUBLIC_*"  # 只内联以PUBLIC_开头的环境变量（推荐）
 # env = "inline"  # 内联所有环境变量
@@ -505,7 +505,7 @@ env = "PUBLIC_*"  # 只内联以PUBLIC_开头的环境变量（推荐）
   这仅适用于字面量`process.env.FOO`引用，不适用于`import.meta.env`或间接访问如`const env =
   process.env; env.FOO`。
 
-如果未设置环境变量，您可能会在浏览器中看到运行时错误，如`ReferenceError: process
+  如果未设置环境变量，您可能会在浏览器中看到运行时错误，如`ReferenceError: process
   is not defined`。
 
 </Note>
@@ -559,7 +559,7 @@ Bun使用`HTMLRewriter`扫描HTML文件中的`<script>`和`<link>`标签，将�
 
 这是一个完整的全栈应用程序示例：
 
-``ts title="server.ts" icon="/icons/typescript.svg"
+```ts title="server.ts" icon="/icons/typescript.svg"
 import { serve } from "bun";
 import { Database } from "bun:sqlite";
 import homepage from "./public/index.html";
@@ -905,7 +905,7 @@ my-app/
 
 ### 基于环境的配置
 
-``ts title="server/config.ts" icon="/icons/typescript.svg"
+```ts title="server/config.ts" icon="/icons/typescript.svg"
 export const config = {
   development: process.env.NODE_ENV !== "production",
   port: process.env.PORT || 3000,
@@ -920,7 +920,7 @@ export const config = {
 
 ### 错误处理
 
-``ts title="server/middleware.ts" icon="/icons/typescript.svg"
+```ts title="server/middleware.ts" icon="/icons/typescript.svg"
 export function errorHandler(error: Error, req: Request) {
   console.error("Server error:", error);
 
@@ -940,7 +940,7 @@ export function errorHandler(error: Error, req: Request) {
 
 ### API响应辅助
 
-``ts title="server/utils.ts" icon="/icons/typescript.svg"
+```ts title="server/utils.ts" icon="/icons/typescript.svg"
 export function json(data: any, status = 200) {
   return Response.json(data, { status });
 }
@@ -960,7 +960,7 @@ export function unauthorized(message = "Unauthorized") {
 
 ### 类型安全
 
-``ts title="types/api.ts" icon="/icons/typescript.svg"
+```ts title="types/api.ts" icon="/icons/typescript.svg"
 export interface User {
   id: number;
   name: string;
@@ -983,7 +983,7 @@ export interface ApiResponse<T> {
 
 ### 生产构建
 
-``bash terminal icon="terminal"
+```bash terminal icon="terminal"
 # Build for production
 bun build --target=bun --production --outdir=dist ./server/index.ts
 
@@ -993,7 +993,7 @@ NODE_ENV=production bun dist/index.js
 
 ### Docker部署
 
-``dockerfile title="Dockerfile" icon="docker"
+```dockerfile title="Dockerfile" icon="docker"
 FROM oven/bun:1 as base
 WORKDIR /usr/src/app
 
@@ -1019,7 +1019,7 @@ CMD ["bun", "index.js"]
 
 ### 环境变量
 
-``ini title=".env.production" icon="file-code"
+```ini title=".env.production" icon="file-code"
 NODE_ENV=production
 PORT=3000
 DATABASE_URL=postgresql://user:pass@localhost:5432/myapp
@@ -1030,7 +1030,7 @@ CORS_ORIGIN=https://myapp.com
 
 ### 从Express + Webpack
 
-``ts title="server.ts" icon="/icons/typescript.svg"
+```ts title="server.ts" icon="/icons/typescript.svg"
 // Before (Express + Webpack)
 app.use(express.static("dist"));
 app.get("/api/users", (req, res) => {
@@ -1052,7 +1052,7 @@ serve({
 
 ### 从Next.js API Routes
 
-``ts title="server.ts" icon="/icons/typescript.svg"
+```ts title="server.ts" icon="/icons/typescript.svg"
 // Before (Next.js)
 export default function handler(req, res) {
   if (req.method === 'GET') {

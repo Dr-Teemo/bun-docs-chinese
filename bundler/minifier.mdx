@@ -56,7 +56,7 @@ bun build ./index.ts --minify-whitespace --minify-syntax --outfile=out.js
 
 当以编程方式使用Bun的打包器时，通过`minify`选项配置压缩：
 
-```ts
+````ts
 await Bun.build({
   entrypoints: ["./index.ts"],
   outdir: "./out",
@@ -66,7 +66,7 @@ await Bun.build({
 
 对于精细控制，传入一个对象：
 
-```ts
+````ts
 await Bun.build({
   entrypoints: ["./index.ts"],
   outdir: "./out",
@@ -102,7 +102,7 @@ Bun的压缩器有三个独立模式，可以单独或组合启用。
 
 将布尔文字转换为较短的表达式。
 
-```ts 输入
+````ts 输入
 true
 false
 ```
@@ -118,7 +118,7 @@ false
 
 使用逻辑规则简化布尔表达式。
 
-```ts 输入
+````ts 输入
 !!x
 x === true
 x && true
@@ -142,7 +142,7 @@ x
 
 用较短的等效项替换`undefined`。
 
-```ts 输入
+````ts 输入
 undefined
 let x = undefined;
 ```
@@ -158,7 +158,7 @@ let x=void 0;
 
 优化与undefined的松散相等性检查。
 
-```ts 输入
+````ts 输入
 x == undefined
 x != undefined
 ```
@@ -174,7 +174,7 @@ x != null
 
 将Infinity转换为数学表达式。
 
-```ts 输入
+````ts 输入
 Infinity
 -Infinity
 ```
@@ -190,7 +190,7 @@ Infinity
 
 优化typeof比较并计算常量typeof表达式。
 
-```ts 输入
+````ts 输入
 typeof x === 'undefined'
 typeof x !== 'undefined'
 typeof require
@@ -218,7 +218,7 @@ typeof x<'u'
 
 以最紧凑的形式格式化数字。
 
-```ts 输入
+````ts 输入
 10000
 100000
 1000000
@@ -240,7 +240,7 @@ typeof x<'u'
 
 在编译时计算算术运算。
 
-```ts 输入
+````ts 输入
 1 + 2
 10 - 5
 3 * 4
@@ -264,7 +264,7 @@ typeof x<'u'
 
 在编译时计算按位运算。
 
-```ts 输入
+````ts 输入
 5 & 3
 5 | 3
 5 ^ 3
@@ -288,7 +288,7 @@ typeof x<'u'
 
 在编译时合并字符串字面量。
 
-```ts 输入
+````ts 输入
 "a" + "b"
 "x" + 123
 "foo" + "bar" + "baz"
@@ -306,7 +306,7 @@ typeof x<'u'
 
 在编译时计算字符串字符访问。
 
-```ts 输入
+````ts 输入
 "foo"[2]
 "hello"[0]
 ```
@@ -322,7 +322,7 @@ typeof x<'u'
 
 计算具有常量表达式的模板字面量。
 
-```ts 输入
+````ts 输入
 `a${123}b`
 `result: ${5 + 10}`
 ```
@@ -338,7 +338,7 @@ typeof x<'u'
 
 将简单模板字面量转换为常规字符串。
 
-```ts 输入
+````ts 输入
 `Hello World`
 `Line 1
 Line 2`
@@ -355,7 +355,7 @@ Line 2`
 
 选择最佳引号字符以最小化转义。
 
-```ts 输入
+````ts 输入
 "It's a string"
 'He said "hello"'
 `Simple string`
@@ -373,7 +373,7 @@ Line 2`
 
 使用常量数组内联数组展开操作。
 
-```ts 输入
+````ts 输入
 [1, ...[2, 3], 4]
 [...[a, b]]
 ```
@@ -389,7 +389,7 @@ Line 2`
 
 在编译时计算常量数组访问。
 
-```ts 输入
+````ts 输入
 [x][0]
 ['a', 'b', 'c'][1]
 ['a', , 'c'][1]
@@ -407,7 +407,7 @@ void 0
 
 在可能时将括号表示法转换为点表示法。
 
-```ts 输入
+````ts 输入
 obj["property"]
 obj["validName"]
 obj["123"]
@@ -427,7 +427,7 @@ obj["invalid-name"]
 
 在编译时计算常量比较。
 
-```ts 输入
+````ts 输入
 3 < 5
 5 > 3
 3 <= 3
@@ -449,7 +449,7 @@ obj["invalid-name"]
 
 使用常量值简化逻辑运算。
 
-```ts 输入
+````ts 输入
 true && x
 false && x
 true || x
@@ -469,7 +469,7 @@ x
 
 使用已知值计算空值合并。
 
-```ts 输入
+````ts 输入
 null ?? x
 undefined ?? x
 42 ?? x
@@ -487,7 +487,7 @@ x
 
 从逗号序列中移除无副作用的表达式。
 
-```ts 输入
+````ts 输入
 (0, x)
 (123, "str", x)
 ```
@@ -503,7 +503,7 @@ x
 
 计算具有常量条件的条件表达式。
 
-```ts 输入
+````ts 输入
 true ? a : b
 false ? a : b
 x ? true : false
@@ -523,7 +523,7 @@ x ? !1 : !0
 
 简化一元运算。
 
-```ts 输入
+````ts 输入
 +123
 +"123"
 -(-x)
@@ -545,7 +545,7 @@ x
 
 移除不必要的双重否定。
 
-```ts 输入
+````ts 输入
 !!x
 !!!x
 ```
@@ -561,7 +561,7 @@ x
 
 优化具有常量条件的if语句。
 
-```ts 输入
+````ts 输入
 if (true) x;
 if (false) x;
 if (x) { a; }
@@ -581,7 +581,7 @@ if(!x)y;
 
 移除不可到达的代码和没有副作用的代码。
 
-```ts 输入
+````ts 输入
 if (false) {
   unreachable();
 }
@@ -601,7 +601,7 @@ function foo(){return x}
 
 移除永远无法执行的分支。
 
-```ts 输入
+````ts 输入
 while (false) {
   neverRuns();
 }
@@ -617,7 +617,7 @@ while (false) {
 
 移除空块和不必要的大括号。
 
-```ts 输入
+````ts 输入
 { }
 if (x) { }
 ```
@@ -633,7 +633,7 @@ if (x) { }
 
 移除单个语句周围的不必要大括号。
 
-```ts 输入
+````ts 输入
 if (condition) {
   doSomething();
 }
@@ -649,7 +649,7 @@ if(condition)doSomething();
 
 在编译时内联TypeScript枚举值。
 
-```ts 输入
+````ts 输入
 enum Color { Red, Green, Blue }
 const x = Color.Red;
 ```
@@ -664,7 +664,7 @@ const x=0;
 
 遵守`/*@__PURE__*/`注释以进行树摇。
 
-```ts 输入
+````ts 输入
 const x = /*@__PURE__*/ expensive();
 // 如果x未使用...
 ```
@@ -679,7 +679,7 @@ const x = /*@__PURE__*/ expensive();
 
 根据使用频率将局部变量重命名为较短的名称。
 
-```ts 输入
+````ts 输入
 function calculateSum(firstNumber, secondNumber) {
   const result = firstNumber + secondNumber;
   return result;
@@ -710,7 +710,7 @@ function a(b,c){const d=b+c;return d}
 
 移除所有不必要的空白。
 
-```ts 输入
+````ts 输入
 function add(a, b) {
     return a + b;
 }
@@ -727,7 +727,7 @@ function add(a,b){return a+b;}let x=10;
 
 仅在必要时插入分号。
 
-```ts 输入
+````ts 输入
 let a = 1;
 let b = 2;
 return a + b;
@@ -743,7 +743,7 @@ let a=1;let b=2;return a+b
 
 移除操作符周围的空格。
 
-```ts 输入
+````ts 输入
 a + b
 x = y * z
 foo && bar || baz
@@ -761,7 +761,7 @@ foo&&bar||baz
 
 移除注释，除了重要的许可证注释。
 
-```ts 输入
+````ts 输入
 // 此注释被移除
 /* 这个也是 */
 /*! 但这个许可证注释会被保留 */
@@ -779,7 +779,7 @@ function test(){}
 
 移除对象和数组字面量中的空白。
 
-```ts 输入
+````ts 输入
 const obj = {
     name: "John",
     age: 30
@@ -797,7 +797,7 @@ const obj={name:"John",age:30};const arr=[1,2,3];
 
 移除控制结构中的空白。
 
-```ts 输入
+````ts 输入
 if (condition) {
     doSomething();
 }
@@ -816,7 +816,7 @@ if(condition)doSomething();for(let i=0;i<10;i++)console.log(i);
 
 移除函数声明中的空白。
 
-```ts 输入
+````ts 输入
 function myFunction(param1, param2) {
     return param1 + param2;
 }
@@ -833,7 +833,7 @@ function myFunction(a,b){return a+b}const arrow=(a,b)=>a+b;
 
 仅在运算符优先级需要时添加括号。
 
-```ts 输入
+````ts 输入
 (a + b) * c
 a + (b * c)
 ((x))
@@ -851,7 +851,7 @@ x
 
 当配置时，将对象属性重命名为较短的名称。
 
-```ts 输入
+````ts 输入
 obj.longPropertyName
 ```
 
@@ -865,7 +865,7 @@ obj.a
 
 将非字符串插值值转换为字符串并折叠到模板中。
 
-``ts 输入
+```ts 输入
 `hello ${123}`
 `value: ${true}`
 `result: ${null}`
@@ -887,7 +887,7 @@ obj.a
 
 在编译时计算字符串字面量的`.length`属性。
 
-```ts 输入
+````ts 输入
 "hello world".length
 "test".length
 ```
@@ -903,7 +903,7 @@ obj.a
 
 简化内置类型的构造函数调用。
 
-``ts 输入
+```ts 输入
 new Object()
 new Object(null)
 new Object({a: 1})
@@ -925,7 +925,7 @@ new Array(x, y)
 
 内联具有单个属性的对象的属性访问。
 
-``ts 输入
+```ts 输入
 ({fn: () => console.log('hi')}).fn()
 ```
 
@@ -939,7 +939,7 @@ new Array(x, y)
 
 在编译时计算字符串字面量的`charCodeAt()`，适用于ASCII字符。
 
-``ts 输入
+```ts 输入
 "hello".charCodeAt(1)
 "A".charCodeAt(0)
 ```
@@ -955,7 +955,7 @@ new Array(x, y)
 
 将与`void 0`的松散相等性检查转换为`null`，因为它们是等价的。
 
-``ts 输入
+```ts 输入
 x == void 0
 x != void 0
 ```
@@ -971,7 +971,7 @@ x != null
 
 将否定运算符移动到逗号表达式中。
 
-``ts 输入
+```ts 输入
 -(a, b)
 -(x, y, z)
 ```
@@ -987,7 +987,7 @@ x,y,-z
 
 在构建时内联`import.meta`属性，当值已知时。
 
-``ts 输入
+```ts 输入
 import.meta.dir
 import.meta.file
 import.meta.path
@@ -1007,7 +1007,7 @@ import.meta.url
 
 合并相邻的相同类型的变量声明。
 
-``ts 输入
+```ts 输入
 let a = 1;
 let b = 2;
 const c = 3;
@@ -1025,7 +1025,7 @@ const c=3,d=4;
 
 使用逗号运算符合并相邻的表达式语句。
 
-``ts 输入
+```ts 输入
 console.log(1);
 console.log(2);
 console.log(3);
@@ -1041,7 +1041,7 @@ console.log(1),console.log(2),console.log(3);
 
 使用逗号运算符合并返回前的表达式。
 
-``ts 输入
+```ts 输入
 console.log(x);
 return y;
 ```
@@ -1056,7 +1056,7 @@ return console.log(x),y;
 
 使用逗号运算符合并抛出前的表达式。
 
-``ts 输入
+```ts 输入
 console.log(x);
 throw new Error();
 ```
@@ -1071,7 +1071,7 @@ throw(console.log(x),new Error());
 
 在模块边界内联枚举值。
 
-``ts 输入 
+```ts 输入 
 // lib.ts
 export enum Color { Red, Green, Blue }
 
@@ -1090,7 +1090,7 @@ const x=0;
 
 内联用作计算对象属性的枚举值。
 
-``ts 输入
+```ts 输入
 enum Keys { FOO = 'foo' }
 const obj = { [Keys.FOO]: value }
 ```
@@ -1105,7 +1105,7 @@ const obj={foo:value}
 
 将字符串数字属性访问转换为数字索引。
 
-``ts 输入
+```ts 输入
 obj["0"]
 arr["5"]
 ```
@@ -1121,7 +1121,7 @@ arr[5]
 
 当箭头函数仅返回一个值时，使用表达式体语法。
 
-``ts 输入
+```ts 输入
 () => { return x; }
 (a) => { return a + 1; }
 ```
@@ -1137,7 +1137,7 @@ a => a + 1
 
 当属性名和值标识符相同时，使用简写语法。
 
-``ts 输入
+```ts 输入
 { x: x, y: y }
 { name: name, age: age }
 ```
@@ -1153,7 +1153,7 @@ a => a + 1
 
 在对象字面量中使用方法简写语法。
 
-``ts 输入
+```ts 输入
 {
   foo: function() {},
   bar: async function() {}
@@ -1173,7 +1173,7 @@ a => a + 1
 
 从代码中移除`debugger`语句。
 
-``ts 输入
+```ts 输入
 function test() {
   debugger;
   return x;
@@ -1190,7 +1190,7 @@ function test(){return x}
 
 从代码中移除所有`console.*`方法调用。
 
-``ts 输入
+```ts 输入
 console.log("debug");
 console.warn("warning");
 x = console.error("error");
@@ -1208,7 +1208,7 @@ x=void 0;
 
 从代码中移除对指定全局函数或方法的调用。
 
-``ts 输入
+```ts 输入
 assert(condition);
 obj.assert(test);
 ```
@@ -1222,13 +1222,13 @@ void 0;
 
 在压缩标识符时，您可能希望为了调试目的保留原始函数和类名称。使用`--keep-names`标志：
 
-``bash
+```bash
 bun build ./index.ts --minify --keep-names --outfile=out.js
 ```
 
 或在JavaScript API中：
 
-``ts
+```ts
 await Bun.build({
   entrypoints: ["./index.ts"],
   outdir: "./out",
@@ -1245,7 +1245,7 @@ await Bun.build({
 
 同时使用所有三种压缩模式：
 
-``ts input.ts (158 bytes)
+```ts input.ts (158 bytes)
 const myVariable = 42;
 
 const myFunction = () => {
