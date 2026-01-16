@@ -25,21 +25,6 @@ bun install react@latest # 特定标签
 
 </Note>
 
-<Accordion title="对于 Linux 用户">
-推荐的最低 Linux 内核版本是 5.6。如果你使用的是 Linux 内核 5.1 - 5.5，`bun install` 仍然可以工作，但由于缺乏对 io_uring 的 `connect()` 操作的支持，HTTP 请求会变慢。
-
-如果你使用的是 Ubuntu 20.04，以下是安装[更新内核](https://wiki.ubuntu.com/Kernel/LTSEnablementStack)的方法：
-
-```bash terminal icon="terminal"
-# 如果这返回的版本 >= 5.6，你不需要做任何事情
-uname -r
-
-# 安装官方 Ubuntu 硬件支持内核
-sudo apt install --install-recommends linux-generic-hwe-20.04
-```
-
-</Accordion>
-
 要安装项目的所有依赖：
 
 ```bash terminal icon="terminal"
